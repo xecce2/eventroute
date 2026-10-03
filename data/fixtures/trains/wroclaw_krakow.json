@@ -294,6 +294,90 @@
     "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_01:46/all/all"
   },
   {
+    "id": "tr_wro_1004_0206",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T15:23:56+02:00",
+    "mode": "bus",
+    "category": "FLIX",
+    "train": "FLIX",
+    "from": "Wrocław Główny",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T02:06:00+02:00",
+    "arr": "2026-10-04T06:43:00+02:00",
+    "price_pln": 63.98,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.6,
+      "mean_delay_min": 10,
+      "p95_delay_min": 35
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_02:06/all/all"
+  },
+  {
+    "id": "tr_wro_1004_0310",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T15:23:56+02:00",
+    "mode": "train",
+    "category": "IC",
+    "train": "IC",
+    "from": "Wrocław Główny",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T03:10:00+02:00",
+    "arr": "2026-10-04T06:34:00+02:00",
+    "price_pln": 64.0,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:10/all/all"
+  },
+  {
+    "id": "tr_wro_1004_0348",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T15:23:56+02:00",
+    "mode": "train",
+    "category": "IC+KŚ",
+    "train": "IC+KŚ",
+    "from": "Wrocław Główny",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T03:48:00+02:00",
+    "arr": "2026-10-04T07:39:00+02:00",
+    "price_pln": 73.93,
+    "changes": 1,
+    "delay_model": {
+      "p_on_time": 0.6,
+      "mean_delay_min": 9,
+      "p95_delay_min": 30
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:48/all/all"
+  },
+  {
+    "id": "tr_wro_1004_0351",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T15:23:56+02:00",
+    "mode": "bus",
+    "category": "FLIX",
+    "train": "FLIX",
+    "from": "Wrocław Główny",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T03:51:00+02:00",
+    "arr": "2026-10-04T08:33:00+02:00",
+    "price_pln": 39.98,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.6,
+      "mean_delay_min": 10,
+      "p95_delay_min": 35
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:51/all/all"
+  },
+  {
     "id": "tr_wro_1004_0510",
     "source": "fixture",
     "fetched_at": "2026-10-03T11:30:00+02:00",

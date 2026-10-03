@@ -1,8 +1,8 @@
 {
-  "request_id": "rq_6ef0cc9d",
+  "request_id": "rq_4402608f",
   "plans": [
     {
-      "id": "pl_ab352e11",
+      "id": "pl_c5d700d1",
       "labels": [
         "safest",
         "fastest"
@@ -308,22 +308,22 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
     },
     {
-      "id": "pl_b95ee54e",
+      "id": "pl_28918c5d",
       "labels": [
         "cheapest"
       ],
       "train": {
-        "id": "tr_wro_1004_0146",
+        "id": "tr_wro_1004_0351",
         "source": "fixture",
-        "fetched_at": "2026-10-03T11:30:00+02:00",
+        "fetched_at": "2026-10-03T15:23:56+02:00",
         "mode": "bus",
         "category": "FLIX",
         "train": "FLIX",
         "from": "Wrocław Główny",
         "to": "Kraków Główny",
-        "dep": "2026-10-04T01:46:00+02:00",
-        "arr": "2026-10-04T06:08:00+02:00",
-        "price_pln": 63.98,
+        "dep": "2026-10-04T03:51:00+02:00",
+        "arr": "2026-10-04T08:33:00+02:00",
+        "price_pln": 39.98,
         "changes": 0,
         "delay_model": {
           "p_on_time": 0.6,
@@ -331,15 +331,15 @@
           "p95_delay_min": 35
         },
         "known_delay_min": 0,
-        "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_01:46/all/all"
+        "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:51/all/all"
       },
       "local_legs": [
         {
           "mode": "walk",
           "from": "Kraków Główny",
           "to": "Dworzec Główny Tunel",
-          "dep": "2026-10-04T06:13:00+02:00",
-          "arr": "2026-10-04T06:16:00+02:00",
+          "dep": "2026-10-04T08:38:00+02:00",
+          "arr": "2026-10-04T08:41:00+02:00",
           "duration_min": 3,
           "std_min": 1,
           "line": null,
@@ -390,8 +390,8 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T06:16:00+02:00",
-          "arr": "2026-10-04T06:29:00+02:00",
+          "dep": "2026-10-04T08:41:00+02:00",
+          "arr": "2026-10-04T08:54:00+02:00",
           "duration_min": 13,
           "std_min": 3,
           "line": "15",
@@ -462,8 +462,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T06:29:00+02:00",
-          "arr": "2026-10-04T06:41:00+02:00",
+          "dep": "2026-10-04T08:54:00+02:00",
+          "arr": "2026-10-04T09:06:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -604,18 +604,323 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T06:41:00+02:00",
-      "buffer_min": 169,
-      "p_on_time": 1.0,
-      "price_pln": 63.98,
+      "arrival_at_venue": "2026-10-04T09:06:00+02:00",
+      "buffer_min": 24,
+      "p_on_time": 0.913,
+      "price_pln": 39.98,
       "overnight_stay": false,
-      "explanation": "Cheapest. 169 min to spare, 100% chance of arriving on time. This is a bus, not a train.",
-      "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_01:46/all/all"
+      "explanation": "Cheapest. 24 min to spare, 91% chance of arriving on time. This is a bus, not a train.",
+      "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:51/all/all"
     }
   ],
   "options": [
     {
-      "id": "pl_bdd68de0",
+      "id": "pl_28918c5d",
+      "labels": [
+        "cheapest"
+      ],
+      "train": {
+        "id": "tr_wro_1004_0351",
+        "source": "fixture",
+        "fetched_at": "2026-10-03T15:23:56+02:00",
+        "mode": "bus",
+        "category": "FLIX",
+        "train": "FLIX",
+        "from": "Wrocław Główny",
+        "to": "Kraków Główny",
+        "dep": "2026-10-04T03:51:00+02:00",
+        "arr": "2026-10-04T08:33:00+02:00",
+        "price_pln": 39.98,
+        "changes": 0,
+        "delay_model": {
+          "p_on_time": 0.6,
+          "mean_delay_min": 10,
+          "p95_delay_min": 35
+        },
+        "known_delay_min": 0,
+        "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:51/all/all"
+      },
+      "local_legs": [
+        {
+          "mode": "walk",
+          "from": "Kraków Główny",
+          "to": "Dworzec Główny Tunel",
+          "dep": "2026-10-04T08:38:00+02:00",
+          "arr": "2026-10-04T08:41:00+02:00",
+          "duration_min": 3,
+          "std_min": 1,
+          "line": null,
+          "path": [
+            [
+              50.0677,
+              19.9479
+            ],
+            [
+              50.067686,
+              19.947901
+            ],
+            [
+              50.067698,
+              19.94872
+            ],
+            [
+              50.067741,
+              19.948751
+            ],
+            [
+              50.067993,
+              19.948737
+            ],
+            [
+              50.068039,
+              19.948635
+            ],
+            [
+              50.068033,
+              19.9481
+            ],
+            [
+              50.068204,
+              19.948095
+            ],
+            [
+              50.068201,
+              19.947649
+            ],
+            [
+              50.068199,
+              19.947649
+            ]
+          ]
+        },
+        {
+          "mode": "tram",
+          "from": "Dworzec Główny Tunel",
+          "to": "TAURON Arena Kraków Wieczysta",
+          "dep": "2026-10-04T08:41:00+02:00",
+          "arr": "2026-10-04T08:54:00+02:00",
+          "duration_min": 13,
+          "std_min": 3,
+          "line": "15",
+          "path": [
+            [
+              50.068199,
+              19.947649
+            ],
+            [
+              50.068203,
+              19.947649
+            ],
+            [
+              50.068157,
+              19.951205
+            ],
+            [
+              50.066989,
+              19.957543
+            ],
+            [
+              50.066651,
+              19.95822
+            ],
+            [
+              50.065712,
+              19.958821
+            ],
+            [
+              50.065593,
+              19.959101
+            ],
+            [
+              50.065979,
+              19.960752
+            ],
+            [
+              50.066548,
+              19.964975
+            ],
+            [
+              50.0665,
+              19.969882
+            ],
+            [
+              50.066672,
+              19.974325
+            ],
+            [
+              50.066888,
+              19.975335
+            ],
+            [
+              50.068379,
+              19.979309
+            ],
+            [
+              50.071786,
+              19.983837
+            ],
+            [
+              50.071785,
+              19.983839
+            ]
+          ]
+        },
+        {
+          "mode": "walk",
+          "from": "TAURON Arena Kraków Wieczysta",
+          "to": "Tauron Arena Kraków",
+          "dep": "2026-10-04T08:54:00+02:00",
+          "arr": "2026-10-04T09:06:00+02:00",
+          "duration_min": 12,
+          "std_min": 2,
+          "line": null,
+          "path": [
+            [
+              50.071785,
+              19.983839
+            ],
+            [
+              50.071778,
+              19.983852
+            ],
+            [
+              50.071593,
+              19.983614
+            ],
+            [
+              50.071579,
+              19.983642
+            ],
+            [
+              50.071545,
+              19.983602
+            ],
+            [
+              50.071439,
+              19.983821
+            ],
+            [
+              50.071455,
+              19.984164
+            ],
+            [
+              50.071419,
+              19.984223
+            ],
+            [
+              50.071306,
+              19.985061
+            ],
+            [
+              50.07106,
+              19.984821
+            ],
+            [
+              50.070995,
+              19.984851
+            ],
+            [
+              50.070695,
+              19.985668
+            ],
+            [
+              50.069483,
+              19.987906
+            ],
+            [
+              50.06944,
+              19.988094
+            ],
+            [
+              50.069442,
+              19.988351
+            ],
+            [
+              50.069504,
+              19.988574
+            ],
+            [
+              50.069645,
+              19.988873
+            ],
+            [
+              50.069667,
+              19.989071
+            ],
+            [
+              50.069599,
+              19.989335
+            ],
+            [
+              50.069553,
+              19.989401
+            ],
+            [
+              50.069503,
+              19.989459
+            ],
+            [
+              50.069332,
+              19.989516
+            ],
+            [
+              50.069315,
+              19.98955
+            ],
+            [
+              50.069354,
+              19.990015
+            ],
+            [
+              50.069333,
+              19.990256
+            ],
+            [
+              50.06932,
+              19.990289
+            ],
+            [
+              50.069191,
+              19.990238
+            ],
+            [
+              50.06913,
+              19.990314
+            ],
+            [
+              50.068694,
+              19.991478
+            ],
+            [
+              50.068645,
+              19.991554
+            ],
+            [
+              50.068528,
+              19.991502
+            ],
+            [
+              50.067496,
+              19.99158
+            ],
+            [
+              50.0675,
+              19.9917
+            ]
+          ]
+        }
+      ],
+      "venue_target": "2026-10-04T09:30:00+02:00",
+      "arrival_at_venue": "2026-10-04T09:06:00+02:00",
+      "buffer_min": 24,
+      "p_on_time": 0.913,
+      "price_pln": 39.98,
+      "overnight_stay": false,
+      "explanation": "Cheapest. 24 min to spare, 91% chance of arriving on time. This is a bus, not a train.",
+      "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:51/all/all"
+    },
+    {
+      "id": "pl_cf2aebde",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1726",
@@ -918,7 +1223,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_17:26/all/all"
     },
     {
-      "id": "pl_ef1f6d62",
+      "id": "pl_70bfe642",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1611",
@@ -1221,7 +1526,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_16:11/all/all"
     },
     {
-      "id": "pl_39bda9df",
+      "id": "pl_4dc7ca39",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1841",
@@ -1524,7 +1829,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_18:41/all/all"
     },
     {
-      "id": "pl_0b7ce2d6",
+      "id": "pl_47a6b6c9",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1610",
@@ -1827,7 +2132,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_16:10/all/all"
     },
     {
-      "id": "pl_9db88a1e",
+      "id": "pl_8e393a11",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1810",
@@ -2130,7 +2435,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_18:10/all/all"
     },
     {
-      "id": "pl_b69e2c21",
+      "id": "pl_6300b473",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2010",
@@ -2433,10 +2738,8 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_20:10/all/all"
     },
     {
-      "id": "pl_b95ee54e",
-      "labels": [
-        "cheapest"
-      ],
+      "id": "pl_a16f03b7",
+      "labels": [],
       "train": {
         "id": "tr_wro_1004_0146",
         "source": "fixture",
@@ -2734,11 +3037,314 @@
       "p_on_time": 1.0,
       "price_pln": 63.98,
       "overnight_stay": false,
-      "explanation": "Cheapest. 169 min to spare, 100% chance of arriving on time. This is a bus, not a train.",
+      "explanation": "169 min to spare, 100% chance of arriving on time. This is a bus, not a train.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_01:46/all/all"
     },
     {
-      "id": "pl_d04a840b",
+      "id": "pl_df3de2e6",
+      "labels": [],
+      "train": {
+        "id": "tr_wro_1004_0206",
+        "source": "fixture",
+        "fetched_at": "2026-10-03T15:23:56+02:00",
+        "mode": "bus",
+        "category": "FLIX",
+        "train": "FLIX",
+        "from": "Wrocław Główny",
+        "to": "Kraków Główny",
+        "dep": "2026-10-04T02:06:00+02:00",
+        "arr": "2026-10-04T06:43:00+02:00",
+        "price_pln": 63.98,
+        "changes": 0,
+        "delay_model": {
+          "p_on_time": 0.6,
+          "mean_delay_min": 10,
+          "p95_delay_min": 35
+        },
+        "known_delay_min": 0,
+        "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_02:06/all/all"
+      },
+      "local_legs": [
+        {
+          "mode": "walk",
+          "from": "Kraków Główny",
+          "to": "Dworzec Główny Tunel",
+          "dep": "2026-10-04T06:48:00+02:00",
+          "arr": "2026-10-04T06:51:00+02:00",
+          "duration_min": 3,
+          "std_min": 1,
+          "line": null,
+          "path": [
+            [
+              50.0677,
+              19.9479
+            ],
+            [
+              50.067686,
+              19.947901
+            ],
+            [
+              50.067698,
+              19.94872
+            ],
+            [
+              50.067741,
+              19.948751
+            ],
+            [
+              50.067993,
+              19.948737
+            ],
+            [
+              50.068039,
+              19.948635
+            ],
+            [
+              50.068033,
+              19.9481
+            ],
+            [
+              50.068204,
+              19.948095
+            ],
+            [
+              50.068201,
+              19.947649
+            ],
+            [
+              50.068199,
+              19.947649
+            ]
+          ]
+        },
+        {
+          "mode": "tram",
+          "from": "Dworzec Główny Tunel",
+          "to": "TAURON Arena Kraków Wieczysta",
+          "dep": "2026-10-04T06:51:00+02:00",
+          "arr": "2026-10-04T07:04:00+02:00",
+          "duration_min": 13,
+          "std_min": 3,
+          "line": "15",
+          "path": [
+            [
+              50.068199,
+              19.947649
+            ],
+            [
+              50.068203,
+              19.947649
+            ],
+            [
+              50.068157,
+              19.951205
+            ],
+            [
+              50.066989,
+              19.957543
+            ],
+            [
+              50.066651,
+              19.95822
+            ],
+            [
+              50.065712,
+              19.958821
+            ],
+            [
+              50.065593,
+              19.959101
+            ],
+            [
+              50.065979,
+              19.960752
+            ],
+            [
+              50.066548,
+              19.964975
+            ],
+            [
+              50.0665,
+              19.969882
+            ],
+            [
+              50.066672,
+              19.974325
+            ],
+            [
+              50.066888,
+              19.975335
+            ],
+            [
+              50.068379,
+              19.979309
+            ],
+            [
+              50.071786,
+              19.983837
+            ],
+            [
+              50.071785,
+              19.983839
+            ]
+          ]
+        },
+        {
+          "mode": "walk",
+          "from": "TAURON Arena Kraków Wieczysta",
+          "to": "Tauron Arena Kraków",
+          "dep": "2026-10-04T07:04:00+02:00",
+          "arr": "2026-10-04T07:16:00+02:00",
+          "duration_min": 12,
+          "std_min": 2,
+          "line": null,
+          "path": [
+            [
+              50.071785,
+              19.983839
+            ],
+            [
+              50.071778,
+              19.983852
+            ],
+            [
+              50.071593,
+              19.983614
+            ],
+            [
+              50.071579,
+              19.983642
+            ],
+            [
+              50.071545,
+              19.983602
+            ],
+            [
+              50.071439,
+              19.983821
+            ],
+            [
+              50.071455,
+              19.984164
+            ],
+            [
+              50.071419,
+              19.984223
+            ],
+            [
+              50.071306,
+              19.985061
+            ],
+            [
+              50.07106,
+              19.984821
+            ],
+            [
+              50.070995,
+              19.984851
+            ],
+            [
+              50.070695,
+              19.985668
+            ],
+            [
+              50.069483,
+              19.987906
+            ],
+            [
+              50.06944,
+              19.988094
+            ],
+            [
+              50.069442,
+              19.988351
+            ],
+            [
+              50.069504,
+              19.988574
+            ],
+            [
+              50.069645,
+              19.988873
+            ],
+            [
+              50.069667,
+              19.989071
+            ],
+            [
+              50.069599,
+              19.989335
+            ],
+            [
+              50.069553,
+              19.989401
+            ],
+            [
+              50.069503,
+              19.989459
+            ],
+            [
+              50.069332,
+              19.989516
+            ],
+            [
+              50.069315,
+              19.98955
+            ],
+            [
+              50.069354,
+              19.990015
+            ],
+            [
+              50.069333,
+              19.990256
+            ],
+            [
+              50.06932,
+              19.990289
+            ],
+            [
+              50.069191,
+              19.990238
+            ],
+            [
+              50.06913,
+              19.990314
+            ],
+            [
+              50.068694,
+              19.991478
+            ],
+            [
+              50.068645,
+              19.991554
+            ],
+            [
+              50.068528,
+              19.991502
+            ],
+            [
+              50.067496,
+              19.99158
+            ],
+            [
+              50.0675,
+              19.9917
+            ]
+          ]
+        }
+      ],
+      "venue_target": "2026-10-04T09:30:00+02:00",
+      "arrival_at_venue": "2026-10-04T07:16:00+02:00",
+      "buffer_min": 134,
+      "p_on_time": 1.0,
+      "price_pln": 63.98,
+      "overnight_stay": false,
+      "explanation": "134 min to spare, 100% chance of arriving on time. This is a bus, not a train.",
+      "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_02:06/all/all"
+    },
+    {
+      "id": "pl_b8f0e13b",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1710",
@@ -3041,7 +3647,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_17:10/all/all"
     },
     {
-      "id": "pl_c64643a5",
+      "id": "pl_231a27f9",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1914",
@@ -3344,7 +3950,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_19:14/all/all"
     },
     {
-      "id": "pl_397aa6c9",
+      "id": "pl_1ec921bd",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2053",
@@ -3647,7 +4253,310 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_20:53/all/all"
     },
     {
-      "id": "pl_ab352e11",
+      "id": "pl_a141d30a",
+      "labels": [],
+      "train": {
+        "id": "tr_wro_1004_0310",
+        "source": "fixture",
+        "fetched_at": "2026-10-03T15:23:56+02:00",
+        "mode": "train",
+        "category": "IC",
+        "train": "IC",
+        "from": "Wrocław Główny",
+        "to": "Kraków Główny",
+        "dep": "2026-10-04T03:10:00+02:00",
+        "arr": "2026-10-04T06:34:00+02:00",
+        "price_pln": 64.0,
+        "changes": 0,
+        "delay_model": {
+          "p_on_time": 0.7,
+          "mean_delay_min": 6,
+          "p95_delay_min": 25
+        },
+        "known_delay_min": 0,
+        "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:10/all/all"
+      },
+      "local_legs": [
+        {
+          "mode": "walk",
+          "from": "Kraków Główny",
+          "to": "Dworzec Główny Tunel",
+          "dep": "2026-10-04T06:39:00+02:00",
+          "arr": "2026-10-04T06:42:00+02:00",
+          "duration_min": 3,
+          "std_min": 1,
+          "line": null,
+          "path": [
+            [
+              50.0677,
+              19.9479
+            ],
+            [
+              50.067686,
+              19.947901
+            ],
+            [
+              50.067698,
+              19.94872
+            ],
+            [
+              50.067741,
+              19.948751
+            ],
+            [
+              50.067993,
+              19.948737
+            ],
+            [
+              50.068039,
+              19.948635
+            ],
+            [
+              50.068033,
+              19.9481
+            ],
+            [
+              50.068204,
+              19.948095
+            ],
+            [
+              50.068201,
+              19.947649
+            ],
+            [
+              50.068199,
+              19.947649
+            ]
+          ]
+        },
+        {
+          "mode": "tram",
+          "from": "Dworzec Główny Tunel",
+          "to": "TAURON Arena Kraków Wieczysta",
+          "dep": "2026-10-04T06:42:00+02:00",
+          "arr": "2026-10-04T06:55:00+02:00",
+          "duration_min": 13,
+          "std_min": 3,
+          "line": "15",
+          "path": [
+            [
+              50.068199,
+              19.947649
+            ],
+            [
+              50.068203,
+              19.947649
+            ],
+            [
+              50.068157,
+              19.951205
+            ],
+            [
+              50.066989,
+              19.957543
+            ],
+            [
+              50.066651,
+              19.95822
+            ],
+            [
+              50.065712,
+              19.958821
+            ],
+            [
+              50.065593,
+              19.959101
+            ],
+            [
+              50.065979,
+              19.960752
+            ],
+            [
+              50.066548,
+              19.964975
+            ],
+            [
+              50.0665,
+              19.969882
+            ],
+            [
+              50.066672,
+              19.974325
+            ],
+            [
+              50.066888,
+              19.975335
+            ],
+            [
+              50.068379,
+              19.979309
+            ],
+            [
+              50.071786,
+              19.983837
+            ],
+            [
+              50.071785,
+              19.983839
+            ]
+          ]
+        },
+        {
+          "mode": "walk",
+          "from": "TAURON Arena Kraków Wieczysta",
+          "to": "Tauron Arena Kraków",
+          "dep": "2026-10-04T06:55:00+02:00",
+          "arr": "2026-10-04T07:07:00+02:00",
+          "duration_min": 12,
+          "std_min": 2,
+          "line": null,
+          "path": [
+            [
+              50.071785,
+              19.983839
+            ],
+            [
+              50.071778,
+              19.983852
+            ],
+            [
+              50.071593,
+              19.983614
+            ],
+            [
+              50.071579,
+              19.983642
+            ],
+            [
+              50.071545,
+              19.983602
+            ],
+            [
+              50.071439,
+              19.983821
+            ],
+            [
+              50.071455,
+              19.984164
+            ],
+            [
+              50.071419,
+              19.984223
+            ],
+            [
+              50.071306,
+              19.985061
+            ],
+            [
+              50.07106,
+              19.984821
+            ],
+            [
+              50.070995,
+              19.984851
+            ],
+            [
+              50.070695,
+              19.985668
+            ],
+            [
+              50.069483,
+              19.987906
+            ],
+            [
+              50.06944,
+              19.988094
+            ],
+            [
+              50.069442,
+              19.988351
+            ],
+            [
+              50.069504,
+              19.988574
+            ],
+            [
+              50.069645,
+              19.988873
+            ],
+            [
+              50.069667,
+              19.989071
+            ],
+            [
+              50.069599,
+              19.989335
+            ],
+            [
+              50.069553,
+              19.989401
+            ],
+            [
+              50.069503,
+              19.989459
+            ],
+            [
+              50.069332,
+              19.989516
+            ],
+            [
+              50.069315,
+              19.98955
+            ],
+            [
+              50.069354,
+              19.990015
+            ],
+            [
+              50.069333,
+              19.990256
+            ],
+            [
+              50.06932,
+              19.990289
+            ],
+            [
+              50.069191,
+              19.990238
+            ],
+            [
+              50.06913,
+              19.990314
+            ],
+            [
+              50.068694,
+              19.991478
+            ],
+            [
+              50.068645,
+              19.991554
+            ],
+            [
+              50.068528,
+              19.991502
+            ],
+            [
+              50.067496,
+              19.99158
+            ],
+            [
+              50.0675,
+              19.9917
+            ]
+          ]
+        }
+      ],
+      "venue_target": "2026-10-04T09:30:00+02:00",
+      "arrival_at_venue": "2026-10-04T07:07:00+02:00",
+      "buffer_min": 143,
+      "p_on_time": 1.0,
+      "price_pln": 64.0,
+      "overnight_stay": false,
+      "explanation": "143 min to spare, 100% chance of arriving on time.",
+      "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:10/all/all"
+    },
+    {
+      "id": "pl_c5d700d1",
       "labels": [
         "safest",
         "fastest"
@@ -3953,7 +4862,310 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
     },
     {
-      "id": "pl_79a7303f",
+      "id": "pl_e84fb69c",
+      "labels": [],
+      "train": {
+        "id": "tr_wro_1004_0348",
+        "source": "fixture",
+        "fetched_at": "2026-10-03T15:23:56+02:00",
+        "mode": "train",
+        "category": "IC+KŚ",
+        "train": "IC+KŚ",
+        "from": "Wrocław Główny",
+        "to": "Kraków Główny",
+        "dep": "2026-10-04T03:48:00+02:00",
+        "arr": "2026-10-04T07:39:00+02:00",
+        "price_pln": 73.93,
+        "changes": 1,
+        "delay_model": {
+          "p_on_time": 0.6,
+          "mean_delay_min": 9,
+          "p95_delay_min": 30
+        },
+        "known_delay_min": 0,
+        "url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:48/all/all"
+      },
+      "local_legs": [
+        {
+          "mode": "walk",
+          "from": "Kraków Główny",
+          "to": "Dworzec Główny Tunel",
+          "dep": "2026-10-04T07:44:00+02:00",
+          "arr": "2026-10-04T07:47:00+02:00",
+          "duration_min": 3,
+          "std_min": 1,
+          "line": null,
+          "path": [
+            [
+              50.0677,
+              19.9479
+            ],
+            [
+              50.067686,
+              19.947901
+            ],
+            [
+              50.067698,
+              19.94872
+            ],
+            [
+              50.067741,
+              19.948751
+            ],
+            [
+              50.067993,
+              19.948737
+            ],
+            [
+              50.068039,
+              19.948635
+            ],
+            [
+              50.068033,
+              19.9481
+            ],
+            [
+              50.068204,
+              19.948095
+            ],
+            [
+              50.068201,
+              19.947649
+            ],
+            [
+              50.068199,
+              19.947649
+            ]
+          ]
+        },
+        {
+          "mode": "tram",
+          "from": "Dworzec Główny Tunel",
+          "to": "TAURON Arena Kraków Wieczysta",
+          "dep": "2026-10-04T07:47:00+02:00",
+          "arr": "2026-10-04T08:00:00+02:00",
+          "duration_min": 13,
+          "std_min": 3,
+          "line": "15",
+          "path": [
+            [
+              50.068199,
+              19.947649
+            ],
+            [
+              50.068203,
+              19.947649
+            ],
+            [
+              50.068157,
+              19.951205
+            ],
+            [
+              50.066989,
+              19.957543
+            ],
+            [
+              50.066651,
+              19.95822
+            ],
+            [
+              50.065712,
+              19.958821
+            ],
+            [
+              50.065593,
+              19.959101
+            ],
+            [
+              50.065979,
+              19.960752
+            ],
+            [
+              50.066548,
+              19.964975
+            ],
+            [
+              50.0665,
+              19.969882
+            ],
+            [
+              50.066672,
+              19.974325
+            ],
+            [
+              50.066888,
+              19.975335
+            ],
+            [
+              50.068379,
+              19.979309
+            ],
+            [
+              50.071786,
+              19.983837
+            ],
+            [
+              50.071785,
+              19.983839
+            ]
+          ]
+        },
+        {
+          "mode": "walk",
+          "from": "TAURON Arena Kraków Wieczysta",
+          "to": "Tauron Arena Kraków",
+          "dep": "2026-10-04T08:00:00+02:00",
+          "arr": "2026-10-04T08:12:00+02:00",
+          "duration_min": 12,
+          "std_min": 2,
+          "line": null,
+          "path": [
+            [
+              50.071785,
+              19.983839
+            ],
+            [
+              50.071778,
+              19.983852
+            ],
+            [
+              50.071593,
+              19.983614
+            ],
+            [
+              50.071579,
+              19.983642
+            ],
+            [
+              50.071545,
+              19.983602
+            ],
+            [
+              50.071439,
+              19.983821
+            ],
+            [
+              50.071455,
+              19.984164
+            ],
+            [
+              50.071419,
+              19.984223
+            ],
+            [
+              50.071306,
+              19.985061
+            ],
+            [
+              50.07106,
+              19.984821
+            ],
+            [
+              50.070995,
+              19.984851
+            ],
+            [
+              50.070695,
+              19.985668
+            ],
+            [
+              50.069483,
+              19.987906
+            ],
+            [
+              50.06944,
+              19.988094
+            ],
+            [
+              50.069442,
+              19.988351
+            ],
+            [
+              50.069504,
+              19.988574
+            ],
+            [
+              50.069645,
+              19.988873
+            ],
+            [
+              50.069667,
+              19.989071
+            ],
+            [
+              50.069599,
+              19.989335
+            ],
+            [
+              50.069553,
+              19.989401
+            ],
+            [
+              50.069503,
+              19.989459
+            ],
+            [
+              50.069332,
+              19.989516
+            ],
+            [
+              50.069315,
+              19.98955
+            ],
+            [
+              50.069354,
+              19.990015
+            ],
+            [
+              50.069333,
+              19.990256
+            ],
+            [
+              50.06932,
+              19.990289
+            ],
+            [
+              50.069191,
+              19.990238
+            ],
+            [
+              50.06913,
+              19.990314
+            ],
+            [
+              50.068694,
+              19.991478
+            ],
+            [
+              50.068645,
+              19.991554
+            ],
+            [
+              50.068528,
+              19.991502
+            ],
+            [
+              50.067496,
+              19.99158
+            ],
+            [
+              50.0675,
+              19.9917
+            ]
+          ]
+        }
+      ],
+      "venue_target": "2026-10-04T09:30:00+02:00",
+      "arrival_at_venue": "2026-10-04T08:12:00+02:00",
+      "buffer_min": 78,
+      "p_on_time": 1.0,
+      "price_pln": 73.93,
+      "overnight_stay": false,
+      "explanation": "78 min to spare, 100% chance of arriving on time.",
+      "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:48/all/all"
+    },
+    {
+      "id": "pl_74da3193",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2001",
@@ -4256,7 +5468,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_20:01/all/all"
     },
     {
-      "id": "pl_93a3cabd",
+      "id": "pl_40a478c6",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2201",
@@ -4559,7 +5771,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_22:01/all/all"
     },
     {
-      "id": "pl_a245f98c",
+      "id": "pl_9d094945",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2321",
@@ -4862,7 +6074,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_23:21/all/all"
     },
     {
-      "id": "pl_1ec98d5b",
+      "id": "pl_d9f336d1",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0021",
