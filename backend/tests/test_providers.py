@@ -94,15 +94,20 @@ def test_configured_but_unavailable_live_is_an_honest_fallback():
     assert chain.stats.fallback == 1
 
 
-@pytest.mark.parametrize("key, reason", [
-    ("", "GEMINI_API_KEY is not set"),
-    ("some-key", "live Koleo provider is not implemented yet"),
-])
-def test_make_provider_for_koleo(monkeypatch, key, reason):
+def test_make_provider_for_koleo_without_a_key(monkeypatch):
     monkeypatch.setattr(config, "TRAIN_PROVIDER", "koleo")
-    monkeypatch.setattr(config, "GEMINI_API_KEY", key)
+    monkeypatch.setattr(config, "GEMINI_API_KEY", "")
     chain = services.make_provider(services.fixtures)
-    assert chain.live is None and chain.unavailable_reason == reason
+    assert chain.live is None and chain.unavailable_reason == "GEMINI_API_KEY is not set"
+
+
+def test_make_provider_for_koleo_with_a_key_plugs_in_the_live_provider(monkeypatch):
+    from app.providers.koleo_agent import KoleoAgentProvider
+
+    monkeypatch.setattr(config, "TRAIN_PROVIDER", "koleo")
+    monkeypatch.setattr(config, "GEMINI_API_KEY", "some-key")
+    chain = services.make_provider(services.fixtures)
+    assert isinstance(chain.live, KoleoAgentProvider) and chain.unavailable_reason is None
 
 
 def test_api_reports_fallback_everywhere(monkeypatch):
