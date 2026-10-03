@@ -1,0 +1,98 @@
+{
+  "event_id": "ev_hackyeah2026",
+  "participants_total": 420,
+  "arrivals_by_slot": [
+    {
+      "slot": "2026-10-04T06:30:00+02:00",
+      "count": 18
+    },
+    {
+      "slot": "2026-10-04T06:45:00+02:00",
+      "count": 0
+    },
+    {
+      "slot": "2026-10-04T07:00:00+02:00",
+      "count": 66
+    },
+    {
+      "slot": "2026-10-04T07:15:00+02:00",
+      "count": 0
+    },
+    {
+      "slot": "2026-10-04T07:30:00+02:00",
+      "count": 0
+    },
+    {
+      "slot": "2026-10-04T07:45:00+02:00",
+      "count": 0
+    },
+    {
+      "slot": "2026-10-04T08:00:00+02:00",
+      "count": 89
+    },
+    {
+      "slot": "2026-10-04T08:15:00+02:00",
+      "count": 18
+    },
+    {
+      "slot": "2026-10-04T08:30:00+02:00",
+      "count": 0
+    },
+    {
+      "slot": "2026-10-04T08:45:00+02:00",
+      "count": 151
+    },
+    {
+      "slot": "2026-10-04T09:00:00+02:00",
+      "count": 78
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Kraków Główny",
+      "lat": 50.0677,
+      "lon": 19.9479,
+      "peak_count": 151,
+      "peak_slot": "2026-10-04T08:15:00+02:00",
+      "load": "high"
+    },
+    {
+      "name": "Tauron Arena Kraków",
+      "lat": 50.0675,
+      "lon": 19.9917,
+      "peak_count": 151,
+      "peak_slot": "2026-10-04T08:45:00+02:00",
+      "load": "high"
+    }
+  ],
+  "origins": [
+    {
+      "station": "Warszawa Centralna",
+      "count": 167
+    },
+    {
+      "station": "Katowice",
+      "count": 88
+    },
+    {
+      "station": "Wrocław Główny",
+      "count": 86
+    },
+    {
+      "station": "Poznań Główny",
+      "count": 79
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "add_trams",
+      "text": "151 participants arrive at Kraków Główny at 08:15–08:30. Add trams towards Tauron Arena Kraków from 08:15 to 08:45.",
+      "severity": "high"
+    },
+    {
+      "type": "stagger_checkin",
+      "text": "Peak of 151 arrivals at the entrance at 08:45–09:00, while check-in handles about 120 per 15 min. Open more desks for this slot or split check-in into waves by arrival train.",
+      "severity": "high"
+    }
+  ]
+}

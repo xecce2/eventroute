@@ -24,14 +24,18 @@ def simulate_disruption(req: DisruptionRequest) -> DisruptionResponse:
     state.known_delays[plan.train.id] = req.train_delay_min
     delayed = plan.train.model_copy(update={"known_delay_min": req.train_delay_min})
     affected = services.planner.plan_for_train(event, state.request, delayed, plan.labels)
-    plans = services.planner.plan(
+    result = services.planner.plan(
         event, state.request, known_delays=state.known_delays, not_before=plan.train.dep
     )
-    services.save_plans(request_id, [affected, *plans])
+    services.save_plans(request_id, [affected, *result.options])
 
-    message = disruption_message(affected, plans, req.train_delay_min)
+    message = disruption_message(affected, result.plans, req.train_delay_min)
     return DisruptionResponse(
-        affected_plan=affected, plans=plans, notified=notify(message), message=message
+        affected_plan=affected,
+        plans=result.plans,
+        options=result.options,
+        notified=notify(message),
+        message=message,
     )
 
 

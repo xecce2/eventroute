@@ -1,0 +1,11 @@
+{
+  "id": "ev_hackyeah2026",
+  "name": "HackYeah 2026",
+  "venue": "Tauron Arena Kraków",
+  "venue_station": "Kraków Główny",
+  "city": "Kraków",
+  "start": "2026-10-04T10:00:00+02:00",
+  "checkin_buffer_min": 30,
+  "lat": 50.0675,
+  "lon": 19.9917
+}

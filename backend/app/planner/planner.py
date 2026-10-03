@@ -32,8 +32,19 @@ class Candidate:
         return self.train.expected_arr - self.train.dep
 
 
+@dataclass
+class PlanResult:
+    plans: list[Plan]    # the cards: labeled plans, in label order
+    options: list[Plan]  # every suitable option, cheapest first; same objects as in `plans`
+
+
 def new_id(prefix: str) -> str:
     return f"{prefix}_{uuid.uuid4().hex[:8]}"
+
+
+def price_order(plan: Plan) -> tuple:
+    """Cheapest first, unknown price last, then by departure."""
+    return (plan.price_pln is None, plan.price_pln or 0.0, plan.train.dep)
 
 
 class Planner:
@@ -49,8 +60,10 @@ class Planner:
         known_delays: dict[str, int] | None = None,
         not_before: datetime | None = None,
         on_status: StatusFn | None = None,
-    ) -> list[Plan]:
-        """Up to 3 plans (one per label, merged when one option wins several labels)."""
+    ) -> PlanResult:
+        """Up to 3 cards (one per label, merged when one option wins several labels)
+        plus the full list of suitable options sorted by price.
+        """
         status = on_status or (lambda step, msg: None)
         known_delays = known_delays or {}
         venue_target = req.arrive_by or event.venue_target
@@ -80,9 +93,16 @@ class Planner:
         status("local", "Checking transfers and local transport")
         status("reliability", f"Calculating the chance of arriving on time ({self.runs} simulations)")
         candidates = [self._score(t, legs, venue_target) for t in trains]
-        picks = select(candidates)
+        labels_by_id = {c.train.id: labels for c, labels in select(candidates)}
+        built = {
+            c.train.id: self._build(c, labels_by_id.get(c.train.id, []), legs, venue_target)
+            for c in candidates
+        }
         status("done", "Done")
-        return [self._build(c, labels, legs, venue_target) for c, labels in picks]
+        return PlanResult(
+            plans=[built[train_id] for train_id in labels_by_id],
+            options=sorted(built.values(), key=price_order),
+        )
 
     def plan_for_train(
         self, event: Event, req: PlanRequest, train: TrainOption, labels: list[Label]
@@ -153,7 +173,8 @@ def select(candidates: list[Candidate]) -> list[tuple[Candidate, list[Label]]]:
         add(min(viable, key=lambda c: c.duration), "fastest")
         priced = [c for c in viable if c.train.price_pln is not None]
         if priced:
-            add(min(priced, key=lambda c: (c.train.price_pln, c.duration)), "cheapest")
+            # Equal price -> the later departure: same money, more sleep.
+            add(min(priced, key=lambda c: (c.train.price_pln, -c.train.dep.timestamp())), "cheapest")
     return list(picks.values())
 
 

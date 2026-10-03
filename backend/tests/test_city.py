@@ -7,6 +7,7 @@ from app.city.overview import build_overview, choose_plan, load_of, slot_of
 from app.city.participants import generate, load_participants
 from app.main import app
 from app.models import Participant, PlanRequest
+from app.planner.planner import PlanResult
 from app.services import events, planner
 
 client = TestClient(app)
@@ -50,19 +51,23 @@ def test_participants_file_wins_over_generator(tmp_path):
 
 
 def test_choose_plan_falls_back_to_safest():
-    plans = planner.plan(EVENT, PlanRequest(origin="Poznań Główny", event_id=EVENT.id))
-    assert choose_plan(plans, "cheapest") is plans[0]
+    plans = planner.plan(EVENT, PlanRequest(origin="Poznań Główny", event_id=EVENT.id)).plans
+    cheapest = next(p for p in plans if "cheapest" in p.labels)
+    assert choose_plan(plans, "cheapest") is cheapest
+    without_cheapest = [p for p in plans if "cheapest" not in p.labels]
+    assert "safest" in choose_plan(without_cheapest, "cheapest").labels
     only_fastest = [plans[0].model_copy(update={"labels": ["fastest"]})]
     assert choose_plan(only_fastest, "cheapest") is only_fastest[0]
     assert choose_plan([], "safest") is None
 
 
 def test_overnight_participants_not_in_wave():
-    plan = planner.plan(EVENT, PlanRequest(origin="Wrocław Główny", event_id=EVENT.id))[0]
+    plan = planner.plan(EVENT, PlanRequest(origin="Wrocław Główny", event_id=EVENT.id)).plans[0]
 
     class StubPlanner:
         def plan(self, event, req):
-            return [plan.model_copy(update={"overnight_stay": True})]
+            overnight = plan.model_copy(update={"overnight_stay": True})
+            return PlanResult(plans=[overnight], options=[overnight])
 
     people = [Participant(id="u_1", origin="Wrocław Główny", pref="safest")]
     overview = build_overview(EVENT, people, StubPlanner())

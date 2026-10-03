@@ -17,9 +17,15 @@ def create_plan(req: PlanRequest) -> PlanResponse:
     request_id = new_id("rq")
     statuses: list[tuple[str, str]] = []
     services.requests[request_id] = services.RequestState(request=req, statuses=statuses)
-    plans = services.planner.plan(event, req, on_status=lambda step, msg: statuses.append((step, msg)))
-    services.save_plans(request_id, plans)
-    return PlanResponse(request_id=request_id, plans=plans, status="ok" if plans else "no_options")
+    result = services.planner.plan(event, req, on_status=lambda step, msg: statuses.append((step, msg)))
+    # Options include the cards, so a delay can be simulated on any listed option.
+    services.save_plans(request_id, result.options)
+    return PlanResponse(
+        request_id=request_id,
+        plans=result.plans,
+        options=result.options,
+        status="ok" if result.plans else "no_options",
+    )
 
 
 def _sse(event: str, data: dict) -> str:

@@ -99,6 +99,7 @@ class PlanRequest(Contract):
 class PlanResponse(Contract):
     request_id: str
     plans: list[Plan]
+    options: list[Plan]  # every suitable option, cheapest first (unknown price last)
     status: Literal["ok", "no_options"]
 
 
@@ -110,6 +111,7 @@ class DisruptionRequest(Contract):
 class DisruptionResponse(Contract):
     affected_plan: Plan
     plans: list[Plan]
+    options: list[Plan]
     notified: bool
     message: str
 

@@ -37,7 +37,9 @@ def test_plan_uses_contract_field_names():
 
 def test_unknown_origin_gives_no_options():
     r = client.post("/api/plan", json={"origin": "Gdańsk Główny", "event_id": "ev_hackyeah2026"})
-    assert r.json() == {"request_id": r.json()["request_id"], "plans": [], "status": "no_options"}
+    assert r.json() == {
+        "request_id": r.json()["request_id"], "plans": [], "options": [], "status": "no_options",
+    }
 
 
 def test_stream_replays_statuses():
@@ -58,6 +60,31 @@ def test_disruption_replans():
     assert out["affected_plan"]["p_on_time"] < fastest["p_on_time"]
     assert out["notified"] is False  # no Telegram yet
     assert "is delayed by 25 min" in out["message"]
+
+
+def test_disruption_returns_options():
+    body = make_plans()
+    out = client.post(
+        "/api/simulate/disruption", json={"plan_id": body["plans"][0]["id"], "train_delay_min": 10}
+    ).json()
+    assert "options" in out
+    assert {p["id"] for p in out["plans"]} <= {p["id"] for p in out["options"]}
+
+
+def test_disruption_on_option_that_is_not_a_card():
+    body = make_plans()
+    card_ids = {p["id"] for p in body["plans"]}
+    other = next(p for p in body["options"] if p["id"] not in card_ids)
+    r = client.post("/api/simulate/disruption", json={"plan_id": other["id"], "train_delay_min": 15})
+    assert r.status_code == 200
+    assert r.json()["affected_plan"]["train"]["id"] == other["train"]["id"]
+
+
+def test_cors_allows_vite_by_ip():
+    r = client.options("/api/plan", headers={
+        "Origin": "http://127.0.0.1:5173", "Access-Control-Request-Method": "POST",
+    })
+    assert r.headers.get("access-control-allow-origin") == "http://127.0.0.1:5173"
 
 
 def test_plan_without_path_is_valid(tmp_path, monkeypatch):

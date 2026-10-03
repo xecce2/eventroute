@@ -31,7 +31,7 @@ def test_time_without_timezone_is_rejected():
 
 
 def test_wroclaw_plans_respect_rules():
-    plans = planner.plan(EVENT, WROCLAW)
+    plans = planner.plan(EVENT, WROCLAW).plans
     assert 1 <= len(plans) <= 3
     labels = [label for p in plans for label in p.labels]
     assert sorted(labels) == ["cheapest", "fastest", "safest"]  # each label exactly once
@@ -81,6 +81,40 @@ def test_price_unknown_not_cheapest():
     picks = dict((c.train.id, labels) for c, labels in select([no_price, priced]))
     assert "cheapest" not in picks["np"]
     assert "cheapest" in picks["pr"]
+
+
+def test_options_list_all_suitable_cheapest_first():
+    result = planner.plan(EVENT, PlanRequest(origin="Katowice", event_id=EVENT.id))
+    options = result.options
+    assert len(options) > len(result.plans)
+    assert {p.id for p in result.plans} <= {p.id for p in options}  # cards are in the list
+    known = [p.price_pln for p in options if p.price_pln is not None]
+    assert known == sorted(known)
+    # Unknown price goes last.
+    first_unknown = next((i for i, p in enumerate(options) if p.price_pln is None), len(options))
+    assert all(p.price_pln is None for p in options[first_unknown:])
+    # Options that are not cards have no labels.
+    card_ids = {p.id for p in result.plans}
+    assert all(p.labels == [] for p in options if p.id not in card_ids)
+
+
+def test_options_include_overnight():
+    options = planner.plan(EVENT, WROCLAW).options
+    assert any(p.overnight_stay for p in options)
+
+
+def test_equal_price_cheapest_goes_to_later_departure():
+    early = Candidate(train("early", "01:30", "06:34", price=77.0), p=1.0, overnight=False)
+    late = Candidate(train("late", "02:53", "08:15", price=77.0), p=0.97, overnight=False)
+    picks = dict((c.train.id, labels) for c, labels in select([early, late]))
+    assert picks["early"] == ["safest", "fastest"]
+    assert picks["late"] == ["cheapest"]
+
+
+def test_poznan_has_two_cards():
+    plans = planner.plan(EVENT, PlanRequest(origin="Poznań Główny", event_id=EVENT.id)).plans
+    labels = {p.train.id: p.labels for p in plans}
+    assert labels == {"tr_poz_1004_0130": ["safest", "fastest"], "tr_poz_1004_0253": ["cheapest"]}
 
 
 def test_known_delay_lowers_p_on_time():

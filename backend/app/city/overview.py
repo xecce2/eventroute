@@ -67,7 +67,7 @@ def build_overview(
     when someone who slept in Kraków reaches the venue is unknown.
     """
     plans_by_origin = {
-        origin: planner.plan(event, PlanRequest(origin=origin, event_id=event.id))
+        origin: planner.plan(event, PlanRequest(origin=origin, event_id=event.id)).plans
         for origin in sorted({p.origin for p in participants})
     }
     venue_counts: Counter = Counter()
