@@ -96,6 +96,8 @@ class BrowserSession:
                 return last  # still changing at the deadline: return what is there
             raise KoleoFetchError("the page stayed empty")
         except PlaywrightError as e:
-            raise KoleoFetchError(f"page failed to load: {type(e).__name__}: {e}") from e
+            # Playwright errors carry a long call log with URLs; the reason shown to users is the first line.
+            first_line = (str(e).strip().splitlines() or [""])[0]
+            raise KoleoFetchError(f"page failed to load: {type(e).__name__}: {first_line}") from e
         finally:
             page.close()
