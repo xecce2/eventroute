@@ -242,3 +242,56 @@ def test_live_koleo_search_returns_options_with_prices():
     assert result.accepted
     assert all(t.source == "playwright" for t in result.accepted)
     assert any(t.price_pln is not None for t in result.accepted)
+
+
+# ---------- the search window ----------
+
+def window_provider(pages):
+    return provider(pages)[:3]
+
+
+def test_a_window_passed_in_decides_where_reading_starts_and_stops():
+    since = datetime.fromisoformat("2026-10-10T16:20:00+02:00")
+    until = datetime.fromisoformat("2026-10-11T08:00:00+02:00")
+    first = page_text(ORIGIN, DEST, [(10, "17:10", "20:09", 179, ["IC"], 64.0), (11, "09:10", "12:23", 193, ["IC"], 63.0)])
+    p, session, _ = provider([first])
+    p.fetch(ORIGIN, DEST, date(2026, 10, 11), since=since, until=until)
+    assert "10-10-2026_16:00" in session.urls[0]  # whole hour, rounded down
+    assert len(session.urls) == 1                 # the last trip is past `until`: nothing more to read
+
+
+def test_until_is_widened_to_the_next_whole_hour_so_the_cache_can_hit():
+    p, session, opened = provider([sample("wroclaw_0000.txt")])
+    since = datetime.fromisoformat("2026-10-03T16:00:00+02:00")
+    first = p.fetch(ORIGIN, DEST, DAY, since=since, until=datetime.fromisoformat("2026-10-04T08:05:00+02:00"))
+    second = p.fetch(ORIGIN, DEST, DAY, since=since.replace(minute=40), until=datetime.fromisoformat("2026-10-04T08:50:00+02:00"))
+    assert second is first and len(opened) == 1   # 16:00 / 09:00 in both cases
+
+
+def test_a_different_window_is_a_different_search():
+    p, _, opened = provider([sample("wroclaw_0000.txt")])
+    p.fetch(ORIGIN, DEST, DAY, since=datetime.fromisoformat("2026-10-03T16:00:00+02:00"), until=datetime.fromisoformat("2026-10-04T09:00:00+02:00"))
+    p.fetch(ORIGIN, DEST, DAY, since=datetime.fromisoformat("2026-10-03T16:00:00+02:00"), until=datetime.fromisoformat("2026-10-04T12:00:00+02:00"))
+    assert len(opened) == 2
+
+
+def test_the_default_window_is_exactly_what_it_was_before():
+    p, session, _ = provider([sample("wroclaw_0000.txt")])
+    p.fetch(ORIGIN, DEST, DAY)
+    assert "03-10-2026_16:00" in session.urls[0]
+
+
+@pytest.mark.parametrize("since, until", [
+    (datetime(2026, 10, 3, 16), datetime.fromisoformat("2026-10-04T08:00:00+02:00")),       # no zone
+    (datetime.fromisoformat("2026-10-03T16:00:00+02:00"), datetime(2026, 10, 4, 8)),
+    (datetime.fromisoformat("2026-10-04T16:00:00+02:00"), datetime.fromisoformat("2026-10-04T08:00:00+02:00")),  # backwards
+])
+def test_a_bad_window_is_refused(since, until):
+    with pytest.raises(ValueError):
+        provider([sample("wroclaw_0000.txt")])[0].fetch(ORIGIN, DEST, DAY, since=since, until=until)
+
+
+def test_a_utc_window_is_read_in_warsaw_time():
+    p, session, _ = provider([sample("wroclaw_0000.txt")])
+    p.fetch(ORIGIN, DEST, DAY, since=datetime.fromisoformat("2026-10-03T14:00:00+00:00"), until=datetime.fromisoformat("2026-10-04T06:30:00+00:00"))
+    assert "03-10-2026_16:00" in session.urls[0]

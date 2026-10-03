@@ -62,18 +62,51 @@ class KoleoAgentProvider:  # satisfies the `LiveProvider` protocol (base.py)
         self._cache: dict[tuple, tuple[float, ValidationResult]] = {}
         self._lock = threading.Lock()
 
-    def fetch(self, origin: str, destination: str, day: date) -> ValidationResult:
-        key = (koleo_slug(origin), koleo_slug(destination), day)
+    def fetch(
+        self,
+        origin: str,
+        destination: str,
+        day: date,
+        *,
+        since: datetime | None = None,
+        until: datetime | None = None,
+    ) -> ValidationResult:
+        """Read the trips departing between `since` and `until` (both with a time zone).
+
+        Without them the window is the evening before `day` (16:00) until the morning of `day`
+        (08:30), as before. The planner passes the window it needs for the chosen arrival time;
+        a trip that departs after `until` cannot arrive in time, so nothing later is read on
+        purpose (the last page may still show some). The bounds are widened to whole hours:
+        Koleo lists only trips that have not left yet anyway, and a window that moved every
+        minute would never hit the cache.
+        """
+        for name, value in (("since", since), ("until", until)):
+            if value is not None and value.tzinfo is None:
+                raise ValueError(f"{name} must include a time zone")
+        # The defaults are exact; bounds that were passed in are widened to whole hours.
+        if since is None:
+            since = datetime.combine(day - timedelta(days=1), SEARCH_FROM, tzinfo=WARSAW)
+        else:
+            since = since.astimezone(WARSAW).replace(minute=0, second=0, microsecond=0)
+        if until is None:
+            until = datetime.combine(day, COVER_UNTIL, tzinfo=WARSAW)
+        else:
+            until = until.astimezone(WARSAW)
+            whole_hour = not (until.minute or until.second or until.microsecond)
+            until = until.replace(minute=0, second=0, microsecond=0) + (timedelta() if whole_hour else timedelta(hours=1))
+        if until <= since:
+            raise ValueError("until must be after since")
+
+        key = (koleo_slug(origin), koleo_slug(destination), since, until)
         with self._lock:
             hit = self._cache.get(key)
             if hit and time.monotonic() - hit[0] < self.cache_ttl_sec:
                 return hit[1]
 
-        rows = self._collect(origin, destination, day)
-        window = (
-            datetime.combine(day - timedelta(days=1), clock_time(0, 0), tzinfo=WARSAW),
-            datetime.combine(day, clock_time(23, 59), tzinfo=WARSAW),
-        )
+        rows = self._collect(origin, destination, since, until)
+        # A sanity range against hallucinated dates, not the planner's filter: the last page
+        # shows trips after `until` too.
+        window = (since - timedelta(days=1), until + timedelta(days=1))
         fetched_at = self.clock()
         by_gemini = [row for row in rows if row.get("_reader") == GEMINI_ROW]
         by_parser = [row for row in rows if row.get("_reader") != GEMINI_ROW]
@@ -91,14 +124,13 @@ class KoleoAgentProvider:  # satisfies the `LiveProvider` protocol (base.py)
                 self._cache[key] = (time.monotonic(), result)
         return result
 
-    def _collect(self, origin: str, destination: str, day: date) -> list[dict]:
-        """Read result pages one after another until the departures reach COVER_UNTIL.
+    def _collect(self, origin: str, destination: str, since: datetime, until: datetime) -> list[dict]:
+        """Read result pages one after another until the departures reach `until`.
 
         Each next page starts at the last departure of the previous one, so no trip falls into
         a gap however dense the route is (Katowice has about 20 trips per page, Wrocław 12).
         """
-        start = datetime.combine(day - timedelta(days=1), SEARCH_FROM, tzinfo=WARSAW)
-        until = datetime.combine(day, COVER_UNTIL, tzinfo=WARSAW)
+        start = since
         deadline = time.monotonic() + self.timeout_sec
         pages: list[list[dict]] = []
         with self.session_factory() as session:
