@@ -1,46 +1,57 @@
-import { probColor, sourceBadge } from "../utils";
+import ProbRing from "./ProbRing";
+import { fmtDuration, fmtPrice, sourceBadge, stamp } from "../utils";
 
-const LABELS = { safest: "Most reliable", fastest: "Fastest", cheapest: "Cheapest" };
+const LABELS = {
+  safest: { className: "good", text: "🛡 Most reliable" },
+  fastest: { className: "fast", text: "⚡ Fastest" },
+  cheapest: { className: "cheap", text: "💰 Cheapest" },
+};
 
 export default function PlanCard({ plan, selected, onSelect }) {
   const t = plan.train;
-  const pct = Math.round(plan.p_on_time * 100);
   const late = plan.buffer_min < 0;
+  const spare = late ? "bad" : plan.buffer_min < 20 ? "warn" : "good";
   const source = sourceBadge(t.source);
+  const price = fmtPrice(plan.price_pln);
 
   return (
     <div className={`panel card ${selected ? "selected" : ""}`} onClick={onSelect}>
       <div className="badges">
-        {plan.labels.map((l) => <span key={l} className="badge good">{LABELS[l] ?? l}</span>)}
-        {plan.overnight_stay && <span className="badge warn">Overnight stay needed</span>}
+        {plan.labels.map((l) => (
+          <span key={l} className={`badge ${LABELS[l]?.className ?? ""}`}>{LABELS[l]?.text ?? l}</span>
+        ))}
+        {plan.overnight_stay && <span className="badge warn">🛏 Overnight stay needed</span>}
         <span className={`badge ${source.className}`}>{source.text}</span>
       </div>
 
-      <div className="prob">
-        <div className="pct" style={{ color: probColor(plan.p_on_time) }}>{pct}%</div>
+      <div className="card-main">
+        <ProbRing value={plan.p_on_time} />
         <div>
-          <div>chance to make it</div>
-          <div className={late ? "bad" : ""}>
-            {late ? `${-plan.buffer_min} min late` : `${plan.buffer_min} min to spare`}
+          <div className="leave">Depart {t.from}</div>
+          <div className="depart">
+            {stamp(t.dep, plan.venue_target)} <small>{t.mode === "bus" ? "🚌" : "🚆"} {t.train}</small>
+          </div>
+          <div className="route">→ {t.to} at {stamp(t.arr, plan.venue_target)} · {fmtDuration(t.dep, t.arr)}</div>
+          <div className="chips">
+            <span className={`chip ${spare}`}>
+              {late ? `${-plan.buffer_min} min late` : `${plan.buffer_min} min to spare`}
+            </span>
+            <span className="chip">{t.category}</span>
+            {t.changes > 0 && <span className="chip warn">{t.changes} change{t.changes > 1 ? "s" : ""}</span>}
+            {t.known_delay_min > 0 && <span className="chip bad">+{t.known_delay_min} min delay</span>}
           </div>
         </div>
       </div>
-      <div className="bar">
-        <div style={{ width: `${pct}%`, background: probColor(plan.p_on_time) }} />
-      </div>
 
-      <h3>
-        {t.mode === "bus" ? "🚌" : "🚆"} {t.train} <small>({t.category})</small>
-        {t.known_delay_min > 0 && <span className="bad"> +{t.known_delay_min} min</span>}
-      </h3>
-      <p className="muted">{t.from} → {t.to}</p>
-      <p className="muted">{plan.explanation}</p>
+      <p className="explain">{plan.explanation}</p>
 
-      <div className="row between">
-        <strong>{plan.price_pln == null ? "price on site" : `${plan.price_pln} zł`}</strong>
+      <div className="card-foot">
+        <span className="price">
+          {price == null ? <small>price on site</small> : <>{price} <small>zł</small></>}
+        </span>
         <a className="button" href={plan.buy_url} target="_blank" rel="noreferrer"
            onClick={(e) => e.stopPropagation()}>
-          Buy on Koleo
+          Buy on Koleo ↗
         </a>
       </div>
     </div>

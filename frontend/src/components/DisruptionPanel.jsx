@@ -1,30 +1,42 @@
-import { fmt } from "../utils";
+import { stamp } from "../utils";
 
 const pct = (p) => `${Math.round(p.p_on_time * 100)}%`;
 
+function Metric({ label, was, now }) {
+  return (
+    <div className="metric">
+      <div className="label">{label}</div>
+      <div className="was">{was}</div>
+      <div className="now">{now}</div>
+    </div>
+  );
+}
+
 export default function DisruptionPanel({ before, res }) {
   const after = res.affected_plan;
-  const noAlt = !res.plans || res.plans.length === 0;
+  // The delayed train itself is in the recalculated list; only another train is an alternative.
+  const alternatives = (res.plans ?? []).filter((p) => p.train.id !== after?.train.id);
 
   return (
     <div className="panel alert">
-      <h3>Train delayed</h3>
-      {!res.notified && <p className="notice">🔔 {res.message}</p>}
-      {res.notified && <p className="notice">📨 Sent to Telegram: {res.message}</p>}
+      <h3>⏱ Train delayed</h3>
+      <div className="bubble">
+        <span aria-hidden="true">{res.notified ? "📨" : "🔔"}</span>
+        <span>{res.notified ? "Sent to Telegram: " : ""}{res.message}</span>
+      </div>
 
       {after && (
-        <table>
-          <thead>
-            <tr><th></th><th>Before</th><th>Now</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Chance</td><td>{pct(before)}</td><td className="bad">{pct(after)}</td></tr>
-            <tr><td>Buffer</td><td>{before.buffer_min} min</td><td className="bad">{after.buffer_min} min</td></tr>
-            <tr><td>At entrance</td><td>{fmt(before.arrival_at_venue)}</td><td className="bad">{fmt(after.arrival_at_venue)}</td></tr>
-          </tbody>
-        </table>
+        <div className="compare">
+          <Metric label="Chance" was={pct(before)} now={pct(after)} />
+          <Metric label="Spare time" was={`${before.buffer_min} min`} now={`${after.buffer_min} min`} />
+          <Metric
+            label="At the entrance"
+            was={stamp(before.arrival_at_venue, before.venue_target)}
+            now={stamp(after.arrival_at_venue, after.venue_target)}
+          />
+        </div>
       )}
-      {noAlt && <p className="bad">No alternative route found.</p>}
+      {alternatives.length === 0 && <p className="bad" style={{ marginTop: 12 }}>No alternative route found.</p>}
     </div>
   );
 }

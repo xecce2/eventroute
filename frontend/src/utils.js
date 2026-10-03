@@ -42,10 +42,31 @@ export function warsawDateTime(ms) {
 export const eventTarget = (event) =>
   warsawDateTime(Date.parse(event.start) - (event.checkin_buffer_min ?? 0) * 60000);
 
+// The Warsaw calendar day of an instant: "2026-10-11".
+export const dayOf = (iso) => warsawDateTime(Date.parse(iso)).date;
+
+const shortDay = (date) =>
+  new Date(`${date}T12:00:00Z`).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", timeZone: "UTC" });
+
+// "21:30", or "Sat 10 21:30" when it is not the day of `refIso` (the day to be at the entrance).
+// With a chosen date the evening before is a different day, and the hours alone would hide that.
+export const stamp = (iso, refIso) =>
+  !refIso || dayOf(iso) === dayOf(refIso) ? fmt(iso) : `${shortDay(dayOf(iso))} ${fmt(iso)}`;
+
 export const longDate = (date) =>
   new Date(`${date}T12:00:00Z`).toLocaleDateString("en-GB", {
     weekday: "short", day: "numeric", month: "short", timeZone: "UTC",
   });
+
+// "3h 05min" for a trip between two instants.
+export const fmtDuration = (depIso, arrIso) => {
+  const minutes = Math.round((Date.parse(arrIso) - Date.parse(depIso)) / 60000);
+  const h = Math.floor(minutes / 60);
+  return h ? `${h}h ${pad2(minutes % 60)}min` : `${minutes}min`;
+};
+
+// Always two decimals, so "64.00" and "39.98" line up; null stays null (the price is on the site).
+export const fmtPrice = (zloty) => (zloty == null ? null : zloty.toFixed(2));
 
 export const probColor = (p) =>
   p >= 0.9 ? "var(--good)" : p >= 0.7 ? "var(--warn)" : "var(--bad)";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FALLBACK_EVENT, FALLBACK_STATIONS, EVENT_ID } from "../constants";
 import { getEvent, getStations } from "../api";
-import { eventTarget, longDate, toArriveBy } from "../utils";
+import { eventTarget, longDate, toArriveBy, warsawDateTime } from "../utils";
 
 export default function RegistrationForm({ onSubmit, loading }) {
   const [event, setEvent] = useState(FALLBACK_EVENT);
@@ -12,6 +12,7 @@ export default function RegistrationForm({ onSubmit, loading }) {
   const [pickedTime, setPickedTime] = useState(null);
   const [budget, setBudget] = useState("");
   const target = eventTarget(event);
+  const eventStart = warsawDateTime(Date.parse(event.start));
   const date = pickedDate ?? target.date;
   const time = pickedTime ?? target.time;
 
@@ -30,7 +31,8 @@ export default function RegistrationForm({ onSubmit, loading }) {
 
   const ready = Boolean(date && time);
 
-  function submit() {
+  function submit(e) {
+    e.preventDefault();
     if (!ready) return;
     onSubmit({
       origin,
@@ -42,45 +44,38 @@ export default function RegistrationForm({ onSubmit, loading }) {
   }
 
   return (
-    <div className="panel form">
+    <form className="panel form" onSubmit={submit}>
       <div className="event">
-        <strong>{event.name}</strong>
-        <span>
-          {event.venue}
-          {ready && ` · be at the entrance by ${time} on ${longDate(date)}`}
-        </span>
+        <strong>{event.name} · {event.venue}</strong>
+        <span>Event: {longDate(eventStart.date)}, {eventStart.time}</span>
+        {ready && <span>Your trip: be at the entrance by {time} on {longDate(date)}</span>}
+        {ready && date !== eventStart.date && (
+          <span className="muted">ⓘ A different day than the event: the timetable is for the day you chose.</span>
+        )}
       </div>
-      <label>
-        Coming from
-        <select value={origin} onChange={(e) => setOrigin(e.target.value)}>
-          {stations.map((s) => <option key={s}>{s}</option>)}
-        </select>
-      </label>
-      <div className="row">
+      <div className="fields">
+        <label>
+          Coming from
+          <select value={origin} onChange={(e) => setOrigin(e.target.value)}>
+            {stations.map((s) => <option key={s}>{s}</option>)}
+          </select>
+        </label>
         <label>
           Date
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setPickedDate(e.target.value)}
-          />
+          <input type="date" value={date} onChange={(e) => setPickedDate(e.target.value)} />
         </label>
         <label>
           Be at the entrance by
-          <input
-            type="time"
-            value={time}
-            onChange={(e) => setPickedTime(e.target.value)}
-          />
+          <input type="time" value={time} onChange={(e) => setPickedTime(e.target.value)} />
         </label>
         <label>
           Budget, zł (optional)
-          <input type="number" min="1" value={budget} onChange={(e) => setBudget(e.target.value)} />
+          <input type="number" min="1" placeholder="no limit" value={budget} onChange={(e) => setBudget(e.target.value)} />
         </label>
+        <button className="primary" type="submit" disabled={loading || !ready}>
+          {loading ? <><span className="spinner" /> Searching…</> : "Plan my trip"}
+        </button>
       </div>
-      <button className="primary" disabled={loading || !ready} onClick={submit}>
-        {loading ? "Searching for trains…" : "Plan my trip"}
-      </button>
-    </div>
+    </form>
   );
 }
