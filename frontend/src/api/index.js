@@ -1,6 +1,7 @@
 import { mockPlansFor, mockDisrupted, mockCity, mockStations } from "../mocks";
 
-const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== "false";
+// Mocks are invented data: they are on only when asked for explicitly (VITE_USE_MOCKS=true).
+export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS === "true";
 const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

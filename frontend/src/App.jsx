@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getPlans, simulateDisruption } from "./api";
+import { getPlans, simulateDisruption, USE_MOCKS } from "./api";
 import RegistrationForm from "./components/RegistrationForm";
 import PlanCard from "./components/PlanCard";
 import OptionsList from "./components/OptionsList";
@@ -31,7 +31,10 @@ export default function App() {
 
   const plans = result?.plans ?? [];
   const options = result?.options ?? [];
-  const all = [...plans, ...options];
+  const affected = disruption?.res?.affected_plan;
+  // The affected plan is kept in the search list: after a delay the recalculated lists
+  // may not contain it (it can become too late), and it must stay selectable.
+  const all = [...plans, ...options, ...(affected ? [affected] : [])];
   const selected = all.find((p) => p.id === selectedId) ?? plans[0] ?? options[0];
 
   const onPlan = (req) =>
@@ -46,12 +49,17 @@ export default function App() {
     run(async () => {
       const res = await simulateDisruption(selected.id, 25);
       setDisruption({ before: selected, res });
-      setResult({
+      const next = {
         ...result,
         plans: res.plans ?? [],
         options: res.options ?? result.options,
-      });
-      setSelectedId(res.affected_plan?.id ?? selected.id);
+      };
+      setResult(next);
+      // The backend gives the same train a new plan id in the recalculated lists,
+      // so the delayed plan is found by train id, not by plan id.
+      const delayed = res.affected_plan;
+      const same = delayed && [...next.plans, ...next.options].find((p) => p.train.id === delayed.train.id);
+      setSelectedId(same?.id ?? delayed?.id ?? selected.id);
     });
 
   return (
@@ -63,6 +71,12 @@ export default function App() {
           <button className={tab === "city" ? "active" : ""} onClick={() => setTab("city")}>City view</button>
         </nav>
       </header>
+
+      {USE_MOCKS && (
+        <p className="mock-banner">
+          MOCK DATA: the trains, prices and routes below are invented and not from the backend.
+        </p>
+      )}
 
       {tab === "city" ? (
         <CityDashboard />
