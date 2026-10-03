@@ -2,11 +2,270 @@
   {
     "station": "Kraków Główny",
     "venue": "Tauron Arena Kraków",
-    "note": "Оценка времени и остановок, F уточнит (линии трамваев, реальные длительности)",
+    "note": "Real route. Tram data: ZTP Kraków GTFS_KRK_T version 20261002, service_3 (Sunday 2026-10-04). Line 15 from Dworzec Główny Tunel 01 to TAURON Arena Kraków Wieczysta 01: 7 min in the vehicle (07:26 -> 07:33), 13 min here includes about 6 min expected wait (lines 15 and 16 together run roughly every 13 min in the morning). Line 16 uses the same stops (Wieczysta 03). Line 14 to Al. Pokoju takes 12 min and is slower overall. Walking distances (191 m and 924 m) from OpenStreetMap foot routing, timed at 1.3 m/s. The platform-to-stop walk is covered by TRANSFER_MIN in the planner.",
     "legs": [
-      {"mode": "walk", "from": "Kraków Główny", "to": "Dworzec Główny Wschód", "duration_min": 5, "std_min": 1, "line": null},
-      {"mode": "tram", "from": "Dworzec Główny Wschód", "to": "Tauron Arena Kraków Wieczysta", "duration_min": 15, "std_min": 4, "line": null},
-      {"mode": "walk", "from": "Tauron Arena Kraków Wieczysta", "to": "Tauron Arena Kraków", "duration_min": 8, "std_min": 2, "line": null}
+      {
+        "mode": "walk",
+        "from": "Kraków Główny",
+        "to": "Dworzec Główny Tunel",
+        "duration_min": 3,
+        "std_min": 1,
+        "line": null,
+        "path": [
+          [
+            50.0677,
+            19.9479
+          ],
+          [
+            50.067686,
+            19.947901
+          ],
+          [
+            50.067698,
+            19.94872
+          ],
+          [
+            50.067741,
+            19.948751
+          ],
+          [
+            50.067993,
+            19.948737
+          ],
+          [
+            50.068039,
+            19.948635
+          ],
+          [
+            50.068033,
+            19.9481
+          ],
+          [
+            50.068204,
+            19.948095
+          ],
+          [
+            50.068201,
+            19.947649
+          ],
+          [
+            50.068199,
+            19.947649
+          ]
+        ]
+      },
+      {
+        "mode": "tram",
+        "from": "Dworzec Główny Tunel",
+        "to": "TAURON Arena Kraków Wieczysta",
+        "duration_min": 13,
+        "std_min": 3,
+        "line": "15",
+        "path": [
+          [
+            50.068199,
+            19.947649
+          ],
+          [
+            50.068203,
+            19.947649
+          ],
+          [
+            50.068157,
+            19.951205
+          ],
+          [
+            50.066989,
+            19.957543
+          ],
+          [
+            50.066651,
+            19.95822
+          ],
+          [
+            50.065712,
+            19.958821
+          ],
+          [
+            50.065593,
+            19.959101
+          ],
+          [
+            50.065979,
+            19.960752
+          ],
+          [
+            50.066548,
+            19.964975
+          ],
+          [
+            50.0665,
+            19.969882
+          ],
+          [
+            50.066672,
+            19.974325
+          ],
+          [
+            50.066888,
+            19.975335
+          ],
+          [
+            50.068379,
+            19.979309
+          ],
+          [
+            50.071786,
+            19.983837
+          ],
+          [
+            50.071785,
+            19.983839
+          ]
+        ]
+      },
+      {
+        "mode": "walk",
+        "from": "TAURON Arena Kraków Wieczysta",
+        "to": "Tauron Arena Kraków",
+        "duration_min": 12,
+        "std_min": 2,
+        "line": null,
+        "path": [
+          [
+            50.071785,
+            19.983839
+          ],
+          [
+            50.071778,
+            19.983852
+          ],
+          [
+            50.071593,
+            19.983614
+          ],
+          [
+            50.071579,
+            19.983642
+          ],
+          [
+            50.071545,
+            19.983602
+          ],
+          [
+            50.071439,
+            19.983821
+          ],
+          [
+            50.071455,
+            19.984164
+          ],
+          [
+            50.071419,
+            19.984223
+          ],
+          [
+            50.071306,
+            19.985061
+          ],
+          [
+            50.07106,
+            19.984821
+          ],
+          [
+            50.070995,
+            19.984851
+          ],
+          [
+            50.070695,
+            19.985668
+          ],
+          [
+            50.069483,
+            19.987906
+          ],
+          [
+            50.06944,
+            19.988094
+          ],
+          [
+            50.069442,
+            19.988351
+          ],
+          [
+            50.069504,
+            19.988574
+          ],
+          [
+            50.069645,
+            19.988873
+          ],
+          [
+            50.069667,
+            19.989071
+          ],
+          [
+            50.069599,
+            19.989335
+          ],
+          [
+            50.069553,
+            19.989401
+          ],
+          [
+            50.069503,
+            19.989459
+          ],
+          [
+            50.069332,
+            19.989516
+          ],
+          [
+            50.069315,
+            19.98955
+          ],
+          [
+            50.069354,
+            19.990015
+          ],
+          [
+            50.069333,
+            19.990256
+          ],
+          [
+            50.06932,
+            19.990289
+          ],
+          [
+            50.069191,
+            19.990238
+          ],
+          [
+            50.06913,
+            19.990314
+          ],
+          [
+            50.068694,
+            19.991478
+          ],
+          [
+            50.068645,
+            19.991554
+          ],
+          [
+            50.068528,
+            19.991502
+          ],
+          [
+            50.067496,
+            19.99158
+          ],
+          [
+            50.0675,
+            19.9917
+          ]
+        ]
+      }
     ]
   }
 ]

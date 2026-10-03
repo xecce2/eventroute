@@ -60,8 +60,18 @@ def test_disruption_replans():
     assert "is delayed by 25 min" in out["message"]
 
 
-def test_plan_without_path_is_valid():
-    # Current fixtures have no path yet: the field is present and null.
+def test_plan_without_path_is_valid(tmp_path, monkeypatch):
+    # A route without `path` stays valid: the field is present in the response and null.
+    routes = [{
+        "station": "Kraków Główny", "venue": "Tauron Arena Kraków", "legs": [
+            {"mode": "walk", "from": "Kraków Główny", "to": "Tauron Arena Kraków",
+             "duration_min": 28, "std_min": 5, "line": None},
+        ],
+    }]
+    routes_file = tmp_path / "local_routes.json"
+    routes_file.write_text(json.dumps(routes), encoding="utf-8")
+    monkeypatch.setattr(services.planner, "local", LocalTransport(routes_file))
+
     leg = make_plans()["plans"][0]["local_legs"][0]
     assert "path" in leg and leg["path"] is None
 

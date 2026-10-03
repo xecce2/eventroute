@@ -2,7 +2,7 @@
   {
     "id": "tr_war_1003_1608",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -23,7 +23,7 @@
   {
     "id": "tr_war_1003_1640",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "EIP",
     "train": "EIP",
@@ -44,7 +44,7 @@
   {
     "id": "tr_war_1003_1740",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "EIP",
     "train": "EIP",
@@ -65,7 +65,7 @@
   {
     "id": "tr_war_1003_1808",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -86,7 +86,7 @@
   {
     "id": "tr_war_1003_1840",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "EIP",
     "train": "EIP",
@@ -107,7 +107,7 @@
   {
     "id": "tr_war_1003_1908",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -128,7 +128,7 @@
   {
     "id": "tr_war_1003_1940",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "EIP",
     "train": "EIP",
@@ -149,7 +149,7 @@
   {
     "id": "tr_war_1003_2004",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "LEO",
     "train": "LEO",
@@ -170,7 +170,7 @@
   {
     "id": "tr_war_1003_2008",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -191,7 +191,7 @@
   {
     "id": "tr_war_1003_2040",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "EIP",
     "train": "EIP",
@@ -212,7 +212,7 @@
   {
     "id": "tr_war_1003_2204",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -233,7 +233,7 @@
   {
     "id": "tr_war_1003_2232",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "LEO",
     "train": "LEO",
@@ -254,7 +254,7 @@
   {
     "id": "tr_war_1003_2332",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "TLK",
     "train": "TLK",
@@ -273,9 +273,51 @@
     "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_23:32/all/all"
   },
   {
+    "id": "tr_war_1003_2351",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
+    "mode": "train",
+    "category": "KM+FLIX",
+    "train": "KM+FLIX",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T23:51:00+02:00",
+    "arr": "2026-10-04T05:38:00+02:00",
+    "price_pln": null,
+    "changes": 1,
+    "delay_model": {
+      "p_on_time": 0.5,
+      "mean_delay_min": 13,
+      "p95_delay_min": 40
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_23:51/all/all"
+  },
+  {
+    "id": "tr_war_1004_0006",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
+    "mode": "train",
+    "category": "KM+KM+FLIX",
+    "train": "KM+KM+FLIX",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T00:06:00+02:00",
+    "arr": "2026-10-04T05:38:00+02:00",
+    "price_pln": null,
+    "changes": 2,
+    "delay_model": {
+      "p_on_time": 0.4,
+      "mean_delay_min": 16,
+      "p95_delay_min": 45
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/04-10-2026_00:06/all/all"
+  },
+  {
     "id": "tr_war_1004_0330",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "TLK",
     "train": "TLK",
@@ -296,7 +338,7 @@
   {
     "id": "tr_war_1004_0604",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -317,7 +359,7 @@
   {
     "id": "tr_war_1004_0608",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -338,7 +380,7 @@
   {
     "id": "tr_war_1004_0640",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "EIP",
     "train": "EIP",
@@ -359,7 +401,7 @@
   {
     "id": "tr_war_1004_0740",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "EIC",
     "train": "EIC",
@@ -380,7 +422,7 @@
   {
     "id": "tr_war_1004_0748",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "LEO",
     "train": "LEO",
@@ -401,7 +443,7 @@
   {
     "id": "tr_war_1004_0840",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "EIP",
     "train": "EIP",

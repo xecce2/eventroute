@@ -2,7 +2,7 @@
   {
     "id": "tr_kat_1003_1615",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -23,7 +23,7 @@
   {
     "id": "tr_kat_1003_1626",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -44,7 +44,7 @@
   {
     "id": "tr_kat_1003_1702",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "KŚ",
     "train": "KŚ",
@@ -65,7 +65,7 @@
   {
     "id": "tr_kat_1003_1710",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -86,7 +86,7 @@
   {
     "id": "tr_kat_1003_1718",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -107,7 +107,7 @@
   {
     "id": "tr_kat_1003_1735",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -128,7 +128,7 @@
   {
     "id": "tr_kat_1003_1805",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "PR",
     "train": "PR",
@@ -149,7 +149,7 @@
   {
     "id": "tr_kat_1003_1825",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -170,7 +170,7 @@
   {
     "id": "tr_kat_1003_1828",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -191,7 +191,7 @@
   {
     "id": "tr_kat_1003_1835",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -212,7 +212,7 @@
   {
     "id": "tr_kat_1003_1847",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "PR",
     "train": "PR",
@@ -233,7 +233,7 @@
   {
     "id": "tr_kat_1003_1900",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -254,7 +254,7 @@
   {
     "id": "tr_kat_1003_1912",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -275,7 +275,7 @@
   {
     "id": "tr_kat_1003_1930",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -296,7 +296,7 @@
   {
     "id": "tr_kat_1003_1945",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "PR",
     "train": "PR",
@@ -317,7 +317,7 @@
   {
     "id": "tr_kat_1003_2000",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "TLK",
     "train": "TLK",
@@ -338,7 +338,7 @@
   {
     "id": "tr_kat_1003_2015",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -359,7 +359,7 @@
   {
     "id": "tr_kat_1003_2024",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -380,7 +380,7 @@
   {
     "id": "tr_kat_1003_2047",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "PR",
     "train": "PR",
@@ -401,7 +401,7 @@
   {
     "id": "tr_kat_1003_2126",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -422,7 +422,7 @@
   {
     "id": "tr_kat_1003_2140",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -443,7 +443,7 @@
   {
     "id": "tr_kat_1003_2146",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "TLK",
     "train": "TLK",
@@ -464,7 +464,7 @@
   {
     "id": "tr_kat_1003_2200_pr",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "PR",
     "train": "PR",
@@ -485,7 +485,7 @@
   {
     "id": "tr_kat_1003_2200_flix",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -506,7 +506,7 @@
   {
     "id": "tr_kat_1003_2219",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -527,7 +527,7 @@
   {
     "id": "tr_kat_1003_2230",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -548,7 +548,7 @@
   {
     "id": "tr_kat_1003_2253",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -569,7 +569,7 @@
   {
     "id": "tr_kat_1004_0020",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -588,9 +588,30 @@
     "url": "https://koleo.pl/rozklad-pkp/katowice/krakow-glowny/04-10-2026_00:20/all/all"
   },
   {
+    "id": "tr_kat_1004_0155",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
+    "mode": "bus",
+    "category": "FLIX",
+    "train": "FLIX",
+    "from": "Katowice",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T01:55:00+02:00",
+    "arr": "2026-10-04T04:08:00+02:00",
+    "price_pln": 66.98,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.6,
+      "mean_delay_min": 10,
+      "p95_delay_min": 35
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/katowice/krakow-glowny/04-10-2026_01:55/all/all"
+  },
+  {
     "id": "tr_kat_1004_0245",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -611,7 +632,7 @@
   {
     "id": "tr_kat_1004_0315",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -632,7 +653,7 @@
   {
     "id": "tr_kat_1004_0330",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -653,7 +674,7 @@
   {
     "id": "tr_kat_1004_0405",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -674,7 +695,7 @@
   {
     "id": "tr_kat_1004_0425",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -695,7 +716,7 @@
   {
     "id": "tr_kat_1004_0435",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -716,7 +737,7 @@
   {
     "id": "tr_kat_1004_0443",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "KŚ",
     "train": "KŚ",
@@ -737,7 +758,7 @@
   {
     "id": "tr_kat_1004_0529",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -758,7 +779,7 @@
   {
     "id": "tr_kat_1004_0535",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -779,7 +800,7 @@
   {
     "id": "tr_kat_1004_0548",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "PR",
     "train": "PR",
@@ -800,7 +821,7 @@
   {
     "id": "tr_kat_1004_0550",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -821,7 +842,7 @@
   {
     "id": "tr_kat_1004_0600",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -842,7 +863,7 @@
   {
     "id": "tr_kat_1004_0606",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -863,7 +884,7 @@
   {
     "id": "tr_kat_1004_0635",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -884,7 +905,7 @@
   {
     "id": "tr_kat_1004_0650",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "PR",
     "train": "PR",
@@ -905,7 +926,7 @@
   {
     "id": "tr_kat_1004_0705",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -926,7 +947,7 @@
   {
     "id": "tr_kat_1004_0720",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
@@ -947,7 +968,7 @@
   {
     "id": "tr_kat_1004_0749",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "PR",
     "train": "PR",
@@ -968,7 +989,7 @@
   {
     "id": "tr_kat_1004_0805",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "bus",
     "category": "FLIX",
     "train": "FLIX",
@@ -989,7 +1010,7 @@
   {
     "id": "tr_kat_1004_0849",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "KŚ",
     "train": "KŚ",
@@ -1010,7 +1031,7 @@
   {
     "id": "tr_kat_1004_0911",
     "source": "fixture",
-    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "fetched_at": "2026-10-03T13:41:00+02:00",
     "mode": "train",
     "category": "IC",
     "train": "IC",
