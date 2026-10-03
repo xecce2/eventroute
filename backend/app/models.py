@@ -1,8 +1,11 @@
 """Contracts from CLAUDE.md section 4. Change here => update CLAUDE.md in the same commit."""
 from datetime import datetime, timedelta
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
+
+# A map point, serialized as [lat, lon].
+LatLon = tuple[Annotated[float, Field(ge=-90, le=90)], Annotated[float, Field(ge=-180, le=180)]]
 
 
 class Contract(BaseModel):
@@ -47,6 +50,8 @@ class LocalLeg(Contract):
     duration_min: int
     std_min: int
     line: str | None = None
+    # Points of the leg in order, for the map line. None -> the map draws a straight line.
+    path: list[LatLon] | None = None
 
 
 Label = Literal["safest", "fastest", "cheapest"]

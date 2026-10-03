@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from app.config import FIXTURES_DIR
-from app.models import LocalLeg
+from app.models import LatLon, LocalLeg
 
 
 @dataclass(frozen=True)
@@ -20,6 +20,7 @@ class LegTemplate:
     duration_min: int
     std_min: int
     line: str | None
+    path: list[LatLon] | None = None
 
 
 class LocalTransport:
@@ -34,6 +35,7 @@ class LocalTransport:
                     duration_min=leg["duration_min"],
                     std_min=leg["std_min"],
                     line=leg["line"],
+                    path=leg.get("path"),
                 )
                 for leg in route["legs"]
             ]
@@ -62,6 +64,7 @@ class LocalTransport:
             out.append(LocalLeg(
                 mode=leg.mode, from_=leg.from_, to=leg.to, dep=t, arr=arr,
                 duration_min=leg.duration_min, std_min=leg.std_min, line=leg.line,
+                path=leg.path,
             ))
             t = arr
         return out

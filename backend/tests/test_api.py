@@ -1,7 +1,13 @@
-from fastapi.testclient import TestClient
+import json
 
-from app import config
+import pytest
+from fastapi.testclient import TestClient
+from pydantic import ValidationError
+
+from app import config, services
 from app.main import app
+from app.models import LocalLeg
+from app.planner.local_transport import LocalTransport
 
 config.SSE_STEP_SEC = 0
 client = TestClient(app)
@@ -52,3 +58,34 @@ def test_disruption_replans():
     assert out["affected_plan"]["p_on_time"] < fastest["p_on_time"]
     assert out["notified"] is False  # no Telegram yet
     assert "is delayed by 25 min" in out["message"]
+
+
+def test_plan_without_path_is_valid():
+    # Current fixtures have no path yet: the field is present and null.
+    leg = make_plans()["plans"][0]["local_legs"][0]
+    assert "path" in leg and leg["path"] is None
+
+
+def test_path_reaches_plan(tmp_path, monkeypatch):
+    station, arena = [50.0677, 19.9479], [50.0675, 19.9917]
+    routes = [{
+        "station": "Kraków Główny", "venue": "Tauron Arena Kraków", "legs": [
+            {"mode": "walk", "from": "Kraków Główny", "to": "Tauron Arena Kraków",
+             "duration_min": 28, "std_min": 5, "line": None, "path": [station, arena]},
+        ],
+    }]
+    routes_file = tmp_path / "local_routes.json"
+    routes_file.write_text(json.dumps(routes), encoding="utf-8")
+    monkeypatch.setattr(services.planner, "local", LocalTransport(routes_file))
+
+    leg = make_plans()["plans"][0]["local_legs"][0]
+    assert leg["path"] == [station, arena]
+
+
+def test_path_rejects_bad_coordinates():
+    with pytest.raises(ValidationError):
+        LocalLeg(
+            mode="walk", from_="a", to="b",
+            dep="2026-10-04T08:20:00+02:00", arr="2026-10-04T08:48:00+02:00",
+            duration_min=28, std_min=5, path=[[19.9479, 250.0]],
+        )
