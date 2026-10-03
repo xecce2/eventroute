@@ -1,0 +1,24 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# node
+node_modules/
+dist/
+
+# cache of live provider responses
+data/cache/
+
+# os / ide
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
