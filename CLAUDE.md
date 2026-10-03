@@ -173,7 +173,7 @@ FastAPI ── Planner (детерминированный, обратный р�
 - `POST /api/simulate/disruption` — вход: `{plan_id, train_delay_min}`, выход: `{affected_plan: Plan, plans: Plan[], options: Plan[], notified: bool, message: str}`. `options` — как в `POST /api/plan`, но пересчитанные с задержкой.
   - `affected_plan` — исходный план с задержкой (`train.known_delay_min`), для экрана «было / стало».
   - `plans` — пересчитанные планы. Альтернативы только с отправлением не раньше задержанного поезда (задержка известна в момент его отправления).
-  - `notified: false` → уведомление не отправлено (нет Telegram), фронт показывает `message` сам.
+  - `notified: true` → `message` отправлен в Telegram. `notified: false` → не отправлен (нет ключей в `.env`, нет сети или ошибка Telegram), фронт показывает `message` сам. Фронт должен показывать `message` в обоих случаях хотя бы коротко: на сцене зрители не видят телефон.
 - `GET /api/city/overview?event_id=...` — выход: `CityOverview`. `event_id` можно не указывать, пока событие одно.
 - `GET /api/events/{id}` — выход: `Event`
 - `GET /api/events/{id}/stations` — выход: список станций отправления, `["Katowice", "Poznań Główny", ...]`, по алфавиту. Для выпадающего списка в форме. Берётся из провайдера (метод `TrainProvider.origins()`), поэтому новый город с фикстурой появляется в списке сам.
@@ -260,7 +260,7 @@ FastAPI ── Planner (детерминированный, обратный р�
 - `backend/app/planner/reliability.py` — Монте-Карло. Задержка: с вероятностью `p_on_time` 0–5 мин, иначе 5 мин + экспоненциальный хвост, подобранный так, что P(задержка > `p95_delay_min`) = 5%. Случайность зависит от `id` поезда, поэтому результат повторяется от запуска к запуску.
 - `backend/app/planner/local_transport.py` — путь по Кракову из `data/fixtures/local_routes.json`.
 - `backend/app/providers/` — интерфейс `TrainProvider` и простой `FixtureProvider` (точное совпадение станций, регистр не важен).
-- `backend/app/notifier/` — заглушка `notify()`, всегда возвращает `False` (Telegram сделает F).
+- `backend/app/notifier/` — `notify()` шлёт `message` в Telegram (`sendMessage` Bot API через `httpx`) на `TELEGRAM_CHAT_ID` из `.env`. Таймаут 3 с (`TELEGRAM_TIMEOUT_SEC`), любые ошибки → `False`, без падений и зависаний. Токен в логи не пишется. Бот может писать только тому, кто сам нажал у него **Start**. Тесты никогда не шлют настоящих сообщений (`backend/tests/conftest.py` отключает Telegram).
 - `backend/app/services.py` — события, планировщик, хранилище в памяти (после перезапуска пусто).
 - Эндпоинты: `GET /api/health`, `GET /api/events/{id}`, `GET /api/events/{id}/stations`, `POST /api/plan`, `GET /api/plan/{request_id}/stream`, `POST /api/simulate/disruption`, `GET /api/city/overview`.
 - `backend/app/city/` — дашборд города: `participants.py` (участники из файла F или генератор), `overview.py` (участник → план по его `pref` → волна, нагрузка узлов, рекомендации). Результат кэшируется на время работы сервера. Текущий результат: 420 участников, пик 151 человек на вокзале в 08:15 и у входа в 08:45, обе нагрузки `high`, две рекомендации.
@@ -310,10 +310,10 @@ FastAPI ── Planner (детерминированный, обратный р�
   - **D:** поля `data_source` и `fallback_reason` в `PlanResponse` (`models.py`), шаг `fallback` в SSE, эндпоинт `GET /api/providers/status`. Пока агента нет, всегда `data_source: "recorded"`, `fallback_reason: null`.
   - **A:** бейдж «Live» / «Recorded data» на карточке плана по `train.source`, плашка при `fallback_reason`; делать на моках, пока бэкенд не готов.
   - Перед питчем смотрим `GET /api/providers/status` и говорим на слайде только то, что показывает счётчик.
-- Агент Gemini + Playwright, Validator, Telegram (F).
+- Агент Gemini + Playwright, Validator (F). Telegram сделан (D).
 - Весь фронтенд (A).
 - **Вроцлав (F):** в `wroclaw_krakow.json` нет отправлений между 01:46 и 04:00 (IC 03:10 → 06:34, IC+KŚ 03:48, FlixBus 02:06 и 03:51) — при снятии выдачи пропущена страница. Переснять Koleo: 3.10 с 16:00, 4.10 с 00:00 и с 04:00. После этого D проверяет тесты (`test_wroclaw_plans_respect_rules`, `test_night_arrivals_are_overnight`) и перезапускает `dump_examples.py`.
-- **Фронтенд (A):** моки в `frontend/src/mocks/index.js` расходятся с API. В ответе задержки есть `affected_plan` (поезд с задержкой, для «было / стало») и `message` (показывать, если `notified: false` — Telegram пока нет); в `POST /api/plan` есть `options` для списка цен. Брать моки из `docs/api-examples/`.
+- **Фронтенд (A):** моки в `frontend/src/mocks/index.js` расходятся с API. В ответе задержки есть `affected_plan` (поезд с задержкой, для «было / стало») и `message` (показывать всегда, особенно если `notified: false`); в `POST /api/plan` есть `options` для списка цен. Брать моки из `docs/api-examples/`.
 - `explanation` пока по шаблону, LLM не подключена.
 
 ### Запуск
