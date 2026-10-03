@@ -16,7 +16,7 @@ VIABLE_P = 0.5              # fastest/cheapest are picked only among plans at le
 SAFE_ENOUGH_P = 0.8         # below this on the event day, an overnight option may become safest
 SAFEST_TIE_P = 0.02         # near-equal p_on_time -> prefer the later departure
 
-LABEL_TEXT = {"safest": "самый надёжный", "fastest": "самый быстрый", "cheapest": "самый дешёвый"}
+LABEL_TEXT = {"safest": "most reliable", "fastest": "fastest", "cheapest": "cheapest"}
 
 StatusFn = Callable[[str, str], None]
 
@@ -64,7 +64,7 @@ class Planner:
         if not_before is not None:
             window_start = max(window_start, not_before)
 
-        status("search", "Ищу поезда…")
+        status("search", "Searching for trains…")
         trains = [
             t.model_copy(update={"known_delay_min": known_delays.get(t.id, t.known_delay_min)})
             for t in self.provider.search(req.origin, event.venue_station, venue_target.date())
@@ -75,13 +75,13 @@ class Planner:
             and t.expected_arr <= station_deadline
             and (req.budget_pln is None or t.price_pln is None or t.price_pln <= req.budget_pln)
         ]
-        status("found", f"Нашёл {len(trains)} подходящих вариантов")
+        status("found", f"Found {len(trains)} suitable options")
 
-        status("local", "Проверяю пересадки и городской транспорт")
-        status("reliability", f"Считаю вероятность успеть ({self.runs} прогонов)")
+        status("local", "Checking transfers and local transport")
+        status("reliability", f"Calculating the chance of arriving on time ({self.runs} simulations)")
         candidates = [self._score(t, legs, venue_target) for t in trains]
         picks = select(candidates)
-        status("done", "Готово")
+        status("done", "Done")
         return [self._build(c, labels, legs, venue_target) for c, labels in picks]
 
     def plan_for_train(
@@ -163,11 +163,11 @@ def explain(c: Candidate, labels: list[Label], buffer_min: int) -> str:
     if labels:
         parts.append(", ".join(LABEL_TEXT[label] for label in labels).capitalize() + ".")
     if buffer_min >= 0:
-        parts.append(f"Запас {buffer_min} мин, шанс успеть {round(c.p * 100)}%.")
+        parts.append(f"{buffer_min} min to spare, {round(c.p * 100)}% chance of arriving on time.")
     else:
-        parts.append(f"Опоздание на {-buffer_min} мин, шанс успеть {round(c.p * 100)}%.")
+        parts.append(f"{-buffer_min} min late, {round(c.p * 100)}% chance of arriving on time.")
     if c.overnight:
-        parts.append("Прибытие накануне или ночью — нужна ночёвка.")
+        parts.append("Arrives the day before or overnight, so you will need a place to stay.")
     if c.train.mode == "bus":
-        parts.append("Это автобус, не поезд.")
+        parts.append("This is a bus, not a train.")
     return " ".join(parts)

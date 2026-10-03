@@ -38,7 +38,7 @@ def test_stream_replays_statuses():
     body = make_plans()
     with client.stream("GET", f"/api/plan/{body['request_id']}/stream") as r:
         text = "".join(r.iter_text())
-    assert "event: status" in text and "Ищу поезда" in text
+    assert "event: status" in text and "Searching for trains" in text
     assert text.rstrip().splitlines()[-2] == "event: done"
 
 
@@ -51,4 +51,4 @@ def test_disruption_replans():
     assert out["affected_plan"]["train"]["known_delay_min"] == 25
     assert out["affected_plan"]["p_on_time"] < fastest["p_on_time"]
     assert out["notified"] is False  # no Telegram yet
-    assert "опаздывает на 25 мин" in out["message"]
+    assert "is delayed by 25 min" in out["message"]

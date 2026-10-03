@@ -1,0 +1,422 @@
+[
+  {
+    "id": "tr_war_1003_1608",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "IC",
+    "train": "IC",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T16:08:00+02:00",
+    "arr": "2026-10-03T19:41:00+02:00",
+    "price_pln": 40.6,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_16:08/all/all"
+  },
+  {
+    "id": "tr_war_1003_1640",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "EIP",
+    "train": "EIP",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T16:40:00+02:00",
+    "arr": "2026-10-03T18:55:00+02:00",
+    "price_pln": 157.17,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.75,
+      "mean_delay_min": 5,
+      "p95_delay_min": 20
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_16:40/all/all"
+  },
+  {
+    "id": "tr_war_1003_1740",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "EIP",
+    "train": "EIP",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T17:40:00+02:00",
+    "arr": "2026-10-03T19:56:00+02:00",
+    "price_pln": 169.0,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.75,
+      "mean_delay_min": 5,
+      "p95_delay_min": 20
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_17:40/all/all"
+  },
+  {
+    "id": "tr_war_1003_1808",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "IC",
+    "train": "IC",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T18:08:00+02:00",
+    "arr": "2026-10-03T21:51:00+02:00",
+    "price_pln": 70.0,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_18:08/all/all"
+  },
+  {
+    "id": "tr_war_1003_1840",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "EIP",
+    "train": "EIP",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T18:40:00+02:00",
+    "arr": "2026-10-03T20:56:00+02:00",
+    "price_pln": 169.0,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.75,
+      "mean_delay_min": 5,
+      "p95_delay_min": 20
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_18:40/all/all"
+  },
+  {
+    "id": "tr_war_1003_1908",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "IC",
+    "train": "IC",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T19:08:00+02:00",
+    "arr": "2026-10-03T21:41:00+02:00",
+    "price_pln": 68.0,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_19:08/all/all"
+  },
+  {
+    "id": "tr_war_1003_1940",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "EIP",
+    "train": "EIP",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T19:40:00+02:00",
+    "arr": "2026-10-03T21:57:00+02:00",
+    "price_pln": 98.02,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.75,
+      "mean_delay_min": 5,
+      "p95_delay_min": 20
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_19:40/all/all"
+  },
+  {
+    "id": "tr_war_1003_2004",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "LEO",
+    "train": "LEO",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T20:04:00+02:00",
+    "arr": "2026-10-03T22:21:00+02:00",
+    "price_pln": 60.0,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_20:04/all/all"
+  },
+  {
+    "id": "tr_war_1003_2008",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "IC",
+    "train": "IC",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T20:08:00+02:00",
+    "arr": "2026-10-03T23:59:00+02:00",
+    "price_pln": 40.6,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_20:08/all/all"
+  },
+  {
+    "id": "tr_war_1003_2040",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "EIP",
+    "train": "EIP",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T20:40:00+02:00",
+    "arr": "2026-10-03T22:57:00+02:00",
+    "price_pln": 74.36,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.75,
+      "mean_delay_min": 5,
+      "p95_delay_min": 20
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_20:40/all/all"
+  },
+  {
+    "id": "tr_war_1003_2204",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "IC",
+    "train": "IC",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T22:04:00+02:00",
+    "arr": "2026-10-04T01:06:00+02:00",
+    "price_pln": 29.92,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_22:04/all/all"
+  },
+  {
+    "id": "tr_war_1003_2232",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "LEO",
+    "train": "LEO",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T22:32:00+02:00",
+    "arr": "2026-10-04T01:23:00+02:00",
+    "price_pln": 46.0,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_22:32/all/all"
+  },
+  {
+    "id": "tr_war_1003_2332",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "TLK",
+    "train": "TLK",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-03T23:32:00+02:00",
+    "arr": "2026-10-04T03:32:00+02:00",
+    "price_pln": 73.0,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.65,
+      "mean_delay_min": 8,
+      "p95_delay_min": 30
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/03-10-2026_23:32/all/all"
+  },
+  {
+    "id": "tr_war_1004_0330",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "TLK",
+    "train": "TLK",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T03:30:00+02:00",
+    "arr": "2026-10-04T07:40:00+02:00",
+    "price_pln": 40.6,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.65,
+      "mean_delay_min": 8,
+      "p95_delay_min": 30
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/04-10-2026_03:30/all/all"
+  },
+  {
+    "id": "tr_war_1004_0604",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "IC",
+    "train": "IC",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T06:04:00+02:00",
+    "arr": "2026-10-04T08:35:00+02:00",
+    "price_pln": 39.44,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/04-10-2026_06:04/all/all"
+  },
+  {
+    "id": "tr_war_1004_0608",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "IC",
+    "train": "IC",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T06:08:00+02:00",
+    "arr": "2026-10-04T09:41:00+02:00",
+    "price_pln": 40.6,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/04-10-2026_06:08/all/all"
+  },
+  {
+    "id": "tr_war_1004_0640",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "EIP",
+    "train": "EIP",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T06:40:00+02:00",
+    "arr": "2026-10-04T08:56:00+02:00",
+    "price_pln": 74.36,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.75,
+      "mean_delay_min": 5,
+      "p95_delay_min": 20
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/04-10-2026_06:40/all/all"
+  },
+  {
+    "id": "tr_war_1004_0740",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "EIC",
+    "train": "EIC",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T07:40:00+02:00",
+    "arr": "2026-10-04T09:58:00+02:00",
+    "price_pln": 128.14,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.75,
+      "mean_delay_min": 5,
+      "p95_delay_min": 20
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/04-10-2026_07:40/all/all"
+  },
+  {
+    "id": "tr_war_1004_0748",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "LEO",
+    "train": "LEO",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T07:48:00+02:00",
+    "arr": "2026-10-04T10:16:00+02:00",
+    "price_pln": 96.0,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.7,
+      "mean_delay_min": 6,
+      "p95_delay_min": 25
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/04-10-2026_07:48/all/all"
+  },
+  {
+    "id": "tr_war_1004_0840",
+    "source": "fixture",
+    "fetched_at": "2026-10-03T12:44:00+02:00",
+    "mode": "train",
+    "category": "EIP",
+    "train": "EIP",
+    "from": "Warszawa Centralna",
+    "to": "Kraków Główny",
+    "dep": "2026-10-04T08:40:00+02:00",
+    "arr": "2026-10-04T10:56:00+02:00",
+    "price_pln": 145.34,
+    "changes": 0,
+    "delay_model": {
+      "p_on_time": 0.75,
+      "mean_delay_min": 5,
+      "p95_delay_min": 20
+    },
+    "known_delay_min": 0,
+    "url": "https://koleo.pl/rozklad-pkp/warszawa-centralna/krakow-glowny/04-10-2026_08:40/all/all"
+  }
+]

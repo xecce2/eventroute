@@ -38,15 +38,15 @@ def simulate_disruption(req: DisruptionRequest) -> DisruptionResponse:
 def disruption_message(affected: Plan, plans: list[Plan], delay_min: int) -> str:
     t = affected.train
     text = (
-        f"{t.train} {t.dep:%H:%M} опаздывает на {delay_min} мин. "
-        f"Будешь на месте около {affected.arrival_at_venue:%H:%M}, "
-        f"шанс успеть {round(affected.p_on_time * 100)}%."
+        f"{t.train} {t.dep:%H:%M} is delayed by {delay_min} min. "
+        f"You will arrive around {affected.arrival_at_venue:%H:%M}, "
+        f"{round(affected.p_on_time * 100)}% chance of arriving on time."
     )
     better = [p for p in plans if p.train.id != t.id and p.p_on_time > affected.p_on_time]
     if better:
         alt = max(better, key=lambda p: p.p_on_time)
         text += (
-            f" Альтернатива: {alt.train.train} {alt.train.dep:%H:%M} → {alt.train.arr:%H:%M}, "
-            f"шанс {round(alt.p_on_time * 100)}%."
+            f" Alternative: {alt.train.train} {alt.train.dep:%H:%M} → {alt.train.arr:%H:%M}, "
+            f"{round(alt.p_on_time * 100)}% chance."
         )
     return text
