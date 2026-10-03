@@ -2,7 +2,7 @@
 import logging
 import threading
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 
 from app import config
 from app.providers.base import LiveProvider, SearchResult, TrainProvider
@@ -55,7 +55,14 @@ class ChainProvider:
     def origins(self, destination: str) -> list[str]:
         return self.fixtures.origins(destination)
 
-    def search(self, origin: str, destination: str, day: date) -> SearchResult:
+    def search(
+        self, origin: str, destination: str, day: date,
+        *, since: datetime | None = None, until: datetime | None = None,
+    ) -> SearchResult:
+        """`since`/`until` bound the departures a live search reads; recorded data ignores them."""
+        if since is not None and until is not None and until <= since:
+            # Too late for anything to arrive in time: no search, and it is not a live failure.
+            return SearchResult([], "recorded")
         with self._lock:
             self.stats.requests_total += 1
         if self.live is None:
@@ -67,7 +74,8 @@ class ChainProvider:
         for attempt in range(1 + self.retries):
             try:
                 result = call_with_timeout(
-                    lambda: self.live.fetch(origin, destination, day), self.timeout_sec
+                    lambda: self.live.fetch(origin, destination, day, since=since, until=until),
+                    self.timeout_sec,
                 )
             except CallTimeout as e:
                 # The hung attempt is still running; a retry would only start a second one.

@@ -18,7 +18,7 @@ class FixtureProvider:
         ]
 
     def search(self, origin: str, destination: str, day: date) -> list[TrainOption]:
-        # `day` is ignored: fixtures are recorded for the event day already.
+        # `day` is ignored: every recorded date is returned, the planner keeps what fits its window.
         # Names are compared as the Validator does: case and diacritics do not matter.
         origin, destination = koleo_slug(origin), koleo_slug(destination)
         return [

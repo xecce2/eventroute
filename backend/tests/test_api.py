@@ -1,13 +1,20 @@
 import json
+from datetime import datetime, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
 from app import config, services
+from app.city.overview import build_overview
+from app.city.participants import generate
+from app.config import FIXTURES_DIR
 from app.main import app
 from app.models import LocalLeg
 from app.planner.local_transport import LocalTransport
+from app.planner.planner import Planner
+from app.providers.chain import ChainProvider
+from app.providers.fixture import FixtureProvider
 
 config.SSE_STEP_SEC = 0
 client = TestClient(app)
@@ -151,11 +158,64 @@ def test_arrive_by_in_another_offset_gives_the_same_plans():
     assert local and local == summary("2026-10-04T07:30:00Z") == summary("2026-10-04T03:30:00-04:00")
 
 
-def test_arrive_by_after_the_event_start_is_rejected():
+def test_arrive_by_after_the_event_start_is_accepted():
+    # The event is the place; its start is only the default time to be there.
     r = client.post("/api/plan", json={
-        "origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "arrive_by": "2026-10-04T10:30:00+02:00",
+        "origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "arrive_by": "2026-10-04T13:00:00+02:00",
+    })
+    assert r.status_code == 200
+    options = r.json()["options"]
+    assert options and all(p["venue_target"] == "2026-10-04T13:00:00+02:00" for p in options)
+    # The window is the 12 hours before 13:00, so nothing from the evening before.
+    assert all(p["train"]["dep"] >= "2026-10-04T01:00:00+02:00" for p in options)
+    assert all(p["arrival_at_venue"] <= "2026-10-04T13:00:00+02:00" for p in options)
+
+
+def test_arrive_by_without_a_time_zone_is_rejected():
+    r = client.post("/api/plan", json={
+        "origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "arrive_by": "2026-10-11T09:30:00",
     })
     assert r.status_code == 422
+
+
+def week_later_fixtures(tmp_path) -> FixtureProvider:
+    """The recorded files plus the same trips a week later, as `record_fixtures.py` would add them."""
+    trains_dir = FIXTURES_DIR / "trains"
+    for path in trains_dir.glob("*.json"):
+        raw = path.read_text(encoding="utf-8")
+        (tmp_path / path.name).write_text(raw, encoding="utf-8")
+        later = [
+            {**t, "id": t["id"] + "_w2", **{
+                k: (datetime.fromisoformat(t[k]) + timedelta(days=7)).isoformat() for k in ("dep", "arr")
+            }}
+            for t in json.loads(raw)
+        ]
+        (tmp_path / f"{path.stem}_1011.json").write_text(json.dumps(later), encoding="utf-8")
+    return FixtureProvider(tmp_path)
+
+
+def test_another_date_is_planned_from_its_own_trips(tmp_path, monkeypatch):
+    monkeypatch.setattr(services.planner, "provider", ChainProvider(week_later_fixtures(tmp_path)))
+
+    def departures(arrive_by=None):
+        request = {"origin": "Wrocław Główny", "event_id": "ev_hackyeah2026"}
+        body = client.post("/api/plan", json=request | ({"arrive_by": arrive_by} if arrive_by else {}))
+        assert body.status_code == 200
+        return sorted(datetime.fromisoformat(p["train"]["dep"]) for p in body.json()["options"])
+
+    event_day = departures()
+    assert event_day == departures("2026-10-04T09:30:00+02:00")
+    assert all(d.date().isoformat() in ("2026-10-03", "2026-10-04") for d in event_day)
+    week_later = departures("2026-10-11T09:30:00+02:00")
+    assert week_later == [d + timedelta(days=7) for d in event_day]
+    assert week_later == departures("2026-10-11T07:30:00Z")
+
+
+def test_city_overview_ignores_fixtures_of_other_dates(tmp_path):
+    event = services.events["ev_hackyeah2026"]
+    people = generate(services.fixtures.origins(event.venue_station))
+    both = Planner(ChainProvider(week_later_fixtures(tmp_path)), services.local_transport, runs=config.MC_RUNS)
+    assert build_overview(event, people, both) == build_overview(event, people, services.city_planner)
 
 
 @pytest.mark.parametrize("budget", [0, -5])
@@ -167,7 +227,8 @@ def test_budget_must_be_positive(budget):
 
 
 def test_budget_leaves_out_options_without_a_price():
-    request = {"origin": "Katowice", "event_id": "ev_hackyeah2026"}
+    # By 10:00, so the FlixBus at 07:05 (no price on Koleo) is among the options.
+    request = {"origin": "Katowice", "event_id": "ev_hackyeah2026", "arrive_by": "2026-10-04T10:00:00+02:00"}
     assert any(p["price_pln"] is None for p in client.post("/api/plan", json=request).json()["options"])
     options = client.post("/api/plan", json={**request, "budget_pln": 30}).json()["options"]
     assert options and all(p["price_pln"] is not None and p["price_pln"] <= 30 for p in options)

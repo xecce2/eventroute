@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 from typing import TYPE_CHECKING, Protocol
 
 from app.models import DataSource, TrainOption
@@ -12,7 +12,7 @@ class TrainProvider(Protocol):
     """A source of options that always answers (fixtures)."""
 
     def search(self, origin: str, destination: str, day: date) -> list[TrainOption]:
-        """Options from `origin` to `destination` for the event on `day`, including the evening before."""
+        """Every recorded option from `origin` to `destination`; the planner picks the dates it needs."""
         ...
 
     def origins(self, destination: str) -> list[str]:
@@ -25,9 +25,13 @@ class LiveProvider(Protocol):
 
     `fetch` returns the Validator's result for everything it read. It raises on a failed fetch
     (network, captcha, Gemini error); the exception text becomes `fallback_reason`.
+    `since`/`until` (with a time zone) bound the departures to read; None means the provider's default.
     """
 
-    def fetch(self, origin: str, destination: str, day: date) -> "ValidationResult": ...
+    def fetch(
+        self, origin: str, destination: str, day: date,
+        *, since: datetime | None = None, until: datetime | None = None,
+    ) -> "ValidationResult": ...
 
 
 @dataclass
@@ -40,6 +44,9 @@ class SearchResult:
 class SearchProvider(Protocol):
     """What the planner sees (CLAUDE.md, section 3): options plus where they came from."""
 
-    def search(self, origin: str, destination: str, day: date) -> SearchResult: ...
+    def search(
+        self, origin: str, destination: str, day: date,
+        *, since: datetime | None = None, until: datetime | None = None,
+    ) -> SearchResult: ...
 
     def origins(self, destination: str) -> list[str]: ...

@@ -1,12 +1,13 @@
 import random
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 from pydantic import ValidationError
 
 from app.models import DelayModel, PlanRequest, TrainOption
-from app.planner.planner import Candidate, select
+from app.planner.planner import Candidate, Planner, select
 from app.planner.reliability import ON_TIME_MAX_MIN, p_on_time, sample_delay
+from app.providers.base import SearchResult
 from app.services import events, planner
 
 EVENT = events["ev_hackyeah2026"]
@@ -52,6 +53,73 @@ def test_night_arrivals_are_overnight():
     legs = planner.local.route(EVENT.venue_station, EVENT.venue)
     assert planner._score(trains["tr_wro_1004_0021"], legs, EVENT.venue_target).overnight  # arr 04:38
     assert not planner._score(trains["tr_wro_1004_0146"], legs, EVENT.venue_target).overnight  # arr 06:08
+
+
+class StubProvider:
+    """Returns the given trains and remembers the window the planner asked for."""
+
+    def __init__(self, *trains: TrainOption):
+        self.trains = list(trains)
+        self.window = None
+
+    def search(self, origin, destination, day, *, since=None, until=None):
+        self.window = (since, until)
+        return SearchResult(self.trains, "recorded")
+
+
+def test_search_window_is_12_hours_before_arrive_by_and_not_before_now():
+    stub = StubProvider()
+    p = Planner(stub, planner.local, runs=10)
+    arrive_by = datetime.fromisoformat("2026-10-11T13:00:00+02:00")
+    req = PlanRequest(origin="Wrocław Główny", event_id=EVENT.id, arrive_by=arrive_by)
+
+    p.plan(EVENT, req, not_before=datetime.fromisoformat("2026-10-03T12:00:00+02:00"))
+    since, until = stub.window
+    assert since == datetime.fromisoformat("2026-10-11T01:00:00+02:00")
+    assert until < arrive_by and arrive_by - until < timedelta(hours=1)  # the station deadline
+
+    now = datetime.fromisoformat("2026-10-11T06:40:00+02:00")
+    p.plan(EVENT, req, not_before=now)
+    assert stub.window[0] == now  # departed trips are not searched for
+
+
+def test_winter_time_date_keeps_its_offset_and_a_real_12_hour_window():
+    # Clocks go back on 2026-10-25 at 03:00: the evening before is +02:00, the morning is +01:00.
+    def t(id: str, dep: str, arr: str) -> TrainOption:
+        return train(id, "05:10", "08:15").model_copy(update={
+            "dep": datetime.fromisoformat(dep), "arr": datetime.fromisoformat(arr),
+        })
+
+    stub = StubProvider(
+        t("too_early", "2026-10-24T22:00:00+02:00", "2026-10-25T01:00:00+02:00"),
+        t("night", "2026-10-24T23:00:00+02:00", "2026-10-25T02:00:00+02:00"),
+        t("morning", "2026-10-25T05:10:00+01:00", "2026-10-25T08:15:00+01:00"),
+    )
+    req = PlanRequest(origin="Wrocław Główny", event_id=EVENT.id, arrive_by="2026-10-25T09:30:00+01:00")
+    options = {o.train.id: o for o in Planner(stub, planner.local, runs=10).plan(EVENT, req).options}
+
+    # 09:30+01:00 minus 12 real hours is 22:30+02:00 the evening before.
+    assert stub.window[0] == datetime.fromisoformat("2026-10-24T22:30:00+02:00")
+    assert set(options) == {"night", "morning"}
+    assert options["night"].overnight_stay and not options["morning"].overnight_stay
+    assert options["morning"].venue_target.isoformat() == "2026-10-25T09:30:00+01:00"
+    assert options["morning"].arrival_at_venue.isoformat().endswith("+01:00")
+
+
+def test_overnight_follows_the_arrive_by_day_not_the_event_day():
+    def t(id: str, dep: str, arr: str) -> TrainOption:
+        return train(id, "05:10", "08:15").model_copy(update={
+            "dep": datetime.fromisoformat(dep), "arr": datetime.fromisoformat(arr),
+        })
+
+    stub = StubProvider(
+        t("evening", "2026-10-10T23:00:00+02:00", "2026-10-10T23:50:00+02:00"),
+        t("before_six", "2026-10-11T02:00:00+02:00", "2026-10-11T05:30:00+02:00"),
+        t("morning", "2026-10-11T05:10:00+02:00", "2026-10-11T08:15:00+02:00"),
+    )
+    req = PlanRequest(origin="Wrocław Główny", event_id=EVENT.id, arrive_by="2026-10-11T09:30:00+02:00")
+    options = {o.train.id: o.overnight_stay for o in Planner(stub, planner.local, runs=10).plan(EVENT, req).options}
+    assert options == {"evening": True, "before_six": True, "morning": False}
 
 
 def test_one_option_winning_several_labels_is_one_plan():

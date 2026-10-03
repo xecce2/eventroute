@@ -2,7 +2,7 @@
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 from app.models import DataSource, Event, Label, Plan, PlanRequest, TrainOption
@@ -11,14 +11,14 @@ from app.planner.reliability import p_on_time
 from app.providers.base import SearchProvider, SearchResult
 
 TRANSFER_MIN = 5            # platform -> first local leg
-SEARCH_FROM_HOUR = 16       # search window opens at 16:00 the day before
-EARLIEST_ARRIVAL_HOUR = 6   # arriving before 06:00 on the event day still means a night to spend
+SEARCH_WINDOW_HOURS = 12    # search window opens this long before the time to be at the venue
+EARLIEST_ARRIVAL_HOUR = 6   # arriving before 06:00 on the arrival day still means a night to spend
 VIABLE_P = 0.5              # fastest/cheapest are picked only among plans at least this likely
-SAFE_ENOUGH_P = 0.8         # below this on the event day, an overnight option may become safest
+SAFE_ENOUGH_P = 0.8         # below this on the arrival day, an overnight option may become safest
 SAFEST_TIE_P = 0.02         # near-equal p_on_time -> prefer the later departure
 
-# The search window, the overnight boundary and the day sent to the provider are local to the
-# event, whatever offset the request used for `arrive_by` (e.g. "...Z").
+# The overnight boundary and the day sent to the provider are local to the event,
+# whatever offset the request used for `arrive_by` (e.g. "...Z").
 LOCAL_TZ = ZoneInfo("Europe/Warsaw")
 
 LABEL_TEXT = {"safest": "most reliable", "fastest": "fastest", "cheapest": "cheapest"}
@@ -87,12 +87,20 @@ class Planner:
         station_deadline = venue_target - timedelta(
             minutes=TRANSFER_MIN + self.local.mean_min(legs) + self.local.std_min(legs)
         )
-        window_start = (venue_target - timedelta(days=1)).replace(
-            hour=SEARCH_FROM_HOUR, minute=0, second=0, microsecond=0
-        )
+        # In UTC, so the window is 12 real hours even across a clock change.
+        window_start = (
+            venue_target.astimezone(timezone.utc) - timedelta(hours=SEARCH_WINDOW_HOURS)
+        ).astimezone(LOCAL_TZ)
 
         status("search", "Searching for trains…")
-        found_trains = found or self.provider.search(req.origin, event.venue_station, venue_target.date())
+        found_trains = found or self.provider.search(
+            req.origin,
+            event.venue_station,
+            venue_target.date(),
+            # Nothing that has already left is needed, and nothing arriving after the deadline.
+            since=max(window_start, not_before) if not_before else window_start,
+            until=station_deadline,
+        )
         if found_trains.fallback_reason:
             status("fallback", f"Live search failed, using recorded data: {found_trains.fallback_reason}")
         trains = [
@@ -181,7 +189,7 @@ def select(candidates: list[Candidate]) -> list[tuple[Candidate, list[Label]]]:
     """Pick safest/fastest/cheapest; one option winning several labels becomes one plan.
 
     Overnight options never win fastest/cheapest: their time and price ignore the night stay.
-    They can be safest only if nothing on the event day is safe enough.
+    They can be safest only if nothing on the arrival day is safe enough.
     """
     same_day = [c for c in candidates if not c.overnight]
     viable = [c for c in same_day if c.p >= VIABLE_P] or same_day

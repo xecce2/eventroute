@@ -1,5 +1,5 @@
 import time
-from datetime import date
+from datetime import date, datetime, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
@@ -24,8 +24,10 @@ class FakeLive:
     def __init__(self, *outcomes):
         self.outcomes = list(outcomes)
         self.calls = 0
+        self.windows = []
 
-    def fetch(self, origin, destination, day):
+    def fetch(self, origin, destination, day, *, since=None, until=None):
+        self.windows.append((since, until))
         outcome = self.outcomes[min(self.calls, len(self.outcomes) - 1)]
         self.calls += 1
         if isinstance(outcome, Exception):
@@ -155,7 +157,7 @@ def test_partly_rejected_live_search_is_live_but_counted():
 
 def test_hung_live_search_times_out_without_a_retry():
     class Hung(FakeLive):
-        def fetch(self, origin, destination, day):
+        def fetch(self, origin, destination, day, *, since=None, until=None):
             self.calls += 1
             time.sleep(1)
 
@@ -167,6 +169,24 @@ def test_hung_live_search_times_out_without_a_retry():
     assert live.calls == 1  # the first attempt is still running: no second browser
     assert found.data_source == "recorded" and found.options == recorded_wroclaw()
     assert found.fallback_reason == "live search failed: no answer within 0.05 s"
+
+
+def test_search_window_reaches_the_live_provider():
+    live = FakeLive(ValidationResult(accepted=live_options()))
+    since = datetime.fromisoformat("2026-10-10T21:30:00+02:00")
+    until = datetime.fromisoformat("2026-10-11T08:57:00+02:00")
+    ChainProvider(services.fixtures, live=live).search("Wrocław Główny", "Kraków Główny", DAY, since=since, until=until)
+    assert live.windows == [(since, until)]
+
+
+def test_empty_window_is_no_search_and_no_fallback():
+    # "Now" is already past the station deadline: nothing can arrive in time.
+    live = FakeLive(ValidationResult(accepted=live_options()))
+    chain = ChainProvider(services.fixtures, live=live)
+    late = datetime.fromisoformat("2026-10-04T09:00:00+02:00")
+    found = chain.search("Wrocław Główny", "Kraków Główny", DAY, since=late, until=late - timedelta(minutes=3))
+    assert (found.options, found.fallback_reason, live.calls) == ([], None, 0)
+    assert (chain.stats.requests_total, chain.stats.fallback) == (0, 0)
 
 
 def test_reason_is_one_line():

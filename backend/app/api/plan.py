@@ -13,9 +13,8 @@ router = APIRouter()
 
 @router.post("/plan", response_model=PlanResponse)
 def create_plan(req: PlanRequest) -> PlanResponse:
+    # The event is the place; `arrive_by` may be any date, the event start is only its default.
     event = services.get_event(req.event_id)
-    if req.arrive_by is not None and req.arrive_by > event.start:
-        raise HTTPException(422, "arrive_by is after the event start")
     request_id = new_id("rq")
     statuses: list[tuple[str, str]] = []
     services.requests[request_id] = services.RequestState(request=req, statuses=statuses)
