@@ -1,13 +1,25 @@
-import { mockPlansFor, mockDisrupted, mockCity, mockStations } from "../mocks";
+import { mockPlansFor, mockDisrupted, mockCity, mockStations, mockEvent } from "../mocks";
 
 // Mocks are invented data: they are on only when asked for explicitly (VITE_USE_MOCKS=true).
 export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS === "true";
 const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// The server explains a refusal (FastAPI: `detail` is a text or a list of {msg}); show that, not just a code.
+async function failure(path, res) {
+  let reason = "";
+  try {
+    const { detail } = await res.json();
+    reason = Array.isArray(detail) ? detail.map((d) => d.msg).join("; ") : String(detail ?? "");
+  } catch {
+    // no JSON body: the status code is all there is
+  }
+  return new Error(reason ? `${reason} (${res.status})` : `${path} ${res.status}`);
+}
+
 async function request(path, options) {
   const res = await fetch(BASE + path, options);
-  if (!res.ok) throw new Error(`${path} ${res.status}`);
+  if (!res.ok) throw await failure(path, res);
   return res.json();
 }
 
@@ -17,6 +29,14 @@ const post = (path, body) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
+
+export async function getEvent(eventId) {
+  if (USE_MOCKS) {
+    await sleep(100);
+    return mockEvent;
+  }
+  return request(`/api/events/${eventId}`);
+}
 
 export async function getStations(eventId) {
   if (USE_MOCKS) {

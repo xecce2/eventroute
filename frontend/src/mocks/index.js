@@ -150,6 +150,11 @@ export function mockDisrupted(planId) {
 
 export const mockStations = Object.keys(ROUTES).sort();
 
+export const mockEvent = {
+  id: "ev_hackyeah2026", name: "HackYeah 2026 (mock)", venue: "Tauron Arena Kraków",
+  start: "2026-10-04T10:00:00+02:00", checkin_buffer_min: 30,
+};
+
 export const mockCity = {
   event_id: "ev_hackyeah2026", participants_total: 420,
   arrivals_by_slot: [
