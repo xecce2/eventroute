@@ -30,6 +30,8 @@ nav .active { background: var(--blue); color: #fff; }
 .badge.good, .load-low { background: #2e9e4f22; color: var(--good); }
 .badge.warn, .load-medium { background: #e0a10022; color: var(--warn); }
 .badge.live { background: var(--blue); color: #fff; }
+.badge.mock { background: var(--bad); color: #fff; font-weight: 600; }
+.mock-banner { background: var(--bad); color: #fff; padding: 8px 12px; border-radius: 8px; font-weight: 600; margin-bottom: 12px; }
 .load-high { background: #d332; color: var(--bad); }
 
 .prob { display: flex; align-items: center; gap: 16px; }

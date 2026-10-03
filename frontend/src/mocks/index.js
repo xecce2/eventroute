@@ -70,7 +70,7 @@ function buildPlan(origin, r, i) {
     id: `pl_${slug(origin)}_${i}`,
     labels: [],
     train: {
-      id: `tr_${slug(origin)}_${i}`, source: "fixture", mode: r.mode, category: r.category, train: r.train,
+      id: `tr_${slug(origin)}_${i}`, source: "mock", mode: r.mode, category: r.category, train: r.train,
       from: origin, to: "Kraków Główny", dep: iso(dep), arr: iso(arr),
       price_pln: r.price, changes: 0, known_delay_min: 0,
       delay_model: { p_on_time: 0.7, mean_delay_min: 6, p95_delay_min: 25 }, url,
@@ -115,7 +115,7 @@ export function mockPlansFor(req) {
   return {
     request_id: "req_mock",
     status: options.length ? "ok" : "no_options",
-    data_source: "recorded",
+    data_source: "mock",
     fallback_reason: null,
     plans,
     options,
@@ -127,14 +127,17 @@ export function mockDisrupted(planId) {
   const delay = 25;
   const buffer = base.buffer_min - delay;
   const arrAbs = TARGET - buffer;
-  const affected = {
+  const delayed = {
     ...base,
     train: { ...base.train, known_delay_min: delay },
     buffer_min: buffer,
     p_on_time: probFor(buffer, base.train.mode),
     arrival_at_venue: iso(arrAbs),
   };
-  const swap = (list) => list.map((p) => (p.id === affected.id ? affected : p));
+  // Like the real backend: the affected plan gets its own id, while the recalculated
+  // lists keep the same train under another plan id. The UI must match by train id.
+  const affected = { ...delayed, id: `${base.id}_affected` };
+  const swap = (list) => list.map((p) => (p.id === base.id ? delayed : p));
   lastOptions = swap(lastOptions);
   return {
     affected_plan: affected,
