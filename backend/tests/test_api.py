@@ -39,6 +39,7 @@ def test_unknown_origin_gives_no_options():
     r = client.post("/api/plan", json={"origin": "Gdańsk Główny", "event_id": "ev_hackyeah2026"})
     assert r.json() == {
         "request_id": r.json()["request_id"], "plans": [], "options": [], "status": "no_options",
+        "data_source": "recorded", "fallback_reason": None,
     }
 
 

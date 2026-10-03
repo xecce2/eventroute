@@ -12,6 +12,10 @@ load_dotenv(ROOT_DIR / ".env")
 
 # Empty -> no live agent: planning stays on fixtures.
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+# fixture: recorded data only (works offline). koleo: live search (F), falls back to fixtures.
+TRAIN_PROVIDER = os.getenv("TRAIN_PROVIDER", "fixture").strip().lower()
+if TRAIN_PROVIDER not in ("fixture", "koleo"):
+    raise ValueError(f"TRAIN_PROVIDER must be 'fixture' or 'koleo', got {TRAIN_PROVIDER!r}")
 
 # Empty token or chat id -> no Telegram: the UI shows the notification text itself.
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()

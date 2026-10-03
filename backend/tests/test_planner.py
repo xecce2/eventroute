@@ -46,7 +46,8 @@ def test_wroclaw_plans_respect_rules():
 
 
 def test_night_arrivals_are_overnight():
-    trains = {t.id: t for t in planner.provider.search("Wrocław Główny", "Kraków Główny", EVENT.start.date())}
+    found = planner.provider.search("Wrocław Główny", "Kraków Główny", EVENT.start.date())
+    trains = {t.id: t for t in found.options}
     legs = planner.local.route(EVENT.venue_station, EVENT.venue)
     assert planner._score(trains["tr_wro_1004_0021"], legs, EVENT.venue_target).overnight  # arr 04:38
     assert not planner._score(trains["tr_wro_1004_0146"], legs, EVENT.venue_target).overnight  # arr 06:08

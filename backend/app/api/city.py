@@ -20,6 +20,6 @@ def city_overview(event_id: str | None = None) -> CityOverview:
         event_id = next(iter(services.events))
     event = services.get_event(event_id)
     if event_id not in _cache:
-        participants = load_participants(services.planner.provider.origins(event.venue_station))
-        _cache[event_id] = build_overview(event, participants, services.planner)
+        participants = load_participants(services.city_planner.provider.origins(event.venue_station))
+        _cache[event_id] = build_overview(event, participants, services.city_planner)
     return _cache[event_id]

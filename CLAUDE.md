@@ -163,21 +163,24 @@ FastAPI ── Planner (детерминированный, обратный р�
 Только эти поля, без персональных данных. `pref` — какую карточку человек выбирает; если такой метки нет, берёт `safest`. Если файла нет, бэкенд генерирует 420 участников сам (`backend/app/city/participants.py`, распределение по городам и предпочтениям — константы в начале файла).
 
 ### Эндпоинты
-- `POST /api/plan` — вход: `{origin, event_id, arrive_by?, budget_pln?, mode_pref?}`, выход: `{request_id, plans: Plan[], options: Plan[], status: "ok"|"no_options"}`.
+- `POST /api/plan` — вход: `{origin, event_id, arrive_by?, budget_pln?, mode_pref?}`, выход: `{request_id, plans: Plan[], options: Plan[], status: "ok"|"no_options", data_source: "live"|"recorded"|"mixed", fallback_reason: str|null}`.
+  - `data_source` — откуда поезда: `live` (живой поиск прошёл Validator), `recorded` (фикстуры). `mixed` зарезервирован, сейчас не выдаётся.
+  - `fallback_reason` — почему вместо живого поиска взяты фикстуры (`null`, если откат не ожидался, например при `TRAIN_PROVIDER=fixture`). Фронт показывает плашку «Live search failed, showing recorded data».
   - `plans` — карточки (1–3 плана с метками).
   - `options` — **все** подходящие варианты для списка под карточками, **сначала дешёвые** (по `price_pln` по возрастанию, при равной цене — по времени отправления; варианты без цены в конце). Включает и карточки (те же `id`), и варианты с `overnight_stay: true`. У вариантов, которые не стали карточками, `labels: []`. Задержку (`/api/simulate/disruption`) можно симулировать для любого `id` из `options`.
   - `origin` — **станция** (полное название, как на Koleo). На фронте выбор из списка станций.
   - `arrive_by: null` → берём `venue_target` из события.
   - **Уже отправившиеся варианты не показываются** ни в `plans`, ни в `options`: отправление раньше «сейчас» отбрасывается. «Сейчас» — реальное время или `DEMO_NOW` из `.env` (см. раздел 11). Если ушло всё, `status: "no_options"`. В статусе SSE `found` пишется, сколько скрыто: `Found 6 suitable options (13 already departed)`.
   - **Запланировано (изменение контракта, см. раздел 11):** в ответ добавляются `data_source: "live" | "recorded" | "mixed"` и `fallback_reason: string | null`. `live` значит, что все варианты пришли от живого агента и прошли Validator; `recorded` — все из фикстур; `mixed` — часть вариантов от живого агента, часть из фикстур. `fallback_reason` заполнен, если был откат на фикстуры (например `"validator rejected 4/6 options"`, `"rate limit"`, `"timeout"`).
-- `GET /api/plan/{request_id}/stream` — SSE-статусы поиска. События: `event: status` с `data: {"step": "search|found|local|reliability|done", "message": "Searching for trains…"}`, в конце `event: done` с `data: {"request_id": "..."}`.
-- `POST /api/simulate/disruption` — вход: `{plan_id, train_delay_min}`, выход: `{affected_plan: Plan, plans: Plan[], options: Plan[], notified: bool, message: str}`. `options` — как в `POST /api/plan`, но пересчитанные с задержкой.
+- `GET /api/plan/{request_id}/stream` — SSE-статусы поиска. События: `event: status` с `data: {"step": "search|fallback|found|local|reliability|done", "message": "Searching for trains…"}` (`fallback` — только при откате на фикстуры, в `message` причина), в конце `event: done` с `data: {"request_id": "..."}`.
+- `POST /api/simulate/disruption` — вход: `{plan_id, train_delay_min}`, выход: `{affected_plan: Plan, plans: Plan[], options: Plan[], notified: bool, message: str, data_source, fallback_reason}`. `options` — как в `POST /api/plan`, но пересчитанные с задержкой.
   - `affected_plan` — исходный план с задержкой (`train.known_delay_min`), для экрана «было / стало».
   - `plans` — пересчитанные планы. Альтернативы только с отправлением не раньше задержанного поезда (задержка известна в момент его отправления) и не раньше «сейчас».
   - `notified: true` → `message` отправлен в Telegram. `notified: false` → не отправлен (нет ключей в `.env`, нет сети или ошибка Telegram), фронт показывает `message` сам. Фронт должен показывать `message` в обоих случаях хотя бы коротко: на сцене зрители не видят телефон.
 - `GET /api/city/overview?event_id=...` — выход: `CityOverview`. `event_id` можно не указывать, пока событие одно.
 - `GET /api/events/{id}` — выход: `Event`
 - `GET /api/events/{id}/stations` — выход: список станций отправления, `["Katowice", "Poznań Główny", ...]`, по алфавиту. Для выпадающего списка в форме. Берётся из провайдера (метод `TrainProvider.origins()`), поэтому новый город с фикстурой появляется в списке сам.
+- `GET /api/providers/status` — выход: `{provider: "fixture"|"koleo", live_available: bool, requests_total, live_ok, fallback, last_fallback_reason}`. Счётчики с запуска сервера. `live_available: false` — живой провайдер выбран, но не может работать (нет ключа, нет модуля). Перед питчем говорим только то, что показывают эти цифры.
 
 ## 5. Логика планировщика (коротко)
 
@@ -254,7 +257,7 @@ FastAPI ── Planner (детерминированный, обратный р�
 ## 11. Текущее состояние (обновлять по ходу)
 
 ### Сделано
-**Backend (D)** — сквозной сценарий на фикстурах работает, 76 тестов проходят (`cd backend; pytest`). Зависимость `tzdata` обязательна на Windows: без неё `ZoneInfo("Europe/Warsaw")` в Validator падает.
+**Backend (D)** — сквозной сценарий на фикстурах работает, 87 тестов проходят (`cd backend; pytest`). Зависимость `tzdata` обязательна на Windows: без неё `ZoneInfo("Europe/Warsaw")` в Validator падает.
 - `backend/app/models.py` — контракты раздела 4 (Pydantic). Поле `from` в коде называется `from_`, наружу уходит `"from"`.
 - `backend/app/planner/planner.py` — обратный планировщик и выбор планов (раздел 5). Настройки — константы в начале файла:
   `TRANSFER_MIN=5` (перрон → остановка), `SEARCH_FROM_HOUR=16`, `EARLIEST_ARRIVAL_HOUR=6` (раньше — ночёвка), `VIABLE_P=0.5` (fastest/cheapest только среди вариантов с шансом ≥ 50%), `SAFE_ENOUGH_P=0.8`, `SAFEST_TIE_P=0.02` (при почти равном шансе safest — более поздний рейс).
@@ -264,7 +267,7 @@ FastAPI ── Planner (детерминированный, обратный р�
 - `backend/app/notifier/` — `notify()` шлёт `message` в Telegram (`sendMessage` Bot API через `httpx`) на `TELEGRAM_CHAT_ID` из `.env`. Таймаут 3 с (`TELEGRAM_TIMEOUT_SEC`), любые ошибки → `False`, без падений и зависаний. Токен в логи не пишется. Бот может писать только тому, кто сам нажал у него **Start**. Тесты никогда не шлют настоящих сообщений (`backend/tests/conftest.py` отключает Telegram).
 - `backend/app/providers/validator.py` и `delay_models.py` (F) — Validator для ответа живого агента. Агент возвращает **только факты со страницы** (`category`, `from`, `to`, `dep`, `arr`, `price_pln`, `changes`), а `id`, `source`, `fetched_at`, `url` (по шаблону Koleo), `mode` и `delay_model` добавляет код, поэтому агент не может подменить ссылку покупки, надёжность или записать себе `source`. `validate_options(...)` возвращает `ValidationResult(accepted, rejected)`; у каждого отклонённого варианта причина, а `fallback_reason()` собирает из них текст для ответа API. Проверки: время только с поясом, `dep < arr`, длительность 15 мин – 16 ч, дата в окне поиска, цена больше 0 и до 1000 zł или `null`, не больше 3 пересадок, известная категория, станции совпадают с запросом (без учёта диакритики), дубли. Таблица `delay_model` по категориям — наши оценки. Тест `test_recorded_fixtures_…` проверяет, что Validator из фактов фикстуры собирает те же `TrainOption`, что лежат в файлах. В планировщик пока не подключён (нет провайдера агента).
 - `backend/app/services.py` — события, планировщик, хранилище в памяти (после перезапуска пусто).
-- Эндпоинты: `GET /api/health`, `GET /api/events/{id}`, `GET /api/events/{id}/stations`, `POST /api/plan`, `GET /api/plan/{request_id}/stream`, `POST /api/simulate/disruption`, `GET /api/city/overview`.
+- Эндпоинты: `GET /api/health`, `GET /api/events/{id}`, `GET /api/events/{id}/stations`, `POST /api/plan`, `GET /api/plan/{request_id}/stream`, `POST /api/simulate/disruption`, `GET /api/city/overview`, `GET /api/providers/status`.
 - `backend/app/city/` — дашборд города: `participants.py` (участники из файла F или генератор), `overview.py` (участник → план по его `pref` → волна, нагрузка узлов, рекомендации). Результат кэшируется на время работы сервера. Текущий результат: 420 участников, пик 151 человек на вокзале в 08:15 и у входа в 08:45, обе нагрузки `high`, две рекомендации.
 - `backend/scripts/dump_examples.py` → `docs/api-examples/*.json`: **настоящие** ответы API (событие, станции, планы из Вроцлава, задержка 25 мин на `fastest`, дашборд). Перезапускать после любых изменений контракта или фикстур: `cd backend; python scripts/dump_examples.py`.
 - Секреты: `.env` в **корне репозитория** (рядом с `CLAUDE.md`), в git не попадает. Шаблон — `.env.example` (в git есть). Бэкенд читает `.env` через `python-dotenv` в `backend/app/config.py`; настоящие переменные окружения важнее файла. Сейчас используется `GEMINI_API_KEY` (`config.GEMINI_API_KEY`, пусто — только фикстуры); `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` — для уведомлений (см. `notifier` выше).
@@ -310,7 +313,14 @@ FastAPI ── Planner (детерминированный, обратный р�
   - Правило: `source` в `TrainOption` пишет провайдер, который реально получил данные. Агент и Playwright пишут `koleo` или `playwright`, только если вариант прошёл Validator; `FixtureProvider` всегда пишет `fixture`. Перекрашивать фикстуры в `koleo` нельзя.
   - Правило: любой откат на фикстуры сопровождается причиной (`fallback_reason`): в лог, в статус SSE (`step: "fallback"`), в ответ `POST /api/plan`.
   - **F:** Validator возвращает принятые варианты и отклонённые с причинами; провайдеры агента собирают `fallback_reason`; счётчик запросов (`live_ok`, `fallback`, `last_fallback_reason`).
-  - **D:** поля `data_source` и `fallback_reason` в `PlanResponse` (`models.py`), шаг `fallback` в SSE, эндпоинт `GET /api/providers/status`. Пока агента нет, всегда `data_source: "recorded"`, `fallback_reason: null`.
+  - **D: сделано.** `data_source` и `fallback_reason` в ответах плана и задержки, шаг `fallback` в SSE, `GET /api/providers/status`. Устройство:
+    - `TRAIN_PROVIDER` в `.env`: `fixture` (по умолчанию, работает без сети) или `koleo`.
+    - `backend/app/providers/chain.py` — `ChainProvider`: живой провайдер → 1 повтор → фикстуры с причиной. Счётчики (`requests_total`, `live_ok`, `fallback`, `last_fallback_reason`) здесь. Ключ Gemini из текста причины вырезается, причина обрезается до 300 символов.
+    - Если `koleo` выбран, но не может работать (нет `GEMINI_API_KEY`, нет модуля, модуль не грузится), **каждый** запрос отдаёт `recorded` с этой причиной, а не делает вид, что всё в порядке.
+    - Дашборд города всегда на фикстурах (`services.city_planner`): это прогноз, он не ждёт живой поиск и не попадает в счётчики.
+    - Тесты и `dump_examples.py` всегда на фикстурах, даже если в `.env` стоит `koleo`.
+  - **F: как подключить живой провайдер.** Создать `backend/app/providers/koleo_agent.py` с классом `KoleoAgentProvider(api_key: str)` и методом `fetch(origin, destination, day) -> ValidationResult` (интерфейс `LiveProvider` в `providers/base.py`). Внутри: Playwright → текст выдачи Koleo → Gemini → `validate_options(..., source="koleo")`. При сбое (сеть, капча, ошибка Gemini) — бросать исключение, текст станет `fallback_reason`. Больше ничего менять не нужно: `services.make_provider()` подхватит класс сам при `TRAIN_PROVIDER=koleo`. Зависимости (`google-genai`, `playwright`) добавить в `requirements.txt`.
+  - **Ещё не сделано (D):** кэш живых результатов и SSE в фоне. Живой поиск займёт 30–40 с, а сейчас `POST /api/plan` ждёт его целиком; SSE статусы только воспроизводит. Нужно договориться с A о формате (например, `POST` сразу отдаёт `request_id`, планы приходят в событии SSE `done`).
   - **A:** бейдж «Live» / «Recorded data» на карточке плана по `train.source`, плашка при `fallback_reason`; делать на моках, пока бэкенд не готов.
   - Перед питчем смотрим `GET /api/providers/status` и говорим на слайде только то, что показывает счётчик.
 - Агент Gemini + Playwright, Validator (F). Telegram сделан (D).

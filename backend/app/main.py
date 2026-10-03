@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import city, disruption, events, plan
+from app.api import city, disruption, events, plan, providers
 from app.config import CORS_ORIGINS
 
 app = FastAPI(title="EventRoute API")
@@ -12,7 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for module in (events, plan, disruption, city):
+for module in (events, plan, disruption, city, providers):
     app.include_router(module.router, prefix="/api")
 
 

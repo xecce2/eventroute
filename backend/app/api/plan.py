@@ -28,6 +28,8 @@ def create_plan(req: PlanRequest) -> PlanResponse:
         plans=result.plans,
         options=result.options,
         status="ok" if result.plans else "no_options",
+        data_source=result.data_source,
+        fallback_reason=result.fallback_reason,
     )
 
 

@@ -1,8 +1,8 @@
 {
-  "request_id": "rq_25c93699",
+  "request_id": "rq_c84cdbca",
   "plans": [
     {
-      "id": "pl_c6fe8c18",
+      "id": "pl_39738f2c",
       "labels": [
         "safest",
         "fastest"
@@ -308,7 +308,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
     },
     {
-      "id": "pl_ae37b2aa",
+      "id": "pl_9a13bc0d",
       "labels": [
         "cheapest"
       ],
@@ -615,7 +615,7 @@
   ],
   "options": [
     {
-      "id": "pl_ae37b2aa",
+      "id": "pl_9a13bc0d",
       "labels": [
         "cheapest"
       ],
@@ -920,7 +920,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:51/all/all"
     },
     {
-      "id": "pl_aec1474c",
+      "id": "pl_374abc16",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1726",
@@ -1223,7 +1223,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_17:26/all/all"
     },
     {
-      "id": "pl_219e26d3",
+      "id": "pl_93ab8c6d",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1611",
@@ -1526,7 +1526,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_16:11/all/all"
     },
     {
-      "id": "pl_1a17185c",
+      "id": "pl_ab195185",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1841",
@@ -1829,7 +1829,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_18:41/all/all"
     },
     {
-      "id": "pl_252ee9d4",
+      "id": "pl_f26669a3",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1610",
@@ -2132,7 +2132,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_16:10/all/all"
     },
     {
-      "id": "pl_68a9dc59",
+      "id": "pl_f44cd155",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1810",
@@ -2435,7 +2435,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_18:10/all/all"
     },
     {
-      "id": "pl_50738688",
+      "id": "pl_9ef37526",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2010",
@@ -2738,7 +2738,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_20:10/all/all"
     },
     {
-      "id": "pl_1756402e",
+      "id": "pl_caa56429",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0146",
@@ -3041,7 +3041,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_01:46/all/all"
     },
     {
-      "id": "pl_27e95083",
+      "id": "pl_c73a8582",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0206",
@@ -3344,7 +3344,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_02:06/all/all"
     },
     {
-      "id": "pl_140c6387",
+      "id": "pl_7d34ed02",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1710",
@@ -3647,7 +3647,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_17:10/all/all"
     },
     {
-      "id": "pl_a16b9e0d",
+      "id": "pl_f97ab647",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_1914",
@@ -3950,7 +3950,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_19:14/all/all"
     },
     {
-      "id": "pl_26ce0203",
+      "id": "pl_893c9bb9",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2053",
@@ -4253,7 +4253,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_20:53/all/all"
     },
     {
-      "id": "pl_a5e7e455",
+      "id": "pl_ccca0dbc",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0310",
@@ -4556,7 +4556,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:10/all/all"
     },
     {
-      "id": "pl_c6fe8c18",
+      "id": "pl_39738f2c",
       "labels": [
         "safest",
         "fastest"
@@ -4862,7 +4862,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
     },
     {
-      "id": "pl_7f9be8ab",
+      "id": "pl_d1dfb02d",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0348",
@@ -5165,7 +5165,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:48/all/all"
     },
     {
-      "id": "pl_9a0ba37d",
+      "id": "pl_d2b60645",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2001",
@@ -5468,7 +5468,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_20:01/all/all"
     },
     {
-      "id": "pl_f436fb21",
+      "id": "pl_3df2c885",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2201",
@@ -5771,7 +5771,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_22:01/all/all"
     },
     {
-      "id": "pl_1fbae5cd",
+      "id": "pl_f96c65e1",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2321",
@@ -6074,7 +6074,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_23:21/all/all"
     },
     {
-      "id": "pl_38b825f5",
+      "id": "pl_341c2329",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0021",
@@ -6377,5 +6377,7 @@
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_00:21/all/all"
     }
   ],
-  "status": "ok"
+  "status": "ok",
+  "data_source": "recorded",
+  "fallback_reason": null
 }

@@ -96,11 +96,16 @@ class PlanRequest(Contract):
     mode_pref: str | None = None
 
 
+DataSource = Literal["live", "recorded", "mixed"]
+
+
 class PlanResponse(Contract):
     request_id: str
     plans: list[Plan]
     options: list[Plan]  # every suitable option, cheapest first (unknown price last)
     status: Literal["ok", "no_options"]
+    data_source: DataSource
+    fallback_reason: str | None  # set when a live search was expected but recorded data was used
 
 
 class DisruptionRequest(Contract):
@@ -114,6 +119,17 @@ class DisruptionResponse(Contract):
     options: list[Plan]
     notified: bool
     message: str
+    data_source: DataSource
+    fallback_reason: str | None
+
+
+class ProviderStatus(Contract):
+    provider: Literal["fixture", "koleo"]  # what TRAIN_PROVIDER asks for
+    live_available: bool  # False when the live provider is configured but cannot run
+    requests_total: int
+    live_ok: int
+    fallback: int
+    last_fallback_reason: str | None
 
 
 class Participant(Contract):

@@ -4,10 +4,10 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from app.models import Event, Label, Plan, PlanRequest, TrainOption
+from app.models import DataSource, Event, Label, Plan, PlanRequest, TrainOption
 from app.planner.local_transport import LegTemplate, LocalTransport
 from app.planner.reliability import p_on_time
-from app.providers.base import TrainProvider
+from app.providers.base import SearchProvider
 
 TRANSFER_MIN = 5            # platform -> first local leg
 SEARCH_FROM_HOUR = 16       # search window opens at 16:00 the day before
@@ -36,6 +36,9 @@ class Candidate:
 class PlanResult:
     plans: list[Plan]    # the cards: labeled plans, in label order
     options: list[Plan]  # every suitable option, cheapest first; same objects as in `plans`
+    # Passed through from the provider; the planner does not decide anything on them.
+    data_source: DataSource = "recorded"
+    fallback_reason: str | None = None
 
 
 def new_id(prefix: str) -> str:
@@ -48,7 +51,7 @@ def price_order(plan: Plan) -> tuple:
 
 
 class Planner:
-    def __init__(self, provider: TrainProvider, local: LocalTransport, runs: int):
+    def __init__(self, provider: SearchProvider, local: LocalTransport, runs: int):
         self.provider = provider
         self.local = local
         self.runs = runs
@@ -76,9 +79,12 @@ class Planner:
         )
 
         status("search", "Searching for trains…")
+        found_trains = self.provider.search(req.origin, event.venue_station, venue_target.date())
+        if found_trains.fallback_reason:
+            status("fallback", f"Live search failed, using recorded data: {found_trains.fallback_reason}")
         trains = [
             t.model_copy(update={"known_delay_min": known_delays.get(t.id, t.known_delay_min)})
-            for t in self.provider.search(req.origin, event.venue_station, venue_target.date())
+            for t in found_trains.options
         ]
         trains = [
             t for t in trains
@@ -106,6 +112,8 @@ class Planner:
         return PlanResult(
             plans=[built[train_id] for train_id in labels_by_id],
             options=sorted(built.values(), key=price_order),
+            data_source=found_trains.data_source,
+            fallback_reason=found_trains.fallback_reason,
         )
 
     def plan_for_train(

@@ -39,6 +39,8 @@ def simulate_disruption(req: DisruptionRequest) -> DisruptionResponse:
         options=result.options,
         notified=notify(message),
         message=message,
+        data_source=result.data_source,
+        fallback_reason=result.fallback_reason,
     )
 
 

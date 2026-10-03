@@ -1,6 +1,6 @@
 {
   "affected_plan": {
-    "id": "pl_6078cce8",
+    "id": "pl_222de998",
     "labels": [
       "safest",
       "fastest"
@@ -307,7 +307,7 @@
   },
   "plans": [
     {
-      "id": "pl_30b8c69b",
+      "id": "pl_1f546ae7",
       "labels": [
         "safest",
         "fastest",
@@ -616,7 +616,7 @@
   ],
   "options": [
     {
-      "id": "pl_30b8c69b",
+      "id": "pl_1f546ae7",
       "labels": [
         "safest",
         "fastest",
@@ -924,5 +924,7 @@
     }
   ],
   "notified": false,
-  "message": "IC 05:10 is delayed by 25 min. You will arrive around 09:13, 90% chance of arriving on time."
+  "message": "IC 05:10 is delayed by 25 min. You will arrive around 09:13, 90% chance of arriving on time.",
+  "data_source": "recorded",
+  "fallback_reason": null
 }

@@ -13,9 +13,10 @@ from datetime import datetime  # noqa: E402
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from app import config  # noqa: E402
+from app import config, services  # noqa: E402
 from app.config import ROOT_DIR  # noqa: E402
 from app.main import app  # noqa: E402
+from app.providers.chain import ChainProvider  # noqa: E402
 
 OUT_DIR = ROOT_DIR / "docs" / "api-examples"
 EVENT_ID = "ev_hackyeah2026"
@@ -26,6 +27,7 @@ EXAMPLES_NOW = datetime.fromisoformat("2026-10-03T12:00:00+02:00")
 def main() -> None:
     config.DEMO_NOW = EXAMPLES_NOW
     config.TELEGRAM_BOT_TOKEN = ""  # the disruption example must not send a real message
+    services.planner.provider = ChainProvider(services.fixtures)  # recorded data, no live search
     client = TestClient(app)
 
     def get(path: str) -> dict | list:
