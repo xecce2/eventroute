@@ -3,11 +3,12 @@ import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from app.models import DataSource, Event, Label, Plan, PlanRequest, TrainOption
 from app.planner.local_transport import LegTemplate, LocalTransport
 from app.planner.reliability import p_on_time
-from app.providers.base import SearchProvider
+from app.providers.base import SearchProvider, SearchResult
 
 TRANSFER_MIN = 5            # platform -> first local leg
 SEARCH_FROM_HOUR = 16       # search window opens at 16:00 the day before
@@ -15,6 +16,10 @@ EARLIEST_ARRIVAL_HOUR = 6   # arriving before 06:00 on the event day still means
 VIABLE_P = 0.5              # fastest/cheapest are picked only among plans at least this likely
 SAFE_ENOUGH_P = 0.8         # below this on the event day, an overnight option may become safest
 SAFEST_TIE_P = 0.02         # near-equal p_on_time -> prefer the later departure
+
+# The search window, the overnight boundary and the day sent to the provider are local to the
+# event, whatever offset the request used for `arrive_by` (e.g. "...Z").
+LOCAL_TZ = ZoneInfo("Europe/Warsaw")
 
 LABEL_TEXT = {"safest": "most reliable", "fastest": "fastest", "cheapest": "cheapest"}
 
@@ -39,10 +44,15 @@ class PlanResult:
     # Passed through from the provider; the planner does not decide anything on them.
     data_source: DataSource = "recorded"
     fallback_reason: str | None = None
+    search: SearchResult | None = None  # what the provider returned, to replan without a new search
 
 
 def new_id(prefix: str) -> str:
     return f"{prefix}_{uuid.uuid4().hex[:8]}"
+
+
+def venue_target_for(event: Event, req: PlanRequest) -> datetime:
+    return (req.arrive_by or event.venue_target).astimezone(LOCAL_TZ)
 
 
 def price_order(plan: Plan) -> tuple:
@@ -63,13 +73,16 @@ class Planner:
         known_delays: dict[str, int] | None = None,
         not_before: datetime | None = None,
         on_status: StatusFn | None = None,
+        found: SearchResult | None = None,
     ) -> PlanResult:
         """Up to 3 cards (one per label, merged when one option wins several labels)
         plus the full list of suitable options sorted by price.
+
+        `found` is an earlier search result to plan from; without it the provider is asked.
         """
         status = on_status or (lambda step, msg: None)
         known_delays = known_delays or {}
-        venue_target = req.arrive_by or event.venue_target
+        venue_target = venue_target_for(event, req)
         legs = self.local.route(event.venue_station, event.venue)
         station_deadline = venue_target - timedelta(
             minutes=TRANSFER_MIN + self.local.mean_min(legs) + self.local.std_min(legs)
@@ -79,7 +92,7 @@ class Planner:
         )
 
         status("search", "Searching for trains…")
-        found_trains = self.provider.search(req.origin, event.venue_station, venue_target.date())
+        found_trains = found or self.provider.search(req.origin, event.venue_station, venue_target.date())
         if found_trains.fallback_reason:
             status("fallback", f"Live search failed, using recorded data: {found_trains.fallback_reason}")
         trains = [
@@ -90,7 +103,9 @@ class Planner:
             t for t in trains
             if t.dep >= window_start
             and t.expected_arr <= station_deadline
-            and (req.budget_pln is None or t.price_pln is None or t.price_pln <= req.budget_pln)
+            # With a budget, an unknown price cannot be promised to fit, so it is left out.
+            and (req.budget_pln is None or (t.price_pln is not None and t.price_pln <= req.budget_pln))
+            and (req.mode_pref is None or t.mode == req.mode_pref)
         ]
         # Options that would fit but have already left (`not_before` is "now").
         departed = 0
@@ -114,13 +129,14 @@ class Planner:
             options=sorted(built.values(), key=price_order),
             data_source=found_trains.data_source,
             fallback_reason=found_trains.fallback_reason,
+            search=found_trains,
         )
 
     def plan_for_train(
         self, event: Event, req: PlanRequest, train: TrainOption, labels: list[Label]
     ) -> Plan:
         """Plan for one given train, even if it no longer makes the cut (e.g. after a delay)."""
-        venue_target = req.arrive_by or event.venue_target
+        venue_target = venue_target_for(event, req)
         legs = self.local.route(event.venue_station, event.venue)
         return self._build(self._score(train, legs, venue_target), labels, legs, venue_target)
 

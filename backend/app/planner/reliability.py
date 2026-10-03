@@ -24,10 +24,18 @@ def _tail_scale(model: DelayModel) -> float:
     return max(mean_late - ON_TIME_MAX_MIN, 1.0)
 
 
-def sample_delay(model: DelayModel, rng: random.Random) -> float:
-    if rng.random() < model.p_on_time:
-        return rng.uniform(0, ON_TIME_MAX_MIN)
-    return ON_TIME_MAX_MIN + rng.expovariate(1 / _tail_scale(model))
+def sample_delay(model: DelayModel, rng: random.Random, at_least: float = 0.0) -> float:
+    """Total delay in minutes, given that it is already known to be at least `at_least`."""
+    if at_least >= ON_TIME_MAX_MIN:
+        # The exponential tail has no memory: beyond a known delay it looks the same.
+        return at_least + rng.expovariate(1 / _tail_scale(model))
+    while True:
+        if rng.random() < model.p_on_time:
+            delay = rng.uniform(0, ON_TIME_MAX_MIN)
+        else:
+            delay = ON_TIME_MAX_MIN + rng.expovariate(1 / _tail_scale(model))
+        if delay >= at_least:
+            return delay
 
 
 def p_on_time(
@@ -39,14 +47,16 @@ def p_on_time(
 ) -> float:
     """Share of runs in which train delay + transfer + local legs still fit before venue_target.
 
-    A known delay is already in `expected_arr`; on top of it the usual random delay is sampled.
+    A known delay is already in `expected_arr`. It is not a second delay on top of the usual
+    random one: the total delay is sampled given that it is at least the known one, and only
+    the part beyond the known delay is added.
     Seeded by train id, so the same input always gives the same number (stable demo).
     """
     rng = random.Random(zlib.crc32(train.id.encode()))
     slack_min = (venue_target - train.expected_arr).total_seconds() / 60 - transfer_min
     hits = 0
     for _ in range(runs):
-        t = sample_delay(train.delay_model, rng)
+        t = sample_delay(train.delay_model, rng, train.known_delay_min) - train.known_delay_min
         for leg in legs:
             t += max(rng.gauss(leg.duration_min, leg.std_min), leg.duration_min * 0.5)
         if t <= slack_min:

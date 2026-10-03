@@ -16,6 +16,8 @@ def providers_status() -> ProviderStatus:
         live_available=provider.live is not None,
         requests_total=stats.requests_total,
         live_ok=stats.live_ok,
+        live_partial=stats.live_partial,
         fallback=stats.fallback,
         last_fallback_reason=stats.last_fallback_reason,
+        last_rejection_reason=stats.last_rejection_reason,
     )

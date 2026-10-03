@@ -1,6 +1,6 @@
 {
   "affected_plan": {
-    "id": "pl_222de998",
+    "id": "pl_98b9ddff",
     "labels": [
       "safest",
       "fastest"
@@ -299,15 +299,15 @@
     "venue_target": "2026-10-04T09:30:00+02:00",
     "arrival_at_venue": "2026-10-04T09:13:00+02:00",
     "buffer_min": 17,
-    "p_on_time": 0.899,
+    "p_on_time": 0.776,
     "price_pln": 64.0,
     "overnight_stay": false,
-    "explanation": "Most reliable, fastest. 17 min to spare, 90% chance of arriving on time.",
+    "explanation": "Most reliable, fastest. 17 min to spare, 78% chance of arriving on time.",
     "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
   },
   "plans": [
     {
-      "id": "pl_1f546ae7",
+      "id": "pl_82f7989c",
       "labels": [
         "safest",
         "fastest",
@@ -607,16 +607,16 @@
       "venue_target": "2026-10-04T09:30:00+02:00",
       "arrival_at_venue": "2026-10-04T09:13:00+02:00",
       "buffer_min": 17,
-      "p_on_time": 0.899,
+      "p_on_time": 0.776,
       "price_pln": 64.0,
       "overnight_stay": false,
-      "explanation": "Most reliable, fastest, cheapest. 17 min to spare, 90% chance of arriving on time.",
+      "explanation": "Most reliable, fastest, cheapest. 17 min to spare, 78% chance of arriving on time.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
     }
   ],
   "options": [
     {
-      "id": "pl_1f546ae7",
+      "id": "pl_82f7989c",
       "labels": [
         "safest",
         "fastest",
@@ -916,15 +916,15 @@
       "venue_target": "2026-10-04T09:30:00+02:00",
       "arrival_at_venue": "2026-10-04T09:13:00+02:00",
       "buffer_min": 17,
-      "p_on_time": 0.899,
+      "p_on_time": 0.776,
       "price_pln": 64.0,
       "overnight_stay": false,
-      "explanation": "Most reliable, fastest, cheapest. 17 min to spare, 90% chance of arriving on time.",
+      "explanation": "Most reliable, fastest, cheapest. 17 min to spare, 78% chance of arriving on time.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
     }
   ],
   "notified": false,
-  "message": "IC 05:10 is delayed by 25 min. You will arrive around 09:13, 90% chance of arriving on time.",
+  "message": "IC 05:10 is delayed by 25 min. You will arrive around 09:13, 78% chance of arriving on time.",
   "data_source": "recorded",
   "fallback_reason": null
 }

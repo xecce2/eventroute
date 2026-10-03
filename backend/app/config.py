@@ -38,6 +38,9 @@ def _aware_datetime(name: str) -> datetime | None:
 # Needed because the pitch happens after the event's trains have left.
 DEMO_NOW = _aware_datetime("DEMO_NOW")
 
+# Hard limit for one live search attempt; past it the request is served from recorded data.
+LIVE_TIMEOUT_SEC = float(os.getenv("LIVE_TIMEOUT_SEC", "120"))
+
 MC_RUNS = int(os.getenv("MC_RUNS", "1000"))
 # Pause between replayed SSE statuses, so the search progress is visible in the UI.
 SSE_STEP_SEC = float(os.getenv("SSE_STEP_SEC", "0.4"))

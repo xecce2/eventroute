@@ -10,6 +10,7 @@ from app.config import FIXTURES_DIR, MC_RUNS
 from app.models import Event, Plan, PlanRequest
 from app.planner.local_transport import LocalTransport
 from app.planner.planner import Planner
+from app.providers.base import SearchResult
 from app.providers.chain import ChainProvider
 from app.providers.fixture import FixtureProvider
 
@@ -56,6 +57,8 @@ city_planner = Planner(ChainProvider(fixtures), local_transport, runs=MC_RUNS)
 class RequestState:
     request: PlanRequest
     statuses: list[tuple[str, str]]
+    # What the search returned; a disruption replans from it instead of searching again.
+    search: SearchResult | None = None
     plan_ids: list[str] = field(default_factory=list)
     # train id -> known delay in minutes (set by the disruption simulation)
     known_delays: dict[str, int] = field(default_factory=dict)

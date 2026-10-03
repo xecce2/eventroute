@@ -127,3 +127,60 @@ def test_path_rejects_bad_coordinates():
             dep="2026-10-04T08:20:00+02:00", arr="2026-10-04T08:48:00+02:00",
             duration_min=28, std_min=5, path=[[19.9479, 250.0]],
         )
+
+
+def test_disruption_replans_without_a_new_search():
+    body = make_plans()
+    searches = services.planner.provider.stats.requests_total
+    out = client.post(
+        "/api/simulate/disruption", json={"plan_id": body["plans"][0]["id"], "train_delay_min": 25}
+    ).json()
+    assert services.planner.provider.stats.requests_total == searches
+    assert {p["train"]["id"] for p in out["options"]} <= {p["train"]["id"] for p in body["options"]}
+    assert (out["data_source"], out["fallback_reason"]) == (body["data_source"], body["fallback_reason"])
+
+
+def test_arrive_by_in_another_offset_gives_the_same_plans():
+    def summary(arrive_by):
+        body = client.post("/api/plan", json={
+            "origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "arrive_by": arrive_by,
+        }).json()
+        return [(p["train"]["id"], p["labels"], p["overnight_stay"], p["p_on_time"]) for p in body["options"]]
+
+    local = summary("2026-10-04T09:30:00+02:00")
+    assert local and local == summary("2026-10-04T07:30:00Z") == summary("2026-10-04T03:30:00-04:00")
+
+
+def test_arrive_by_after_the_event_start_is_rejected():
+    r = client.post("/api/plan", json={
+        "origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "arrive_by": "2026-10-04T10:30:00+02:00",
+    })
+    assert r.status_code == 422
+
+
+@pytest.mark.parametrize("budget", [0, -5])
+def test_budget_must_be_positive(budget):
+    r = client.post("/api/plan", json={
+        "origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "budget_pln": budget,
+    })
+    assert r.status_code == 422
+
+
+def test_budget_leaves_out_options_without_a_price():
+    request = {"origin": "Katowice", "event_id": "ev_hackyeah2026"}
+    assert any(p["price_pln"] is None for p in client.post("/api/plan", json=request).json()["options"])
+    options = client.post("/api/plan", json={**request, "budget_pln": 30}).json()["options"]
+    assert options and all(p["price_pln"] is not None and p["price_pln"] <= 30 for p in options)
+
+
+def test_mode_pref_filters_by_mode():
+    request = {"origin": "Wrocław Główny", "event_id": "ev_hackyeah2026"}
+    for mode in ("train", "bus"):
+        options = client.post("/api/plan", json={**request, "mode_pref": mode}).json()["options"]
+        assert options and {p["train"]["mode"] for p in options} == {mode}
+    assert client.post("/api/plan", json={**request, "mode_pref": "plane"}).status_code == 422
+
+
+def test_origin_without_diacritics_is_found():
+    plain = client.post("/api/plan", json={"origin": "wroclaw glowny", "event_id": "ev_hackyeah2026"}).json()
+    assert [p["train"]["id"] for p in plain["options"]] == [p["train"]["id"] for p in make_plans()["options"]]

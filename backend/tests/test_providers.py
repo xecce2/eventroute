@@ -1,3 +1,4 @@
+import time
 from datetime import date
 
 import pytest
@@ -135,5 +136,40 @@ def test_status_endpoint_by_default():
     assert status["provider"] == "fixture"
     assert status["live_available"] is False
     assert set(status) == {
-        "provider", "live_available", "requests_total", "live_ok", "fallback", "last_fallback_reason",
+        "provider", "live_available", "requests_total", "live_ok", "live_partial", "fallback",
+        "last_fallback_reason", "last_rejection_reason",
     }
+
+
+def test_partly_rejected_live_search_is_live_but_counted():
+    partly = ValidationResult(
+        accepted=live_options(), rejected=[Rejection(0, "implausible price", {})]
+    )
+    chain = ChainProvider(services.fixtures, live=FakeLive(partly))
+    found = search(chain)
+    assert found.data_source == "live" and found.fallback_reason is None  # no fixtures were used
+    assert (chain.stats.live_ok, chain.stats.live_partial, chain.stats.fallback) == (1, 1, 0)
+    assert "validator rejected 1/" in chain.stats.last_rejection_reason
+    assert "implausible price" in chain.stats.last_rejection_reason
+
+
+def test_hung_live_search_times_out_without_a_retry():
+    class Hung(FakeLive):
+        def fetch(self, origin, destination, day):
+            self.calls += 1
+            time.sleep(1)
+
+    live = Hung()
+    chain = ChainProvider(services.fixtures, live=live, timeout_sec=0.05)
+    started = time.monotonic()
+    found = search(chain)
+    assert time.monotonic() - started < 0.5
+    assert live.calls == 1  # the first attempt is still running: no second browser
+    assert found.data_source == "recorded" and found.options == recorded_wroclaw()
+    assert found.fallback_reason == "live search failed: no answer within 0.05 s"
+
+
+def test_reason_is_one_line():
+    live = FakeLive(RuntimeError("unexpected page\n  <html>\n\tAccess denied"))
+    found = search(ChainProvider(services.fixtures, live=live))
+    assert found.fallback_reason == "live search failed: RuntimeError: unexpected page <html> Access denied"

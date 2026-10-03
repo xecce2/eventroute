@@ -4,6 +4,7 @@ from pathlib import Path
 
 from app.config import FIXTURES_DIR
 from app.models import TrainOption
+from app.providers.validator import koleo_slug
 
 
 class FixtureProvider:
@@ -18,12 +19,13 @@ class FixtureProvider:
 
     def search(self, origin: str, destination: str, day: date) -> list[TrainOption]:
         # `day` is ignored: fixtures are recorded for the event day already.
-        origin, destination = origin.casefold(), destination.casefold()
+        # Names are compared as the Validator does: case and diacritics do not matter.
+        origin, destination = koleo_slug(origin), koleo_slug(destination)
         return [
             t for t in self._trains
-            if t.from_.casefold() == origin and t.to.casefold() == destination
+            if koleo_slug(t.from_) == origin and koleo_slug(t.to) == destination
         ]
 
     def origins(self, destination: str) -> list[str]:
-        destination = destination.casefold()
-        return sorted({t.from_ for t in self._trains if t.to.casefold() == destination})
+        destination = koleo_slug(destination)
+        return sorted({t.from_ for t in self._trains if koleo_slug(t.to) == destination})

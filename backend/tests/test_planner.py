@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 
 import pytest
@@ -5,7 +6,7 @@ from pydantic import ValidationError
 
 from app.models import DelayModel, PlanRequest, TrainOption
 from app.planner.planner import Candidate, select
-from app.planner.reliability import p_on_time
+from app.planner.reliability import ON_TIME_MAX_MIN, p_on_time, sample_delay
 from app.services import events, planner
 
 EVENT = events["ev_hackyeah2026"]
@@ -125,3 +126,14 @@ def test_known_delay_lowers_p_on_time():
     late = p_on_time(t.model_copy(update={"known_delay_min": 40}), legs, 5, EVENT.venue_target, 1000)
     assert late < on_time
     assert on_time == p_on_time(t, legs, 5, EVENT.venue_target, 1000)  # deterministic
+
+
+def test_known_delay_is_a_lower_bound_not_a_second_delay():
+    model = DelayModel(p_on_time=0.7, mean_delay_min=6, p95_delay_min=25)
+    rng = random.Random(1)
+    assert all(sample_delay(model, rng, at_least=25) >= 25 for _ in range(200))
+    assert all(sample_delay(model, rng, at_least=3) >= 3 for _ in range(200))
+    # Past the known delay the tail looks the same as past the on-time limit.
+    extra = [sample_delay(model, rng, at_least=25) - 25 for _ in range(5000)]
+    tail = [d - ON_TIME_MAX_MIN for d in (sample_delay(model, rng) for _ in range(20000)) if d > ON_TIME_MAX_MIN]
+    assert abs(sum(extra) / len(extra) - sum(tail) / len(tail)) < 1.0

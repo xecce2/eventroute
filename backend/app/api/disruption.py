@@ -11,7 +11,8 @@ router = APIRouter()
 def simulate_disruption(req: DisruptionRequest) -> DisruptionResponse:
     """The plan's train is reported late: replan and notify the user.
 
-    The delay is assumed to be known at the train's scheduled departure,
+    Replans from the options the original search returned: no new search, so the button answers
+    at once and the option ids stay the same. The delay is assumed to be known at the train's scheduled departure,
     so only options departing from then on (and not before now) are offered as alternatives.
     """
     plan = services.plans.get(req.plan_id)
@@ -29,6 +30,7 @@ def simulate_disruption(req: DisruptionRequest) -> DisruptionResponse:
         state.request,
         known_delays=state.known_delays,
         not_before=max(plan.train.dep, clock.now()),
+        found=state.search,
     )
     services.save_plans(request_id, [affected, *result.options])
 

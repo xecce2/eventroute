@@ -92,8 +92,8 @@ class PlanRequest(Contract):
     origin: str
     event_id: str
     arrive_by: AwareDatetime | None = None
-    budget_pln: float | None = None
-    mode_pref: str | None = None
+    budget_pln: float | None = Field(default=None, gt=0)
+    mode_pref: Literal["train", "bus"] | None = None  # None -> both
 
 
 DataSource = Literal["live", "recorded", "mixed"]
@@ -128,8 +128,10 @@ class ProviderStatus(Contract):
     live_available: bool  # False when the live provider is configured but cannot run
     requests_total: int
     live_ok: int
+    live_partial: int  # live searches where the Validator rejected some (not all) options
     fallback: int
     last_fallback_reason: str | None
+    last_rejection_reason: str | None
 
 
 class Participant(Contract):

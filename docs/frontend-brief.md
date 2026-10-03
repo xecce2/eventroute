@@ -41,10 +41,11 @@ Send the chosen value as `origin` unchanged.
 
 ### Plans
 `POST /api/plan`, body `{"origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "arrive_by": null, "budget_pln": null, "mode_pref": null}`.
+`budget_pln` must be above 0 (with a budget, options without a price are left out). `mode_pref` is `"train"`, `"bus"` or `null` (both). `arrive_by` later than the event start, a budget of 0 or less and any other `mode_pref` give HTTP 422.
 Response: `{request_id, plans: Plan[], options: Plan[], status: "ok" | "no_options"}`.
 
 - `plans`: the cards, 1 to 3 plans with labels.
-- `options`: **all** suitable options, cheapest first (ties by departure time, options without a price last). It includes the cards (same `id`) and options with `overnight_stay: true`. For Wrocław it currently returns 15 options, and the first ones in the list are overnight (the evening of 3 October), so give `overnight_stay` a clear visual treatment or the list will look misleading.
+- `options`: **all** suitable options, cheapest first (ties by departure time, options without a price last). It includes the cards (same `id`) and options with `overnight_stay: true`. For Wrocław it currently returns 19 options, and the first ones in the list are overnight (the evening of 3 October), so give `overnight_stay` a clear visual treatment or the list will look misleading.
 - On `no_options` show a clear "no suitable options" state.
 
 Real example of one plan (Wrocław), with `path` points shortened:
@@ -98,13 +99,13 @@ How to read the fields:
 ### Delay
 `POST /api/simulate/disruption`, body `{"plan_id": "pl_066e7559", "train_delay_min": 25}`. `plan_id` can be any `id` from `plans` or `options`. Response:
 ```json
-{"affected_plan": { "...Plan, train.known_delay_min = 25, p_on_time 0.899, buffer_min 17, arrival_at_venue 09:13" },
+{"affected_plan": { "...Plan, train.known_delay_min = 25, p_on_time 0.776, buffer_min 17, arrival_at_venue 09:13" },
  "plans": [ "...recalculated cards" ],
  "options": [ "...recalculated list, same rules as in POST /api/plan" ],
  "notified": false,
- "message": "IC 05:10 is delayed by 25 min. You will arrive around 09:13, 90% chance of arriving on time."}
+ "message": "IC 05:10 is delayed by 25 min. You will arrive around 09:13, 78% chance of arriving on time."}
 ```
-`affected_plan` is for "before and after" (compare it with the original plan). Alternatives only include departures not earlier than the delayed train. `notified: false` means the Telegram message was not sent; show `message` in the UI as the notification.
+`affected_plan` is for "before and after" (compare it with the original plan). Alternatives only include departures not earlier than the delayed train. `notified: false` means the Telegram message was not sent; show `message` in the UI as the notification. The delay is recalculated from the options of the original search (no new search), so the answer is instant and every `train.id` is one you already have.
 
 ### City screen
 `GET /api/city/overview` (the `event_id` query parameter is optional while there is one event). Real response, shortened:
@@ -137,7 +138,7 @@ We do not want the demo to look like a live agent when it is really replaying re
 - **Planned, not implemented yet (build against mocks):**
   - `POST /api/plan` gains `data_source: "live" | "recorded" | "mixed"` and `fallback_reason: string | null` (for example "live search failed: rate limit"; `null` when there was no fallback). When `fallback_reason` is set, show a one-line banner above the plans: "Live search failed, showing recorded data".
   - SSE gains a `step: "fallback"` with the reason in `message`.
-  - `GET /api/providers/status` returns `{requests_total, live_ok, fallback, last_fallback_reason}`, for a small corner indicator or a service screen.
+  - `GET /api/providers/status` returns `{provider, live_available, requests_total, live_ok, live_partial, fallback, last_fallback_reason, last_rejection_reason}`, for a small corner indicator or a service screen.
 
 ## What we need from the design
 

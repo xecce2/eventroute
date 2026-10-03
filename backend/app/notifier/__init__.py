@@ -3,6 +3,7 @@ import logging
 import httpx
 
 from app import config
+from app.timeouts import call_with_timeout
 
 log = logging.getLogger(__name__)
 
@@ -20,13 +21,17 @@ def notify(text: str) -> bool:
         log.info("notification not sent (Telegram not configured): %s", text)
         return False
     try:
-        r = httpx.post(
-            f"{TELEGRAM_API}/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage",
-            json={"chat_id": config.TELEGRAM_CHAT_ID, "text": text},
-            timeout=config.TELEGRAM_TIMEOUT_SEC,
+        # httpx's timeout does not cover the DNS lookup, which can hang without a network.
+        r = call_with_timeout(
+            lambda: httpx.post(
+                f"{TELEGRAM_API}/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage",
+                json={"chat_id": config.TELEGRAM_CHAT_ID, "text": text},
+                timeout=config.TELEGRAM_TIMEOUT_SEC,
+            ),
+            config.TELEGRAM_TIMEOUT_SEC * 2,
         )
         ok = r.status_code == 200 and r.json().get("ok") is True
-    except (httpx.HTTPError, ValueError) as e:
+    except (httpx.HTTPError, ValueError, TimeoutError) as e:
         log.warning("Telegram notification failed: %s", type(e).__name__)
         return False
     if not ok:

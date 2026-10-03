@@ -14,6 +14,8 @@ router = APIRouter()
 @router.post("/plan", response_model=PlanResponse)
 def create_plan(req: PlanRequest) -> PlanResponse:
     event = services.get_event(req.event_id)
+    if req.arrive_by is not None and req.arrive_by > event.start:
+        raise HTTPException(422, "arrive_by is after the event start")
     request_id = new_id("rq")
     statuses: list[tuple[str, str]] = []
     services.requests[request_id] = services.RequestState(request=req, statuses=statuses)
@@ -22,6 +24,7 @@ def create_plan(req: PlanRequest) -> PlanResponse:
         event, req, not_before=clock.now(), on_status=lambda step, msg: statuses.append((step, msg))
     )
     # Options include the cards, so a delay can be simulated on any listed option.
+    services.requests[request_id].search = result.search
     services.save_plans(request_id, result.options)
     return PlanResponse(
         request_id=request_id,

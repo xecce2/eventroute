@@ -1,4 +1,5 @@
 import logging
+import time
 
 import httpx
 import pytest
@@ -52,3 +53,12 @@ def test_no_network_gives_false_and_hides_token(monkeypatch, telegram_on, caplog
     with caplog.at_level(logging.WARNING):
         assert notify("hello") is False
     assert FAKE_TOKEN not in caplog.text
+
+
+def test_hung_request_gives_false_quickly(monkeypatch, telegram_on):
+    """Without a network the DNS lookup can hang past httpx's own timeout."""
+    monkeypatch.setattr(config, "TELEGRAM_TIMEOUT_SEC", 0.05)
+    monkeypatch.setattr(httpx, "post", lambda url, json, timeout: time.sleep(1))
+    started = time.monotonic()
+    assert notify("hello") is False
+    assert time.monotonic() - started < 0.5
