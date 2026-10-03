@@ -1,79 +1,107 @@
 import { useState } from "react";
 import { getPlans, simulateDisruption } from "./api";
+import RegistrationForm from "./components/RegistrationForm";
+import PlanCard from "./components/PlanCard";
+import OptionsList from "./components/OptionsList";
+import Timeline from "./components/Timeline";
+import MapView from "./components/MapView";
+import DisruptionPanel from "./components/DisruptionPanel";
+import CityDashboard from "./components/CityDashboard";
+import "./App.css";
 
 export default function App() {
-  const [plans, setPlans] = useState([]);
+  const [tab, setTab] = useState("trip");
+  const [result, setResult] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+  const [disruption, setDisruption] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [notified, setNotified] = useState(false);
 
-  async function onFind() {
+  async function run(fn) {
     setLoading(true);
     setError(null);
-    setNotified(false);
     try {
-      const data = await getPlans({
-        origin: "Wrocław Główny",
-        event_id: "ev_hackyeah2026",
-        arrive_by: null,
+      await fn();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const plans = result?.plans ?? [];
+  const options = result?.options ?? [];
+  const all = [...plans, ...options];
+  const selected = all.find((p) => p.id === selectedId) ?? plans[0] ?? options[0];
+
+  const onPlan = (req) =>
+    run(async () => {
+      const data = await getPlans(req);
+      setResult(data);
+      setDisruption(null);
+      setSelectedId(data.plans?.[0]?.id ?? data.options?.[0]?.id ?? null);
+    });
+
+  const onDelay = () =>
+    run(async () => {
+      const res = await simulateDisruption(selected.id, 25);
+      setDisruption({ before: selected, res });
+      setResult({
+        ...result,
+        plans: res.plans ?? [],
+        options: res.options ?? result.options,
       });
-      setPlans(data.plans);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function onDelay() {
-    if (plans.length === 0) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await simulateDisruption(plans[0].id, 25);
-      setPlans(data.plans);
-      setNotified(data.notified);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
+      setSelectedId(res.affected_plan?.id ?? selected.id);
+    });
 
   return (
-    <div style={{ padding: 24, textAlign: "left" }}>
-      <h1>EventRoute</h1>
+    <div className="app">
+      <header>
+        <h1>EventRoute</h1>
+        <nav>
+          <button className={tab === "trip" ? "active" : ""} onClick={() => setTab("trip")}>My trip</button>
+          <button className={tab === "city" ? "active" : ""} onClick={() => setTab("city")}>City view</button>
+        </nav>
+      </header>
 
-      <button onClick={onFind} disabled={loading}>
-        Find plans
-      </button>{" "}
-      <button onClick={onDelay} disabled={loading || plans.length === 0}>
-        Train delayed 25 min
-      </button>
+      {tab === "city" ? (
+        <CityDashboard />
+      ) : (
+        <>
+          <RegistrationForm onSubmit={onPlan} loading={loading} />
+          {error && <p className="bad">Error: {error}</p>}
 
-      {loading && <p>Searching for trains...</p>}
-      {error && <p style={{ color: "crimson" }}>Error: {error}</p>}
-      {notified && <p>Telegram notification sent</p>}
+          {result?.fallback_reason && (
+            <p className="notice">⚠ Live search failed, showing recorded data ({result.fallback_reason})</p>
+          )}
+          {result?.status === "no_options" && <p className="bad">No suitable options.</p>}
 
-      {plans.map((p) => (
-        <div
-          key={p.id}
-          style={{ border: "1px solid #888", borderRadius: 8, padding: 12, marginTop: 12 }}
-        >
-          <strong>{p.labels.join(", ")}</strong>
-          <div>
-            {p.train.train}: {p.train.from} to {p.train.to}
-          </div>
-          <div>
-            Chance to make it: {Math.round(p.p_on_time * 100)}%, buffer {p.buffer_min} min
-          </div>
-          <div>Known delay: {p.train.known_delay_min} min</div>
-          <div>{p.explanation}</div>
-          <a href={p.buy_url} target="_blank" rel="noreferrer">
-            Buy ticket
-          </a>
-        </div>
-      ))}
+          {selected && (
+            <div className="trip">
+              <div className="col">
+                {plans.map((p) => (
+                  <PlanCard key={p.id} plan={p} selected={p.id === selected.id}
+                            onSelect={() => setSelectedId(p.id)} />
+                ))}
+                <button className="danger" disabled={loading} onClick={onDelay}>
+                  Train delayed 25 min (for the selected option)
+                </button>
+                {disruption && <DisruptionPanel {...disruption} />}
+                <OptionsList options={options} selectedId={selected.id} onSelect={setSelectedId} />
+              </div>
+              <div className="col">
+                {selected.overnight_stay && (
+                  <p className="notice">
+                    ⚠ This option arrives the day before the event. You need a place to stay.
+                  </p>
+                )}
+                <Timeline plan={selected} />
+                <MapView plan={selected} />
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
