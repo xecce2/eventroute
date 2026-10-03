@@ -23,3 +23,7 @@ class FixtureProvider:
             t for t in self._trains
             if t.from_.casefold() == origin and t.to.casefold() == destination
         ]
+
+    def origins(self, destination: str) -> list[str]:
+        destination = destination.casefold()
+        return sorted({t.from_ for t in self._trains if t.to.casefold() == destination})

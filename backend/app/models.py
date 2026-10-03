@@ -112,3 +112,47 @@ class DisruptionResponse(Contract):
     plans: list[Plan]
     notified: bool
     message: str
+
+
+class Participant(Contract):
+    """Synthetic participant (data/fixtures/participants.json or the generator). No personal data."""
+    id: str
+    origin: str
+    pref: Label
+
+
+Load = Literal["low", "medium", "high"]
+
+
+class ArrivalSlot(Contract):
+    slot: AwareDatetime
+    count: int
+
+
+class CityNode(Contract):
+    name: str
+    lat: float
+    lon: float
+    peak_count: int
+    peak_slot: AwareDatetime | None
+    load: Load
+
+
+class OriginCount(Contract):
+    station: str
+    count: int
+
+
+class Recommendation(Contract):
+    type: Literal["stagger_checkin", "add_trams"]
+    text: str
+    severity: Load
+
+
+class CityOverview(Contract):
+    event_id: str
+    participants_total: int
+    arrivals_by_slot: list[ArrivalSlot]
+    nodes: list[CityNode]
+    origins: list[OriginCount]
+    recommendations: list[Recommendation]

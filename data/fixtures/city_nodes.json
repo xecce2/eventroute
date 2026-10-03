@@ -1,0 +1,15 @@
+[
+  {
+    "kind": "station",
+    "name": "Kraków Główny",
+    "lat": 50.0677,
+    "lon": 19.9479,
+    "capacity_per_slot": 100,
+    "note": "Estimate: how many participants per 15 minutes the trams to the arena can carry on top of regular passengers. To be refined by F / the organizer."
+  },
+  {
+    "kind": "venue",
+    "capacity_per_slot": 120,
+    "note": "Estimate: how many people check-in can process per 15 minutes. Name and coordinates come from the event."
+  }
+]
