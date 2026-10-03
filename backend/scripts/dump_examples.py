@@ -9,16 +9,23 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from datetime import datetime  # noqa: E402
+
 from fastapi.testclient import TestClient  # noqa: E402
 
+from app import config  # noqa: E402
 from app.config import ROOT_DIR  # noqa: E402
 from app.main import app  # noqa: E402
 
 OUT_DIR = ROOT_DIR / "docs" / "api-examples"
 EVENT_ID = "ev_hackyeah2026"
+# Before every recorded departure, so the examples show the full list on any day.
+EXAMPLES_NOW = datetime.fromisoformat("2026-10-03T12:00:00+02:00")
 
 
 def main() -> None:
+    config.DEMO_NOW = EXAMPLES_NOW
+    config.TELEGRAM_BOT_TOKEN = ""  # the disruption example must not send a real message
     client = TestClient(app)
 
     def get(path: str) -> dict | list:

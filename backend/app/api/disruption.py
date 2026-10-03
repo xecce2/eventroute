@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from app import services
+from app import clock, services
 from app.models import DisruptionRequest, DisruptionResponse, Plan
 from app.notifier import notify
 
@@ -12,7 +12,7 @@ def simulate_disruption(req: DisruptionRequest) -> DisruptionResponse:
     """The plan's train is reported late: replan and notify the user.
 
     The delay is assumed to be known at the train's scheduled departure,
-    so only options departing from then on are offered as alternatives.
+    so only options departing from then on (and not before now) are offered as alternatives.
     """
     plan = services.plans.get(req.plan_id)
     if plan is None:
@@ -25,7 +25,10 @@ def simulate_disruption(req: DisruptionRequest) -> DisruptionResponse:
     delayed = plan.train.model_copy(update={"known_delay_min": req.train_delay_min})
     affected = services.planner.plan_for_train(event, state.request, delayed, plan.labels)
     result = services.planner.plan(
-        event, state.request, known_delays=state.known_delays, not_before=plan.train.dep
+        event,
+        state.request,
+        known_delays=state.known_delays,
+        not_before=max(plan.train.dep, clock.now()),
     )
     services.save_plans(request_id, [affected, *result.options])
 

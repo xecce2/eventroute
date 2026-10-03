@@ -74,8 +74,6 @@ class Planner:
         window_start = (venue_target - timedelta(days=1)).replace(
             hour=SEARCH_FROM_HOUR, minute=0, second=0, microsecond=0
         )
-        if not_before is not None:
-            window_start = max(window_start, not_before)
 
         status("search", "Searching for trains…")
         trains = [
@@ -88,7 +86,13 @@ class Planner:
             and t.expected_arr <= station_deadline
             and (req.budget_pln is None or t.price_pln is None or t.price_pln <= req.budget_pln)
         ]
-        status("found", f"Found {len(trains)} suitable options")
+        # Options that would fit but have already left (`not_before` is "now").
+        departed = 0
+        if not_before is not None:
+            departed = sum(t.dep < not_before for t in trains)
+            trains = [t for t in trains if t.dep >= not_before]
+        found = f"Found {len(trains)} suitable options"
+        status("found", found + (f" ({departed} already departed)" if departed else ""))
 
         status("local", "Checking transfers and local transport")
         status("reliability", f"Calculating the chance of arriving on time ({self.runs} simulations)")

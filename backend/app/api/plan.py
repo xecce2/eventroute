@@ -4,7 +4,7 @@ import json
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
-from app import config, services
+from app import clock, config, services
 from app.models import PlanRequest, PlanResponse
 from app.planner.planner import new_id
 
@@ -17,7 +17,10 @@ def create_plan(req: PlanRequest) -> PlanResponse:
     request_id = new_id("rq")
     statuses: list[tuple[str, str]] = []
     services.requests[request_id] = services.RequestState(request=req, statuses=statuses)
-    result = services.planner.plan(event, req, on_status=lambda step, msg: statuses.append((step, msg)))
+    # Options that have already departed are not offered.
+    result = services.planner.plan(
+        event, req, not_before=clock.now(), on_status=lambda step, msg: statuses.append((step, msg))
+    )
     # Options include the cards, so a delay can be simulated on any listed option.
     services.save_plans(request_id, result.options)
     return PlanResponse(

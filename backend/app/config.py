@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -17,6 +18,21 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
 # Short on purpose: without Wi-Fi on stage the "train is late" button must not hang.
 TELEGRAM_TIMEOUT_SEC = float(os.getenv("TELEGRAM_TIMEOUT_SEC", "3"))
+
+
+def _aware_datetime(name: str) -> datetime | None:
+    raw = os.getenv(name, "").strip()
+    if not raw:
+        return None
+    value = datetime.fromisoformat(raw)
+    if value.tzinfo is None:
+        raise ValueError(f"{name} must include a time zone, e.g. 2026-10-04T04:30:00+02:00")
+    return value
+
+
+# Frozen "now" for the demo, e.g. 2026-10-04T04:30:00+02:00. Empty -> real current time.
+# Needed because the pitch happens after the event's trains have left.
+DEMO_NOW = _aware_datetime("DEMO_NOW")
 
 MC_RUNS = int(os.getenv("MC_RUNS", "1000"))
 # Pause between replayed SSE statuses, so the search progress is visible in the UI.
