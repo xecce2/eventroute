@@ -1,0 +1,173 @@
+"""Backward planner: from the time you must be at the venue back to the train (CLAUDE.md, section 5)."""
+import uuid
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+
+from app.models import Event, Label, Plan, PlanRequest, TrainOption
+from app.planner.local_transport import LegTemplate, LocalTransport
+from app.planner.reliability import p_on_time
+from app.providers.base import TrainProvider
+
+TRANSFER_MIN = 5            # platform -> first local leg
+SEARCH_FROM_HOUR = 16       # search window opens at 16:00 the day before
+EARLIEST_ARRIVAL_HOUR = 6   # arriving before 06:00 on the event day still means a night to spend
+VIABLE_P = 0.5              # fastest/cheapest are picked only among plans at least this likely
+SAFE_ENOUGH_P = 0.8         # below this on the event day, an overnight option may become safest
+SAFEST_TIE_P = 0.02         # near-equal p_on_time -> prefer the later departure
+
+LABEL_TEXT = {"safest": "самый надёжный", "fastest": "самый быстрый", "cheapest": "самый дешёвый"}
+
+StatusFn = Callable[[str, str], None]
+
+
+@dataclass
+class Candidate:
+    train: TrainOption
+    p: float
+    overnight: bool
+
+    @property
+    def duration(self) -> timedelta:
+        return self.train.expected_arr - self.train.dep
+
+
+def new_id(prefix: str) -> str:
+    return f"{prefix}_{uuid.uuid4().hex[:8]}"
+
+
+class Planner:
+    def __init__(self, provider: TrainProvider, local: LocalTransport, runs: int):
+        self.provider = provider
+        self.local = local
+        self.runs = runs
+
+    def plan(
+        self,
+        event: Event,
+        req: PlanRequest,
+        known_delays: dict[str, int] | None = None,
+        not_before: datetime | None = None,
+        on_status: StatusFn | None = None,
+    ) -> list[Plan]:
+        """Up to 3 plans (one per label, merged when one option wins several labels)."""
+        status = on_status or (lambda step, msg: None)
+        known_delays = known_delays or {}
+        venue_target = req.arrive_by or event.venue_target
+        legs = self.local.route(event.venue_station, event.venue)
+        station_deadline = venue_target - timedelta(
+            minutes=TRANSFER_MIN + self.local.mean_min(legs) + self.local.std_min(legs)
+        )
+        window_start = (venue_target - timedelta(days=1)).replace(
+            hour=SEARCH_FROM_HOUR, minute=0, second=0, microsecond=0
+        )
+        if not_before is not None:
+            window_start = max(window_start, not_before)
+
+        status("search", "Ищу поезда…")
+        trains = [
+            t.model_copy(update={"known_delay_min": known_delays.get(t.id, t.known_delay_min)})
+            for t in self.provider.search(req.origin, event.venue_station, venue_target.date())
+        ]
+        trains = [
+            t for t in trains
+            if t.dep >= window_start
+            and t.expected_arr <= station_deadline
+            and (req.budget_pln is None or t.price_pln is None or t.price_pln <= req.budget_pln)
+        ]
+        status("found", f"Нашёл {len(trains)} подходящих вариантов")
+
+        status("local", "Проверяю пересадки и городской транспорт")
+        status("reliability", f"Считаю вероятность успеть ({self.runs} прогонов)")
+        candidates = [self._score(t, legs, venue_target) for t in trains]
+        picks = select(candidates)
+        status("done", "Готово")
+        return [self._build(c, labels, legs, venue_target) for c, labels in picks]
+
+    def plan_for_train(
+        self, event: Event, req: PlanRequest, train: TrainOption, labels: list[Label]
+    ) -> Plan:
+        """Plan for one given train, even if it no longer makes the cut (e.g. after a delay)."""
+        venue_target = req.arrive_by or event.venue_target
+        legs = self.local.route(event.venue_station, event.venue)
+        return self._build(self._score(train, legs, venue_target), labels, legs, venue_target)
+
+    def _score(self, train: TrainOption, legs: list[LegTemplate], venue_target: datetime) -> Candidate:
+        earliest_ok = venue_target.replace(hour=EARLIEST_ARRIVAL_HOUR, minute=0, second=0, microsecond=0)
+        return Candidate(
+            train=train,
+            p=p_on_time(train, legs, TRANSFER_MIN, venue_target, self.runs),
+            overnight=train.expected_arr < earliest_ok,
+        )
+
+    def _build(
+        self, c: Candidate, labels: list[Label], legs: list[LegTemplate], venue_target: datetime
+    ) -> Plan:
+        local_legs = self.local.schedule(legs, c.train.expected_arr + timedelta(minutes=TRANSFER_MIN))
+        arrival = local_legs[-1].arr if local_legs else c.train.expected_arr
+        buffer_min = round((venue_target - arrival).total_seconds() / 60)
+        return Plan(
+            id=new_id("pl"),
+            labels=labels,
+            train=c.train,
+            local_legs=local_legs,
+            venue_target=venue_target,
+            arrival_at_venue=arrival,
+            buffer_min=buffer_min,
+            p_on_time=round(c.p, 3),
+            price_pln=c.train.price_pln,
+            overnight_stay=c.overnight,
+            explanation=explain(c, labels, buffer_min),
+            buy_url=c.train.url,
+        )
+
+
+def _safest(candidates: list[Candidate]) -> Candidate | None:
+    if not candidates:
+        return None
+    best_p = max(c.p for c in candidates)
+    return max((c for c in candidates if c.p >= best_p - SAFEST_TIE_P), key=lambda c: c.train.dep)
+
+
+def select(candidates: list[Candidate]) -> list[tuple[Candidate, list[Label]]]:
+    """Pick safest/fastest/cheapest; one option winning several labels becomes one plan.
+
+    Overnight options never win fastest/cheapest: their time and price ignore the night stay.
+    They can be safest only if nothing on the event day is safe enough.
+    """
+    same_day = [c for c in candidates if not c.overnight]
+    viable = [c for c in same_day if c.p >= VIABLE_P] or same_day
+    picks: dict[str, tuple[Candidate, list[Label]]] = {}
+
+    def add(c: Candidate, label: Label) -> None:
+        picks.setdefault(c.train.id, (c, []))[1].append(label)
+
+    safest = _safest(same_day)
+    if safest is None or safest.p < SAFE_ENOUGH_P:
+        overnight = _safest([c for c in candidates if c.overnight])
+        if overnight is not None and (safest is None or overnight.p > safest.p):
+            safest = overnight
+    if safest is not None:
+        add(safest, "safest")
+    if viable:
+        add(min(viable, key=lambda c: c.duration), "fastest")
+        priced = [c for c in viable if c.train.price_pln is not None]
+        if priced:
+            add(min(priced, key=lambda c: (c.train.price_pln, c.duration)), "cheapest")
+    return list(picks.values())
+
+
+def explain(c: Candidate, labels: list[Label], buffer_min: int) -> str:
+    """Template text; to be replaced by an LLM that rephrases these same numbers."""
+    parts = []
+    if labels:
+        parts.append(", ".join(LABEL_TEXT[label] for label in labels).capitalize() + ".")
+    if buffer_min >= 0:
+        parts.append(f"Запас {buffer_min} мин, шанс успеть {round(c.p * 100)}%.")
+    else:
+        parts.append(f"Опоздание на {-buffer_min} мин, шанс успеть {round(c.p * 100)}%.")
+    if c.overnight:
+        parts.append("Прибытие накануне или ночью — нужна ночёвка.")
+    if c.train.mode == "bus":
+        parts.append("Это автобус, не поезд.")
+    return " ".join(parts)

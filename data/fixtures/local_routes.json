@@ -1,0 +1,12 @@
+[
+  {
+    "station": "Kraków Główny",
+    "venue": "Tauron Arena Kraków",
+    "note": "Оценка времени и остановок, F уточнит (линии трамваев, реальные длительности)",
+    "legs": [
+      {"mode": "walk", "from": "Kraków Główny", "to": "Dworzec Główny Wschód", "duration_min": 5, "std_min": 1, "line": null},
+      {"mode": "tram", "from": "Dworzec Główny Wschód", "to": "Tauron Arena Kraków Wieczysta", "duration_min": 15, "std_min": 4, "line": null},
+      {"mode": "walk", "from": "Tauron Arena Kraków Wieczysta", "to": "Tauron Arena Kraków", "duration_min": 8, "std_min": 2, "line": null}
+    ]
+  }
+]
