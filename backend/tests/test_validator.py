@@ -95,9 +95,51 @@ def test_station_names_match_without_diacritics_and_use_the_requested_spelling()
     assert (t.from_, t.to) == (ORIGIN, DEST)
 
 
-def test_utc_times_are_accepted_and_the_url_uses_warsaw_time():
-    t = check([raw(dep="2026-10-04T03:10:00Z", arr="2026-10-04T06:15:00Z")]).accepted[0]
-    assert t.id == "tr_wro_1004_0510" and "04-10-2026_05:10" in t.url
+@pytest.mark.parametrize("dep, arr", [
+    ("2026-10-04T05:10:00+00:00", "2026-10-04T08:15:00+00:00"),  # local time labelled as UTC
+    ("2026-10-04T03:10:00Z", "2026-10-04T06:15:00Z"),            # a correct instant, still not local
+    ("2026-10-04T05:10:00+01:00", "2026-10-04T08:15:00+01:00"),  # winter offset in the summer-time period
+    ("2026-10-04T05:10:00+02:00", "2026-10-04T08:15:00+00:00"),  # arrival only
+])
+def test_offset_other_than_warsaw_is_rejected(dep, arr):
+    assert only_reason([raw(dep=dep, arr=arr)]) == "time zone offset is not Europe/Warsaw"
+
+
+def test_winter_offset_is_accepted_after_the_clock_change():
+    # DST ends on 2026-10-25: +01:00 is the correct local offset from then on.
+    window = (datetime.fromisoformat("2026-10-20T00:00:00+02:00"), datetime.fromisoformat("2026-11-01T00:00:00+01:00"))
+    result = validate_options(
+        [raw(dep="2026-10-26T05:10:00+01:00", arr="2026-10-26T08:15:00+01:00")],
+        origin=ORIGIN, destination=DEST, window=window, source="koleo", fetched_at=FETCHED_AT,
+    )
+    assert len(result.accepted) == 1 and "26-10-2026_05:10" in result.accepted[0].url
+
+
+@pytest.mark.parametrize("overrides", [
+    {"category": "IC+KŚ", "changes": 0},   # two vehicles, no change
+    {"category": "IC", "changes": 1},      # one vehicle, one change
+    {"category": "KM+KM+FLIX", "changes": 1},
+])
+def test_number_of_changes_must_match_the_category(overrides):
+    assert only_reason([raw(**overrides)]) == "number of changes does not match the category"
+
+
+@pytest.mark.parametrize("overrides, field", [
+    ({"price_pln": True}, "price_pln"),
+    ({"changes": True}, "changes"),
+])
+def test_boolean_is_not_a_number(overrides, field):
+    assert only_reason([raw(**overrides)]).startswith(f"invalid field {field}")
+
+
+def test_integer_price_is_fine():
+    assert check([raw(price_pln=64)]).accepted[0].price_pln == 64.0
+
+
+def test_ids_stay_unique_for_same_departure_and_category_with_another_arrival():
+    result = check([raw(), raw(arr="2026-10-04T08:45:00+02:00"), raw(arr="2026-10-04T09:00:00+02:00")])
+    ids = [t.id for t in result.accepted]
+    assert len(ids) == 3 and len(set(ids)) == 3
 
 
 def test_duplicates_are_dropped():

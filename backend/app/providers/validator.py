@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from typing import Any, Literal
 from zoneinfo import ZoneInfo
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, ValidationError
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 from app.models import TrainOption
 from app.providers.delay_models import DELAY_BY_CATEGORY, delay_model_for, split_category
@@ -36,6 +36,14 @@ class RawOption(BaseModel):
     arr: AwareDatetime
     price_pln: float | None = None
     changes: int = 0
+
+    @field_validator("price_pln", "changes", mode="before")
+    @classmethod
+    def _not_a_boolean(cls, value: Any) -> Any:
+        # Pydantic would turn `true` into 1.0 / 1; a price of 1 zł would win "cheapest".
+        if isinstance(value, bool):
+            raise ValueError("must be a number, not a boolean")
+        return value
 
 
 @dataclass
@@ -89,6 +97,11 @@ def _problem(
     unknown = [leg for leg in legs if leg not in DELAY_BY_CATEGORY]
     if unknown:
         return f"unknown category {'+'.join(unknown)}"
+    # Koleo shows Polish local time. An agent that writes "+00:00" for a local time moves the
+    # train by two hours without any other sign, so any offset but the local one is rejected.
+    for moment in (raw.dep, raw.arr):
+        if moment.utcoffset() != moment.astimezone(WARSAW).utcoffset():
+            return "time zone offset is not Europe/Warsaw"
     if raw.arr <= raw.dep:
         return "arrival is not after departure"
     minutes = (raw.arr - raw.dep) / timedelta(minutes=1)
@@ -100,6 +113,9 @@ def _problem(
         return "implausible price"
     if not 0 <= raw.changes <= MAX_CHANGES:
         return "implausible number of changes"
+    if raw.changes != len(legs) - 1:
+        # "IC+KŚ" is two vehicles, so one change; a direct train has one category.
+        return "number of changes does not match the category"
     return None
 
 
@@ -150,10 +166,19 @@ def validate_options(
 
     origin_key = koleo_slug(origin)[:3]
     base_ids = Counter(f"tr_{origin_key}_{raw.dep.astimezone(WARSAW):%m%d_%H%M}" for raw, _ in accepted)
+    used_ids: set[str] = set()
     for raw, category in accepted:
         train_id = f"tr_{origin_key}_{raw.dep.astimezone(WARSAW):%m%d_%H%M}"
         if base_ids[train_id] > 1:
             train_id += "_" + category.lower().replace("+", "")
+        # The planner keys everything by id, so two options must never share one
+        # (same departure and category but another arrival is possible).
+        unique_id, counter = train_id, 2
+        while unique_id in used_ids:
+            unique_id = f"{train_id}_{counter}"
+            counter += 1
+        train_id = unique_id
+        used_ids.add(train_id)
         legs = split_category(category)
         result.accepted.append(TrainOption(
             id=train_id,
