@@ -41,11 +41,11 @@ Send the chosen value as `origin` unchanged.
 
 ### Plans
 `POST /api/plan`, body `{"origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "arrive_by": null, "budget_pln": null, "mode_pref": null}`.
-`budget_pln` must be above 0 (with a budget, options without a price are left out). `mode_pref` is `"train"`, `"bus"` or `null` (both). `arrive_by` later than the event start, a budget of 0 or less and any other `mode_pref` give HTTP 422.
+`budget_pln` must be above 0 (with a budget, options without a price are left out). `mode_pref` is `"train"`, `"bus"` or `null` (both). `arrive_by` may be any date and time with a time zone (the event is the place, its start is only the default); the search covers the 12 hours before it. `arrive_by` without a time zone, a budget of 0 or less and any other `mode_pref` give HTTP 422.
 Response: `{request_id, plans: Plan[], options: Plan[], status: "ok" | "no_options"}`.
 
 - `plans`: the cards, 1 to 3 plans with labels.
-- `options`: **all** suitable options, cheapest first (ties by departure time, options without a price last). It includes the cards (same `id`) and options with `overnight_stay: true`. For Wrocław it currently returns 19 options, and the first ones in the list are overnight (the evening of 3 October), so give `overnight_stay` a clear visual treatment or the list will look misleading.
+- `options`: **all** suitable options, cheapest first (ties by departure time, options without a price last). It includes the cards (same `id`) and options with `overnight_stay: true`. For Wrocław it currently returns 9 options, and some of them are overnight (arriving before 06:00), so give `overnight_stay` a clear visual treatment or the list will look misleading.
 - On `no_options` show a clear "no suitable options" state.
 
 Real example of one plan (Wrocław), with `path` points shortened:
