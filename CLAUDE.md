@@ -168,6 +168,7 @@ FastAPI ── Planner (детерминированный, обратный р�
   - `options` — **все** подходящие варианты для списка под карточками, **сначала дешёвые** (по `price_pln` по возрастанию, при равной цене — по времени отправления; варианты без цены в конце). Включает и карточки (те же `id`), и варианты с `overnight_stay: true`. У вариантов, которые не стали карточками, `labels: []`. Задержку (`/api/simulate/disruption`) можно симулировать для любого `id` из `options`.
   - `origin` — **станция** (полное название, как на Koleo). На фронте выбор из списка станций.
   - `arrive_by: null` → берём `venue_target` из события.
+  - **Запланировано (изменение контракта, см. раздел 11):** в ответ добавляются `data_source: "live" | "recorded" | "mixed"` и `fallback_reason: string | null`. `live` значит, что все варианты пришли от живого агента и прошли Validator; `recorded` — все из фикстур; `mixed` — часть вариантов от живого агента, часть из фикстур. `fallback_reason` заполнен, если был откат на фикстуры (например `"validator rejected 4/6 options"`, `"rate limit"`, `"timeout"`).
 - `GET /api/plan/{request_id}/stream` — SSE-статусы поиска. События: `event: status` с `data: {"step": "search|found|local|reliability|done", "message": "Searching for trains…"}`, в конце `event: done` с `data: {"request_id": "..."}`.
 - `POST /api/simulate/disruption` — вход: `{plan_id, train_delay_min}`, выход: `{affected_plan: Plan, plans: Plan[], options: Plan[], notified: bool, message: str}`. `options` — как в `POST /api/plan`, но пересчитанные с задержкой.
   - `affected_plan` — исходный план с задержкой (`train.known_delay_min`), для экрана «было / стало».
@@ -302,6 +303,13 @@ FastAPI ── Planner (детерминированный, обратный р�
   - **D: сделано.** Поле `path` в `LocalLeg` (`backend/app/models.py`, тип `LatLon` с проверкой диапазонов), передаётся из `local_routes.json` через `local_transport.py`. Тесты: план без `path` валиден (`path: null`), `path` из фикстуры доходит до `POST /api/plan`, неверные координаты отклоняются. Существующие фикстуры не изменены.
   - **F: сделано.** В `local_routes.json` реальные остановки, линия 15, длительности и `path` для всех трёх участков (10 + 15 + 33 точки, порядок `[lat, lon]`, концы участков совпадают). Фронт может рисовать полилинию сразу.
   - **A:** рисовать `path` полилинией. Пока `path` нет, прямая между вокзалом (50.0677, 19.9479) и ареной (`Event.lat/lon`: 50.0675, 19.9917). Маркеры: вокзал, арена. Начинать можно сразу, не дожидаясь F.
+- **Честность источника данных (live / recorded) — чтобы подмена фикстурами не выглядела как работа агента.** Описание для фронтенда: `docs/frontend-brief.md`.
+  - Правило: `source` в `TrainOption` пишет провайдер, который реально получил данные. Агент и Playwright пишут `koleo` или `playwright`, только если вариант прошёл Validator; `FixtureProvider` всегда пишет `fixture`. Перекрашивать фикстуры в `koleo` нельзя.
+  - Правило: любой откат на фикстуры сопровождается причиной (`fallback_reason`): в лог, в статус SSE (`step: "fallback"`), в ответ `POST /api/plan`.
+  - **F:** Validator возвращает принятые варианты и отклонённые с причинами; провайдеры агента собирают `fallback_reason`; счётчик запросов (`live_ok`, `fallback`, `last_fallback_reason`).
+  - **D:** поля `data_source` и `fallback_reason` в `PlanResponse` (`models.py`), шаг `fallback` в SSE, эндпоинт `GET /api/providers/status`. Пока агента нет, всегда `data_source: "recorded"`, `fallback_reason: null`.
+  - **A:** бейдж «Live» / «Recorded data» на карточке плана по `train.source`, плашка при `fallback_reason`; делать на моках, пока бэкенд не готов.
+  - Перед питчем смотрим `GET /api/providers/status` и говорим на слайде только то, что показывает счётчик.
 - Агент Gemini + Playwright, Validator, Telegram (F).
 - Весь фронтенд (A).
 - **Вроцлав (F):** в `wroclaw_krakow.json` нет отправлений между 01:46 и 04:00 (IC 03:10 → 06:34, IC+KŚ 03:48, FlixBus 02:06 и 03:51) — при снятии выдачи пропущена страница. Переснять Koleo: 3.10 с 16:00, 4.10 с 00:00 и с 04:00. После этого D проверяет тесты (`test_wroclaw_plans_respect_rules`, `test_night_arrivals_are_overnight`) и перезапускает `dump_examples.py`.
