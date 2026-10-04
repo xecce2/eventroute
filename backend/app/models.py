@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 from typing import Annotated, Literal
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, field_validator
 
 # A map point, serialized as [lat, lon].
 LatLon = tuple[Annotated[float, Field(ge=-90, le=90)], Annotated[float, Field(ge=-180, le=180)]]
@@ -92,8 +92,16 @@ class PlanRequest(Contract):
     origin: str
     event_id: str
     arrive_by: AwareDatetime | None = None
-    budget_pln: float | None = Field(default=None, gt=0)
+    budget_pln: float | None = Field(default=None, gt=0, allow_inf_nan=False)
     mode_pref: Literal["train", "bus"] | None = None  # None -> both
+
+    @field_validator("arrive_by")
+    @classmethod
+    def arrive_by_in_range(cls, value: datetime | None) -> datetime | None:
+        # Years at the edge of what `datetime` can hold overflow in time zone arithmetic.
+        if value is not None and not 2000 <= value.year <= 2100:
+            raise ValueError("arrive_by is out of range")
+        return value
 
 
 DataSource = Literal["live", "recorded", "mixed"]

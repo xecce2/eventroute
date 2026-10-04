@@ -59,14 +59,25 @@ def test_live_ok():
 
 
 def test_live_retried_once_then_fixtures_with_reason():
-    live = FakeLive(TimeoutError("Koleo did not answer"))
+    live = FakeLive(ConnectionError("Koleo did not answer"))
     chain = ChainProvider(services.fixtures, live=live)
     found = search(chain)
     assert live.calls == 2  # one retry
     assert found.data_source == "recorded"
     assert found.options == recorded_wroclaw()
-    assert found.fallback_reason == "live search failed: TimeoutError: Koleo did not answer"
+    assert found.fallback_reason == "live search failed: ConnectionError: Koleo did not answer"
     assert (chain.stats.fallback, chain.stats.last_fallback_reason) == (1, found.fallback_reason)
+
+
+def test_provider_timeout_is_not_retried():
+    # The provider spent its whole time budget: a second attempt would double the wait.
+    live = FakeLive(TimeoutError("search took longer than 100 s"))
+    chain = ChainProvider(services.fixtures, live=live)
+    found = search(chain)
+    assert live.calls == 1
+    assert found.data_source == "recorded"
+    assert found.fallback_reason == "live search failed: TimeoutError: search took longer than 100 s"
+    assert chain.stats.fallback == 1
 
 
 def test_retry_can_succeed():

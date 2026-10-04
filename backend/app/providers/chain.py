@@ -77,9 +77,11 @@ class ChainProvider:
                     lambda: self.live.fetch(origin, destination, day, since=since, until=until),
                     self.timeout_sec,
                 )
-            except CallTimeout as e:
-                # The hung attempt is still running; a retry would only start a second one.
-                reason = f"live search failed: {e}"
+            except TimeoutError as e:
+                # Our limit (the hung attempt is still running) or the provider's own:
+                # either way the time is spent, and a retry would only double the wait.
+                detail = str(e) if isinstance(e, CallTimeout) else f"{type(e).__name__}: {e}"
+                reason = f"live search failed: {detail}"
                 log.warning("live search attempt %d timed out", attempt + 1)
                 break
             except Exception as e:  # any failure of the live source -> retry, then fixtures

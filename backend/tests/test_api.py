@@ -226,6 +226,25 @@ def test_budget_must_be_positive(budget):
     assert r.status_code == 422
 
 
+@pytest.mark.parametrize("budget", ["NaN", "Infinity", "-Infinity"])
+def test_budget_that_is_not_a_number_is_rejected_not_a_server_error(budget):
+    body = '{"origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "budget_pln": %s}' % budget
+    r = client.post("/api/plan", content=body.encode(), headers={"Content-Type": "application/json"})
+    assert r.status_code == 422
+    assert r.json()["detail"][0]["loc"] == ["body", "budget_pln"]
+
+
+@pytest.mark.parametrize("arrive_by", [
+    "0001-01-01T00:00:00+02:00", "0001-01-01T00:00:00Z", "9999-12-31T23:59:59-12:00",
+])
+def test_arrive_by_at_the_edge_of_the_calendar_is_rejected_not_a_server_error(arrive_by):
+    r = client.post("/api/plan", json={
+        "origin": "Wrocław Główny", "event_id": "ev_hackyeah2026", "arrive_by": arrive_by,
+    })
+    assert r.status_code == 422
+    assert "out of range" in r.json()["detail"][0]["msg"]
+
+
 def test_budget_leaves_out_options_without_a_price():
     # By 10:00, so the FlixBus at 07:05 (no price on Koleo) is among the options.
     request = {"origin": "Katowice", "event_id": "ev_hackyeah2026", "arrive_by": "2026-10-04T10:00:00+02:00"}

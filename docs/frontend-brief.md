@@ -66,19 +66,19 @@ Real example of one plan (Wrocław), with `path` points shortened:
      "dep": "2026-10-04T08:20:00+02:00", "arr": "2026-10-04T08:23:00+02:00",
      "duration_min": 3, "std_min": 1, "line": null, "path": [[50.0677, 19.9479], "..."]},
     {"mode": "tram", "from": "Dworzec Główny Tunel", "to": "TAURON Arena Kraków Wieczysta",
-     "dep": "2026-10-04T08:23:00+02:00", "arr": "2026-10-04T08:36:00+02:00",
-     "duration_min": 13, "std_min": 3, "line": "15", "path": [[50.068199, 19.947649], "..."]},
+     "dep": "2026-10-04T08:37:00+02:00", "arr": "2026-10-04T08:44:00+02:00",
+     "duration_min": 7, "std_min": 2, "line": "15", "path": [[50.068199, 19.947649], "..."]},
     {"mode": "walk", "from": "TAURON Arena Kraków Wieczysta", "to": "Tauron Arena Kraków",
-     "dep": "2026-10-04T08:36:00+02:00", "arr": "2026-10-04T08:48:00+02:00",
+     "dep": "2026-10-04T08:44:00+02:00", "arr": "2026-10-04T08:56:00+02:00",
      "duration_min": 12, "std_min": 2, "line": null, "path": [[50.071785, 19.983839], "..."]}
   ],
   "venue_target": "2026-10-04T09:30:00+02:00",
-  "arrival_at_venue": "2026-10-04T08:48:00+02:00",
-  "buffer_min": 42,
-  "p_on_time": 0.983,
+  "arrival_at_venue": "2026-10-04T08:56:00+02:00",
+  "buffer_min": 34,
+  "p_on_time": 0.981,
   "price_pln": 64.0,
   "overnight_stay": false,
-  "explanation": "Most reliable, fastest. 42 min to spare, 98% chance of arriving on time.",
+  "explanation": "Most reliable, fastest. 34 min to spare, 98% chance of arriving on time.",
   "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
 }
 ```
@@ -89,6 +89,7 @@ How to read the fields:
 - `buffer_min` can be negative: the traveller is late, show it in red as "X min late".
 - `p_on_time` is from 0 to 1. Pick colour thresholds in the design; a guide: 0.9 and up is safe, 0.7 and up is fine, below that is risky.
 - `overnight_stay: true` means the train arrives the day before or overnight, so the traveller needs a place to stay. Show it as a warning. Such a plan is never `fastest` or `cheapest`.
+- The tram leg follows the real timetable (lines 15 and 16): its `dep` is the next real departure after the traveller reaches the stop, so there can be a gap between the previous leg's `arr` and the tram's `dep`. That gap is the wait at the stop (here 08:23 to 08:37); show it in the timeline. `duration_min` of the tram leg is the ride only, and `line` is the tram actually taken.
 - If a `local_legs[].path` is `null`, draw a straight line between the station (50.0677, 19.9479) and the arena (`Event.lat/lon`).
 - `path` points are `[lat, lon]`, the order Leaflet uses.
 - `known_delay_min` above 0 means the train is already late; the planned `arr` does not change.
@@ -99,11 +100,11 @@ How to read the fields:
 ### Delay
 `POST /api/simulate/disruption`, body `{"plan_id": "pl_066e7559", "train_delay_min": 25}`. `plan_id` can be any `id` from `plans` or `options`. Response:
 ```json
-{"affected_plan": { "...Plan, train.known_delay_min = 25, p_on_time 0.776, buffer_min 17, arrival_at_venue 09:13" },
+{"affected_plan": { "...Plan, train.known_delay_min = 25, p_on_time 0.765, buffer_min 14, arrival_at_venue 09:16" },
  "plans": [ "...recalculated cards" ],
  "options": [ "...recalculated list, same rules as in POST /api/plan" ],
  "notified": false,
- "message": "IC 05:10 is delayed by 25 min. You will arrive around 09:13, 78% chance of arriving on time."}
+ "message": "IC 05:10 is delayed by 25 min. You will arrive around 09:16, 76% chance of arriving on time."}
 ```
 `affected_plan` is for "before and after" (compare it with the original plan). Alternatives only include departures not earlier than the delayed train. `notified: false` means the Telegram message was not sent; show `message` in the UI as the notification. The delay is recalculated from the options of the original search (no new search), so the answer is instant and every `train.id` is one you already have.
 

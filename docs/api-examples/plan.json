@@ -1,8 +1,8 @@
 {
-  "request_id": "rq_6d397751",
+  "request_id": "rq_efb0b263",
   "plans": [
     {
-      "id": "pl_8fc0a781",
+      "id": "pl_7249e37a",
       "labels": [
         "safest",
         "fastest"
@@ -85,10 +85,10 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T08:23:00+02:00",
-          "arr": "2026-10-04T08:36:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
+          "dep": "2026-10-04T08:37:00+02:00",
+          "arr": "2026-10-04T08:44:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
           "line": "15",
           "path": [
             [
@@ -157,8 +157,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T08:36:00+02:00",
-          "arr": "2026-10-04T08:48:00+02:00",
+          "dep": "2026-10-04T08:44:00+02:00",
+          "arr": "2026-10-04T08:56:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -299,16 +299,16 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T08:48:00+02:00",
-      "buffer_min": 42,
-      "p_on_time": 0.983,
+      "arrival_at_venue": "2026-10-04T08:56:00+02:00",
+      "buffer_min": 34,
+      "p_on_time": 0.981,
       "price_pln": 64.0,
       "overnight_stay": false,
-      "explanation": "Most reliable, fastest. 42 min to spare, 98% chance of arriving on time.",
+      "explanation": "Most reliable, fastest. 34 min to spare, 98% chance of arriving on time.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
     },
     {
-      "id": "pl_64e4a82f",
+      "id": "pl_3aa38cf7",
       "labels": [
         "cheapest"
       ],
@@ -390,11 +390,11 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T08:41:00+02:00",
-          "arr": "2026-10-04T08:54:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
-          "line": "15",
+          "dep": "2026-10-04T08:44:00+02:00",
+          "arr": "2026-10-04T08:51:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
+          "line": "16",
           "path": [
             [
               50.068199,
@@ -462,8 +462,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T08:54:00+02:00",
-          "arr": "2026-10-04T09:06:00+02:00",
+          "dep": "2026-10-04T08:51:00+02:00",
+          "arr": "2026-10-04T09:03:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -604,18 +604,18 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T09:06:00+02:00",
-      "buffer_min": 24,
-      "p_on_time": 0.913,
+      "arrival_at_venue": "2026-10-04T09:03:00+02:00",
+      "buffer_min": 27,
+      "p_on_time": 0.905,
       "price_pln": 39.98,
       "overnight_stay": false,
-      "explanation": "Cheapest. 24 min to spare, 91% chance of arriving on time. This is a bus, not a train.",
+      "explanation": "Cheapest. 27 min to spare, 90% chance of arriving on time. This is a bus, not a train.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:51/all/all"
     }
   ],
   "options": [
     {
-      "id": "pl_64e4a82f",
+      "id": "pl_3aa38cf7",
       "labels": [
         "cheapest"
       ],
@@ -697,11 +697,11 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T08:41:00+02:00",
-          "arr": "2026-10-04T08:54:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
-          "line": "15",
+          "dep": "2026-10-04T08:44:00+02:00",
+          "arr": "2026-10-04T08:51:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
+          "line": "16",
           "path": [
             [
               50.068199,
@@ -769,8 +769,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T08:54:00+02:00",
-          "arr": "2026-10-04T09:06:00+02:00",
+          "dep": "2026-10-04T08:51:00+02:00",
+          "arr": "2026-10-04T09:03:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -911,16 +911,16 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T09:06:00+02:00",
-      "buffer_min": 24,
-      "p_on_time": 0.913,
+      "arrival_at_venue": "2026-10-04T09:03:00+02:00",
+      "buffer_min": 27,
+      "p_on_time": 0.905,
       "price_pln": 39.98,
       "overnight_stay": false,
-      "explanation": "Cheapest. 24 min to spare, 91% chance of arriving on time. This is a bus, not a train.",
+      "explanation": "Cheapest. 27 min to spare, 90% chance of arriving on time. This is a bus, not a train.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:51/all/all"
     },
     {
-      "id": "pl_e566d6cf",
+      "id": "pl_ed862888",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0146",
@@ -1000,11 +1000,11 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T06:16:00+02:00",
-          "arr": "2026-10-04T06:29:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
-          "line": "15",
+          "dep": "2026-10-04T06:19:00+02:00",
+          "arr": "2026-10-04T06:26:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
+          "line": "16",
           "path": [
             [
               50.068199,
@@ -1072,8 +1072,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T06:29:00+02:00",
-          "arr": "2026-10-04T06:41:00+02:00",
+          "dep": "2026-10-04T06:26:00+02:00",
+          "arr": "2026-10-04T06:38:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -1214,16 +1214,16 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T06:41:00+02:00",
-      "buffer_min": 169,
+      "arrival_at_venue": "2026-10-04T06:38:00+02:00",
+      "buffer_min": 172,
       "p_on_time": 1.0,
       "price_pln": 63.98,
       "overnight_stay": false,
-      "explanation": "169 min to spare, 100% chance of arriving on time. This is a bus, not a train.",
+      "explanation": "172 min to spare, 100% chance of arriving on time. This is a bus, not a train.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_01:46/all/all"
     },
     {
-      "id": "pl_b14054e6",
+      "id": "pl_ec24d5da",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0206",
@@ -1303,10 +1303,10 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T06:51:00+02:00",
-          "arr": "2026-10-04T07:04:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
+          "dep": "2026-10-04T06:56:00+02:00",
+          "arr": "2026-10-04T07:03:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
           "line": "15",
           "path": [
             [
@@ -1375,8 +1375,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T07:04:00+02:00",
-          "arr": "2026-10-04T07:16:00+02:00",
+          "dep": "2026-10-04T07:03:00+02:00",
+          "arr": "2026-10-04T07:15:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -1517,16 +1517,16 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T07:16:00+02:00",
-      "buffer_min": 134,
+      "arrival_at_venue": "2026-10-04T07:15:00+02:00",
+      "buffer_min": 135,
       "p_on_time": 1.0,
       "price_pln": 63.98,
       "overnight_stay": false,
-      "explanation": "134 min to spare, 100% chance of arriving on time. This is a bus, not a train.",
+      "explanation": "135 min to spare, 100% chance of arriving on time. This is a bus, not a train.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_02:06/all/all"
     },
     {
-      "id": "pl_0e3f87af",
+      "id": "pl_1cf601e1",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0310",
@@ -1606,11 +1606,11 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T06:42:00+02:00",
-          "arr": "2026-10-04T06:55:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
-          "line": "15",
+          "dep": "2026-10-04T06:49:00+02:00",
+          "arr": "2026-10-04T06:56:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
+          "line": "16",
           "path": [
             [
               50.068199,
@@ -1678,8 +1678,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T06:55:00+02:00",
-          "arr": "2026-10-04T07:07:00+02:00",
+          "dep": "2026-10-04T06:56:00+02:00",
+          "arr": "2026-10-04T07:08:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -1820,16 +1820,16 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T07:07:00+02:00",
-      "buffer_min": 143,
+      "arrival_at_venue": "2026-10-04T07:08:00+02:00",
+      "buffer_min": 142,
       "p_on_time": 1.0,
       "price_pln": 64.0,
       "overnight_stay": false,
-      "explanation": "143 min to spare, 100% chance of arriving on time.",
+      "explanation": "142 min to spare, 100% chance of arriving on time.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:10/all/all"
     },
     {
-      "id": "pl_8fc0a781",
+      "id": "pl_7249e37a",
       "labels": [
         "safest",
         "fastest"
@@ -1912,10 +1912,10 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T08:23:00+02:00",
-          "arr": "2026-10-04T08:36:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
+          "dep": "2026-10-04T08:37:00+02:00",
+          "arr": "2026-10-04T08:44:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
           "line": "15",
           "path": [
             [
@@ -1984,8 +1984,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T08:36:00+02:00",
-          "arr": "2026-10-04T08:48:00+02:00",
+          "dep": "2026-10-04T08:44:00+02:00",
+          "arr": "2026-10-04T08:56:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -2126,16 +2126,16 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T08:48:00+02:00",
-      "buffer_min": 42,
-      "p_on_time": 0.983,
+      "arrival_at_venue": "2026-10-04T08:56:00+02:00",
+      "buffer_min": 34,
+      "p_on_time": 0.981,
       "price_pln": 64.0,
       "overnight_stay": false,
-      "explanation": "Most reliable, fastest. 42 min to spare, 98% chance of arriving on time.",
+      "explanation": "Most reliable, fastest. 34 min to spare, 98% chance of arriving on time.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_05:10/all/all"
     },
     {
-      "id": "pl_757751db",
+      "id": "pl_433dcb71",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0348",
@@ -2215,10 +2215,10 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T07:47:00+02:00",
-          "arr": "2026-10-04T08:00:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
+          "dep": "2026-10-04T07:56:00+02:00",
+          "arr": "2026-10-04T08:03:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
           "line": "15",
           "path": [
             [
@@ -2287,8 +2287,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T08:00:00+02:00",
-          "arr": "2026-10-04T08:12:00+02:00",
+          "dep": "2026-10-04T08:03:00+02:00",
+          "arr": "2026-10-04T08:15:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -2429,16 +2429,16 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T08:12:00+02:00",
-      "buffer_min": 78,
+      "arrival_at_venue": "2026-10-04T08:15:00+02:00",
+      "buffer_min": 75,
       "p_on_time": 1.0,
       "price_pln": 73.93,
       "overnight_stay": false,
-      "explanation": "78 min to spare, 100% chance of arriving on time.",
+      "explanation": "75 min to spare, 100% chance of arriving on time.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_03:48/all/all"
     },
     {
-      "id": "pl_01f1dfe0",
+      "id": "pl_125394a3",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2201",
@@ -2518,11 +2518,11 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T02:36:00+02:00",
-          "arr": "2026-10-04T02:49:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
-          "line": "15",
+          "dep": "2026-10-04T04:49:00+02:00",
+          "arr": "2026-10-04T04:56:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
+          "line": "16",
           "path": [
             [
               50.068199,
@@ -2590,8 +2590,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T02:49:00+02:00",
-          "arr": "2026-10-04T03:01:00+02:00",
+          "dep": "2026-10-04T04:56:00+02:00",
+          "arr": "2026-10-04T05:08:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -2732,16 +2732,16 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T03:01:00+02:00",
-      "buffer_min": 389,
+      "arrival_at_venue": "2026-10-04T05:08:00+02:00",
+      "buffer_min": 262,
       "p_on_time": 1.0,
       "price_pln": 85.98,
       "overnight_stay": true,
-      "explanation": "389 min to spare, 100% chance of arriving on time. Arrives the day before or overnight, so you will need a place to stay. This is a bus, not a train.",
+      "explanation": "262 min to spare, 100% chance of arriving on time. Arrives the day before or overnight, so you will need a place to stay. This is a bus, not a train.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_22:01/all/all"
     },
     {
-      "id": "pl_06f734e7",
+      "id": "pl_30f9e931",
       "labels": [],
       "train": {
         "id": "tr_wro_1003_2321",
@@ -2821,11 +2821,11 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T04:16:00+02:00",
-          "arr": "2026-10-04T04:29:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
-          "line": "15",
+          "dep": "2026-10-04T04:49:00+02:00",
+          "arr": "2026-10-04T04:56:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
+          "line": "16",
           "path": [
             [
               50.068199,
@@ -2893,8 +2893,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T04:29:00+02:00",
-          "arr": "2026-10-04T04:41:00+02:00",
+          "dep": "2026-10-04T04:56:00+02:00",
+          "arr": "2026-10-04T05:08:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -3035,16 +3035,16 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T04:41:00+02:00",
-      "buffer_min": 289,
+      "arrival_at_venue": "2026-10-04T05:08:00+02:00",
+      "buffer_min": 262,
       "p_on_time": 1.0,
       "price_pln": 85.98,
       "overnight_stay": true,
-      "explanation": "289 min to spare, 100% chance of arriving on time. Arrives the day before or overnight, so you will need a place to stay. This is a bus, not a train.",
+      "explanation": "262 min to spare, 100% chance of arriving on time. Arrives the day before or overnight, so you will need a place to stay. This is a bus, not a train.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/03-10-2026_23:21/all/all"
     },
     {
-      "id": "pl_3aa9e07b",
+      "id": "pl_60af2a59",
       "labels": [],
       "train": {
         "id": "tr_wro_1004_0021",
@@ -3124,11 +3124,11 @@
           "mode": "tram",
           "from": "Dworzec Główny Tunel",
           "to": "TAURON Arena Kraków Wieczysta",
-          "dep": "2026-10-04T04:46:00+02:00",
-          "arr": "2026-10-04T04:59:00+02:00",
-          "duration_min": 13,
-          "std_min": 3,
-          "line": "15",
+          "dep": "2026-10-04T04:49:00+02:00",
+          "arr": "2026-10-04T04:56:00+02:00",
+          "duration_min": 7,
+          "std_min": 2,
+          "line": "16",
           "path": [
             [
               50.068199,
@@ -3196,8 +3196,8 @@
           "mode": "walk",
           "from": "TAURON Arena Kraków Wieczysta",
           "to": "Tauron Arena Kraków",
-          "dep": "2026-10-04T04:59:00+02:00",
-          "arr": "2026-10-04T05:11:00+02:00",
+          "dep": "2026-10-04T04:56:00+02:00",
+          "arr": "2026-10-04T05:08:00+02:00",
           "duration_min": 12,
           "std_min": 2,
           "line": null,
@@ -3338,12 +3338,12 @@
         }
       ],
       "venue_target": "2026-10-04T09:30:00+02:00",
-      "arrival_at_venue": "2026-10-04T05:11:00+02:00",
-      "buffer_min": 259,
+      "arrival_at_venue": "2026-10-04T05:08:00+02:00",
+      "buffer_min": 262,
       "p_on_time": 1.0,
       "price_pln": 85.98,
       "overnight_stay": true,
-      "explanation": "259 min to spare, 100% chance of arriving on time. Arrives the day before or overnight, so you will need a place to stay. This is a bus, not a train.",
+      "explanation": "262 min to spare, 100% chance of arriving on time. Arrives the day before or overnight, so you will need a place to stay. This is a bus, not a train.",
       "buy_url": "https://koleo.pl/rozklad-pkp/wroclaw-glowny/krakow-glowny/04-10-2026_00:21/all/all"
     }
   ],

@@ -5,7 +5,7 @@ import zlib
 from datetime import datetime
 
 from app.models import DelayModel, TrainOption
-from app.planner.local_transport import LegTemplate
+from app.planner.local_transport import LegTemplate, board
 
 # PKP counts a train as on time if it is at most 5 minutes late.
 ON_TIME_MAX_MIN = 5.0
@@ -47,18 +47,28 @@ def p_on_time(
 ) -> float:
     """Share of runs in which train delay + transfer + local legs still fit before venue_target.
 
+    A leg with a timetable is boarded at its next real departure in each run.
+
     A known delay is already in `expected_arr`. It is not a second delay on top of the usual
     random one: the total delay is sampled given that it is at least the known one, and only
     the part beyond the known delay is added.
     Seeded by train id, so the same input always gives the same number (stable demo).
     """
     rng = random.Random(zlib.crc32(train.id.encode()))
-    slack_min = (venue_target - train.expected_arr).total_seconds() / 60 - transfer_min
+    slack_min = (venue_target - train.expected_arr).total_seconds() / 60
+    # Real departures of timetabled legs, in minutes after the expected train arrival.
+    departures = [leg.timetable.offsets_min(train.expected_arr) if leg.timetable else None for leg in legs]
     hits = 0
     for _ in range(runs):
         t = sample_delay(train.delay_model, rng, train.known_delay_min) - train.known_delay_min
-        for leg in legs:
-            t += max(rng.gauss(leg.duration_min, leg.std_min), leg.duration_min * 0.5)
+        t += transfer_min
+        for leg, deps in zip(legs, departures):
+            # A later train or a slower walk can miss a tram: the next one is boarded instead.
+            dep = board(deps, t) if deps is not None else None
+            if dep is None:
+                t += max(rng.gauss(leg.duration_min, leg.std_min), leg.duration_min * 0.5)
+            else:
+                t = dep + max(rng.gauss(leg.ride_min, leg.ride_std_min), leg.ride_min * 0.5)
         if t <= slack_min:
             hits += 1
     return hits / runs

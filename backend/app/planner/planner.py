@@ -84,9 +84,10 @@ class Planner:
         known_delays = known_delays or {}
         venue_target = venue_target_for(event, req)
         legs = self.local.route(event.venue_station, event.venue)
-        station_deadline = venue_target - timedelta(
-            minutes=TRANSFER_MIN + self.local.mean_min(legs) + self.local.std_min(legs)
-        )
+        # A margin for the uncertainty of the local part: expected arrival must leave this much.
+        margin = timedelta(minutes=self.local.std_min(legs))
+        # No train arriving later can make it, even if every tram leaves the moment you reach the stop.
+        station_deadline = venue_target - margin - timedelta(minutes=TRANSFER_MIN + self.local.min_min(legs))
         # In UTC, so the window is 12 real hours even across a clock change.
         window_start = (
             venue_target.astimezone(timezone.utc) - timedelta(hours=SEARCH_WINDOW_HOURS)
@@ -111,6 +112,8 @@ class Planner:
             t for t in trains
             if t.dep >= window_start
             and t.expected_arr <= station_deadline
+            # With the real tram departures, including the wait at the stop.
+            and self._venue_arrival(t, legs) + margin <= venue_target
             # With a budget, an unknown price cannot be promised to fit, so it is left out.
             and (req.budget_pln is None or (t.price_pln is not None and t.price_pln <= req.budget_pln))
             and (req.mode_pref is None or t.mode == req.mode_pref)
@@ -147,6 +150,9 @@ class Planner:
         venue_target = venue_target_for(event, req)
         legs = self.local.route(event.venue_station, event.venue)
         return self._build(self._score(train, legs, venue_target), labels, legs, venue_target)
+
+    def _venue_arrival(self, train: TrainOption, legs: list[LegTemplate]) -> datetime:
+        return self.local.arrival(legs, train.expected_arr + timedelta(minutes=TRANSFER_MIN))
 
     def _score(self, train: TrainOption, legs: list[LegTemplate], venue_target: datetime) -> Candidate:
         earliest_ok = venue_target.replace(hour=EARLIEST_ARRIVAL_HOUR, minute=0, second=0, microsecond=0)
