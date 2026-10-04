@@ -15,6 +15,7 @@ export default function RegistrationForm({ onSubmit, loading }) {
   const eventStart = warsawDateTime(Date.parse(event.start));
   const date = pickedDate ?? DEFAULT_DATE ?? target.date;
   const time = pickedTime ?? target.time;
+  const onEventDay = date === eventStart.date;
 
   useEffect(() => {
     getStations(EVENT_ID)
@@ -46,12 +47,12 @@ export default function RegistrationForm({ onSubmit, loading }) {
   return (
     <form className="panel form" onSubmit={submit}>
       <div className="event">
-        <strong>{event.name} · {event.venue}</strong>
-        <span>Event: {longDate(eventStart.date)}, {eventStart.time}</span>
+        {/* The event's name and date are shown only on the event's own day: on any other day the
+            event is not happening, so the card names just the place. */}
+        <strong>{onEventDay ? `${event.name} · ${event.venue}` : event.venue}</strong>
+        {onEventDay && <span>Event: {longDate(eventStart.date)}, {eventStart.time}</span>}
         {ready && <span>Your trip: be at the entrance by {time} on {longDate(date)}</span>}
-        {ready && date !== eventStart.date && (
-          <span className="muted">ⓘ A different day than the event: the timetable is for the day you chose.</span>
-        )}
+        {ready && !onEventDay && <span className="muted">ⓘ Live timetable for the day you chose</span>}
       </div>
       <div className="fields">
         <label>
