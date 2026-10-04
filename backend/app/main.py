@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from app.api import city, disruption, events, plan, providers
 from app.config import CORS_ORIGINS
 
-app = FastAPI(title="EventRoute API")
+app = FastAPI(title="OneSearch API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,

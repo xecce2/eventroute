@@ -10,16 +10,7 @@ import CityDashboard from "./components/CityDashboard";
 import "./App.css";
 
 function Logo() {
-  return (
-    <div className="logo" aria-hidden="true">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-           strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="5" cy="18" r="2.2" />
-        <circle cx="19" cy="6" r="2.2" />
-        <path d="M7 18h6a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h6" />
-      </svg>
-    </div>
-  );
+  return <img className="logo" src="/logo.png" width="44" height="44" alt="" />;
 }
 
 export default function App() {
@@ -82,7 +73,7 @@ export default function App() {
         <div className="brand">
           <Logo />
           <div>
-            <div className="brand-name">EventRoute</div>
+            <div className="brand-name">OneSearch</div>
             <div className="brand-tag">Plan the way to the event, backwards from the entrance</div>
           </div>
         </div>

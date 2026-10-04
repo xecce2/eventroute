@@ -1,4 +1,4 @@
-# CLAUDE.md — HackYeah 2026 / SmartCity (рабочее название: EventRoute)
+# CLAUDE.md — HackYeah 2026 / SmartCity (название продукта: OneSearch, раньше рабочее название EventRoute)
 
 Контекст для людей и для Claude Code. Читай целиком перед началом работы. Если что-то меняется в контрактах, правь этот файл в том же коммите.
 

@@ -1,4 +1,4 @@
-# EventRoute: data and screens for the frontend
+# OneSearch: data and screens for the frontend
 
 Paste this whole file into a Claude chat and ask for the design and components. The contracts in `CLAUDE.md` (section 4) stay the source of truth: if they disagree with this file, `CLAUDE.md` wins.
 

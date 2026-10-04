@@ -12,7 +12,7 @@
   --line: #e0e6f1;
 
   --brand: #1f4fe0;
-  --brand-2: #0a9bc0;
+  --brand-2: #7b3ff0;  /* the violet end of the logo's gradient */
   --brand-ink: #ffffff;
   --brand-soft: #e7edfd;
   --blue: var(--brand);
@@ -42,7 +42,7 @@
     --line: #26324c;
 
     --brand: #7b9bff;
-    --brand-2: #3cc7e3;
+    --brand-2: #b393ff;
     --brand-ink: #0a101d;
     --brand-soft: #1b2850;
 
