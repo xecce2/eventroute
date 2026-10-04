@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FALLBACK_EVENT, FALLBACK_STATIONS, EVENT_ID } from "../constants";
+import { DEFAULT_DATE, FALLBACK_EVENT, FALLBACK_STATIONS, EVENT_ID } from "../constants";
 import { getEvent, getStations } from "../api";
 import { eventTarget, longDate, toArriveBy, warsawDateTime } from "../utils";
 
@@ -13,7 +13,7 @@ export default function RegistrationForm({ onSubmit, loading }) {
   const [budget, setBudget] = useState("");
   const target = eventTarget(event);
   const eventStart = warsawDateTime(Date.parse(event.start));
-  const date = pickedDate ?? target.date;
+  const date = pickedDate ?? DEFAULT_DATE ?? target.date;
   const time = pickedTime ?? target.time;
 
   useEffect(() => {

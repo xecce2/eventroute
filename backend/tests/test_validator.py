@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 
@@ -203,8 +203,10 @@ def test_recorded_fixtures_are_what_the_validator_would_build_from_the_same_fact
          "arr": t.arr.isoformat(), "price_pln": t.price_pln, "changes": t.changes}
         for t in recorded
     ]
+    # Each file has its own dates (3-4 Oct, 10-11 Oct, ...): the sanity window follows the file.
+    window = (min(t.dep for t in recorded) - timedelta(days=1), max(t.dep for t in recorded) + timedelta(days=1))
     result = validate_options(
-        facts, origin=origin, destination=DEST, window=WINDOW, source="koleo", fetched_at=FETCHED_AT
+        facts, origin=origin, destination=DEST, window=window, source="koleo", fetched_at=FETCHED_AT
     )
     assert result.rejected == []
     built = {t.id: t for t in result.accepted}

@@ -7,7 +7,7 @@ from app.config import FIXTURES_DIR
 from app.models import TrainOption
 from app.providers.fixture import FixtureProvider
 from app.providers.recorder import RecordError, fixture_path, record_fixtures
-from app.providers.validator import ValidationResult
+from app.providers.validator import ValidationResult, koleo_slug
 
 DEST = "Kraków Główny"
 SINCE = datetime.fromisoformat("2026-10-10T16:00:00+02:00")
@@ -16,7 +16,12 @@ UNTIL = datetime.fromisoformat("2026-10-11T08:30:00+02:00")
 
 def live_options(origin: str, day_shift: int = 7):
     """Recorded Wrocław options moved a week ahead and tagged as if Playwright had just read them."""
-    options = FixtureProvider().search(origin, DEST, UNTIL.date())
+    # The original recording only (3-4 Oct): the folder may hold other dates too, e.g. 10-11 Oct.
+    first = koleo_slug(origin).split("-")[0]
+    options = [
+        TrainOption.model_validate(item)
+        for item in json.loads((FIXTURES_DIR / "trains" / f"{first}_krakow.json").read_text(encoding="utf-8"))
+    ]
     moved = []
     for option in options:
         delta = day_shift * 24 * 3600
